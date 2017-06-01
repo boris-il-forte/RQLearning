@@ -101,9 +101,9 @@ That is the classical Q-Learning update
 If $\beta=\delta\alpha$
 \begin{align}
 Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\delta Q(x',\pi(x')) \nonumber\\
- & -\tilde{R}(x,u)+\gamma\delta\tilde{Q}(x,u)) \nonumber\\
+ & -(\tilde{R}(x,u)+\gamma\delta\tilde{Q}(x,u))) \nonumber\\
  & =Q(x,u)+\alpha(R(x,u,x')+\gamma'Q(x',\pi(x')) \nonumber\\
- & -\tilde{R}(x,u)+\gamma'\tilde{Q}(x,u)) \nonumber\\
+ & -(\tilde{R}(x,u)+\gamma'\tilde{Q}(x,u))) \nonumber\\
  & =Q(x,u)+\alpha((R(x,u,x')+\gamma'Q(x',\pi(x'))) \nonumber\\
  & -Q'(x,u))
 \end{align}
