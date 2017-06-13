@@ -11,14 +11,14 @@ from PyPi.utils.dataset import parse_dataset
 from PyPi.utils.parameters import Parameter
 
 
-def experiment(algorithm_class, decay_exp):
+def experiment():
     np.random.seed()
 
     # MDP
     mdp = GridWorld(height=3, width=3, goal=(2,2))
 
     # Policy
-    epsilon = Parameter(value=1, decay=False)
+    epsilon = Parameter(value=1, decay=True)
     pi = EpsGreedy(epsilon=epsilon, observation_space=mdp.observation_space,
                    action_space=mdp.action_space)
 
@@ -28,7 +28,7 @@ def experiment(algorithm_class, decay_exp):
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = Parameter(value=1, decay=True, decay_exp=decay_exp,
+    alpha = Parameter(value=1, decay=True, decay_exp=1,
                               shape=shape)
     delta = Parameter(value=1, decay=False)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
@@ -53,13 +53,7 @@ if __name__ == '__main__':
 
     logger.Logger(3)
 
-    names = {1: '1', .8: '08', QDecompositionLearning: 'QD'}
-    for e in [1, .8]:
-        for a in [QDecompositionLearning]:
-            r = Parallel(n_jobs=-1)(
-                delayed(experiment)(a, e) for _ in xrange(n_experiment))
-            from matplotlib import pyplot as plt
-            plt.plot(np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-            plt.show()
-            #np.save('r' + names[a] + names[e] + '.npy',
-            #        np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
+    r = Parallel(n_jobs=-1)(delayed(experiment)() for _ in xrange(n_experiment))
+    from matplotlib import pyplot as plt
+    plt.plot(r[0])
+    plt.show()

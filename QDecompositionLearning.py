@@ -8,14 +8,14 @@ class QDecompositionLearning(Agent):
     """
     Implements functions to run QDec algorithms.
     """
-    def __init__(self, approximator, policy, actions, states, **params):
+    def __init__(self, approximator, policy, states, actions, **params):
 
         self.alpha = params['algorithm_params'].pop('learning_rate')
         self.delta = params['algorithm_params'].pop('delta')
         self.offpolicy = params['algorithm_params'].pop('offpolicy')
 
-        self.r_tilde = np.zeros(shape=actions+states)
-        self.q_tilde = np.zeros(shape=actions+states)
+        self.r_tilde = np.zeros(shape=states+actions)
+        self.q_tilde = np.zeros(shape=states+actions)
 
         super(QDecompositionLearning, self).__init__(approximator, policy, **params)
 
@@ -29,7 +29,7 @@ class QDecompositionLearning(Agent):
             [dataset[-1]])
 
         sa = [state, action]
-        sa1 = np.concatenate((state, action), axis=1)
+        sa1 = tuple(np.concatenate((state, action), axis=1)[0])
 
         alpha = self.alpha(sa)
 
@@ -44,8 +44,8 @@ class QDecompositionLearning(Agent):
         self.q_tilde[sa1] = qtilde_current + alpha*delta * (q_next - qtilde_current)
 
         # Update policy
-        q = self.r_tilde + self.mdp_info['gamma']*self.q_tilde
-        self.approximator.fit(sa,q,**self.params['fit_params'])
+        q = self.r_tilde[sa1] + self.mdp_info['gamma']*self.q_tilde[sa1]
+        self.approximator.fit(sa,[q],**self.params['fit_params'])
 
     def __str__(self):
         return self.__name__
