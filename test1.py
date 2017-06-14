@@ -7,7 +7,7 @@ from PyPi.core.core import Core
 from PyPi.environments import *
 from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
-from PyPi.utils.dataset import parse_dataset
+from PyPi.utils.dataset import compute_J
 from PyPi.utils.parameters import Parameter
 
 
@@ -44,9 +44,7 @@ def experiment():
     core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
                iterate_over='samples')
 
-    _, _, reward, _, _, _ = parse_dataset(core.get_dataset())
-
-    return reward
+    return compute_J(core.get_dataset(), mdp.gamma)
 
 if __name__ == '__main__':
     n_experiment = 1
