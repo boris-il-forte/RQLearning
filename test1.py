@@ -2,6 +2,8 @@ import numpy as np
 from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
+from DeltaParameter import DeltaParameter
+
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
 from PyPi.environments import *
@@ -9,7 +11,6 @@ from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
 from PyPi.utils.dataset import compute_J
 from PyPi.utils.parameters import Parameter
-
 
 def experiment():
     np.random.seed()
@@ -30,7 +31,7 @@ def experiment():
     # Agent
     alpha = Parameter(value=1, decay=True, decay_exp=1,
                               shape=shape)
-    delta = Parameter(value=1, decay=False)
+    delta = DeltaParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,

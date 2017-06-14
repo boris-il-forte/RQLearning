@@ -1,14 +1,14 @@
+import numpy as np
+
 class DeltaParameter(object):
     def __init__(self, value, exponential=False, min_value=None, shape=(1,)):
         self._initial_value = value
         self._exponential = exponential
         self._min_value = min_value
-        self._Q2 = np.zeros(shape)
         self._n_updates = np.zeros(shape)
         self._weights_var = np.zeros(shape)
-        self._sigmas = np.ones(shape)*1e10
 
-    def __call__(self, idx, val, update=True):
+    def __call__(self, idx, **kwargs):
         if isinstance(idx, list):
             assert len(idx) == 2
 
@@ -21,23 +21,21 @@ class DeltaParameter(object):
 
         idx = tuple(idx) if idx.size == self._n_updates.ndim else 0
 
-        return self._compute(idx, val)
+        return self._compute(idx, kwargs['Sigma'])
 
-    def _compute(self, idx, alpha, Q, target):
+    def _compute(self, idx, Sigma):
+        self._n_updates[idx] += 1
 
-        self._Q2[idx]= (1.0 - alpha) * self._Q2[idx] + alpha * target**2;
+        Sigma_estimator = Sigma*self._weights_var[idx]
 
-        if (self._n_updates[idx] > 1.0):
-            self._weights_var[idx] = (1.0 - alpha)**2 * self._weights_var[idx] + alpha**2.0
-            n = 1.0 / self._weights_var[idx]
-            diff = self._Q2(idx) - Q[idx]^2.0
-            if diff < 0.0:
-                diff = 0.0
-            self._sigmas[idx] = np.sqrt(diff / n);
-
-
-        new_value = 1.0 - np.exp(-self._sigmas[idx]) if self._exponential else 1.0 / (self.sigmas[idx] + 1.0)
-        if self._min_value is None or new_value >= self._min_value:
-            return new_value
+        if self._n_updates[idx] < 2:
+            parameter_value = self._initial_value
         else:
-            return self._min_value
+            parameter_value = np.exp(-Sigma_estimator) if self._exponential else 1.0 / (Sigma_estimator + 1.0)
+
+        if self._min_value is not None and new_value < self._min_value:
+            parameter_value =  self._min_value
+
+        self._weights_var[idx] = (1.0 - parameter_value)**2 * self._weights_var[idx] + parameter_value**2.0
+
+        return parameter_value

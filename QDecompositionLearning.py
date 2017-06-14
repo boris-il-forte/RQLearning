@@ -15,7 +15,9 @@ class QDecompositionLearning(Agent):
         self.offpolicy = params['algorithm_params'].pop('offpolicy')
 
         self.r_tilde = np.zeros(shape=states+actions)
+        self.r2_tilde = np.zeros(shape=states + actions)
         self.q_tilde = np.zeros(shape=states+actions)
+        self.q2_tilde = np.zeros(shape=states+actions)
 
         super(QDecompositionLearning, self).__init__(approximator, policy, **params)
 
@@ -31,17 +33,20 @@ class QDecompositionLearning(Agent):
         sa = [state, action]
         sa1 = tuple(np.concatenate((state, action), axis=1)[0])
 
-        alpha = self.alpha(sa)
+        sigma_r = self.r2_tilde[sa1] - self.r_tilde[sa1]**2
+        alpha = self.alpha(sa, Sigma=sigma_r)
 
         # Reward update
-        r_current = self.r_tilde[sa1]
-        self.r_tilde[sa1] = r_current + alpha*(reward - r_current)
+        self.r_tilde[sa1] += alpha*(reward - self.r_tilde[sa1])
+        self.r2_tilde[sa1] += alpha*(reward**2 - self.r2_tilde[sa1])
 
         # Q update
-        delta = self.delta(sa)
-        qtilde_current = self.q_tilde[sa1]
+        sigma_q = self.q2_tilde[sa1] - self.q_tilde[sa1] ** 2
+        delta = self.delta(sa, Sigma=sigma_q)
         q_next = self._next_q(next_state) if not absorbing else 0.
-        self.q_tilde[sa1] = qtilde_current + alpha*delta * (q_next - qtilde_current)
+        self.q_tilde[sa1] += alpha*delta * (q_next - self.q_tilde[sa1])
+        self.q2_tilde[sa1] += alpha * delta * (q_next**2 - self.q2_tilde[sa1])
+
 
         # Update policy
         q = self.r_tilde[sa1] + self.mdp_info['gamma']*self.q_tilde[sa1]
