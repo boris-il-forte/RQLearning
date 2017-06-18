@@ -31,6 +31,7 @@ def experiment():
 
     # Agent
     #alpha = Parameter(value=1, decay=True, decay_exp=1, shape=shape)
+    #alpha = DeltaParameter(value=0, shape=shape)
     alpha = VarianceParameter(value=1, shape=shape)
     delta = DeltaParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
