@@ -3,6 +3,7 @@ from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
 from DeltaParameter import DeltaParameter
+from VarianceParameter import VarianceParameter
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
@@ -29,8 +30,8 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = Parameter(value=1, decay=True, decay_exp=1,
-                              shape=shape)
+    #alpha = Parameter(value=1, decay=True, decay_exp=1, shape=shape)
+    alpha = VarianceParameter(value=1, shape=shape)
     delta = DeltaParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()

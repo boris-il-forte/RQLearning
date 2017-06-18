@@ -1,6 +1,6 @@
 import numpy as np
 
-class DeltaParameter(object):
+class VarianceParameter(object):
     def __init__(self, value, exponential=False, min_value=None, shape=(1,)):
         self._initial_value = value
         self._exponential = exponential
@@ -31,7 +31,7 @@ class DeltaParameter(object):
         if self._n_updates[idx] < 2:
             parameter_value = self._initial_value
         else:
-            parameter_value = np.exp(-Sigma_estimator) if self._exponential else 1.0 / (Sigma_estimator + 1.0)
+            parameter_value = 1 - np.exp(-Sigma_estimator) if self._exponential else Sigma_estimator / (Sigma_estimator + 1.0)
 
         if self._min_value is not None and parameter_value < self._min_value:
             parameter_value = self._min_value

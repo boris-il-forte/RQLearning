@@ -10,9 +10,15 @@ class QDecompositionLearning(Agent):
     """
     def __init__(self, approximator, policy, states, actions, **params):
 
-        self.alpha = params['algorithm_params'].pop('learning_rate')
-        self.delta = params['algorithm_params'].pop('delta')
         self.offpolicy = params['algorithm_params'].pop('offpolicy')
+        self.alpha = params['algorithm_params'].pop('learning_rate')
+
+        self.delta = params['algorithm_params'].get('delta')
+
+        if self.delta is not None:
+            del params['algorithm_params']['delta']
+        else:
+            self.beta = params['algorithm_params'].pop('beta')
 
         self.r_tilde = np.zeros(shape=states+actions)
         self.r2_tilde = np.zeros(shape=states + actions)
@@ -42,10 +48,15 @@ class QDecompositionLearning(Agent):
 
         # Q update
         sigma_q = self.q2_tilde[sa1] - self.q_tilde[sa1] ** 2
-        delta = self.delta(sa, Sigma=sigma_q)
+
+        if self.delta is not None:
+            beta = alpha*self.delta(sa, Sigma=sigma_q)
+        else:
+            beta = self.beta(sa, Sigma=sigma_q)
+
         q_next = self._next_q(next_state) if not absorbing else 0.
-        self.q_tilde[sa1] += alpha*delta * (q_next - self.q_tilde[sa1])
-        self.q2_tilde[sa1] += alpha * delta * (q_next**2 - self.q2_tilde[sa1])
+        self.q_tilde[sa1] += beta * (q_next - self.q_tilde[sa1])
+        self.q2_tilde[sa1] += beta * (q_next**2 - self.q2_tilde[sa1])
 
 
         # Update policy
