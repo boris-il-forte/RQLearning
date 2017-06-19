@@ -9,18 +9,6 @@ class DeltaParameter(object):
         self._weights_var = np.zeros(shape)
 
     def __call__(self, idx, **kwargs):
-        if isinstance(idx, list):
-            assert len(idx) == 2
-
-            idx = np.concatenate((idx[0].astype(np.int),
-                                  idx[1].astype(np.int)),
-                                 axis=1).ravel()
-        else:
-            idx = idx.astype(np.int)
-        assert idx.ndim == 1
-
-        idx = tuple(idx) if idx.size == self._n_updates.ndim else 0
-
         return self._compute(idx, kwargs['Sigma'])
 
     def _compute(self, idx, Sigma):
