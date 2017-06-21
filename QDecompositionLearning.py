@@ -22,12 +22,9 @@ class QDecompositionLearning(Agent):
             self.beta = params['algorithm_params'].pop('beta')
 
         self.r_tilde = np.zeros(shape=states+actions)
-        self.r2_tilde = np.zeros(shape=states + actions)
         self.q_tilde = np.zeros(shape=states+actions)
-        self.q2_tilde = np.zeros(shape=states+actions)
 
         super(QDecompositionLearning, self).__init__(approximator, policy, **params)
-
 
     def fit(self, dataset, n_fit_iterations=1):
         """
@@ -41,25 +38,21 @@ class QDecompositionLearning(Agent):
         sa = state_action(state, action)
         sa1 = state_action_idx(state, action)
 
-        sigma_r = self.r2_tilde[sa1] - self.r_tilde[sa1]**2
-        alpha = self.alpha(sa_idx, Sigma=sigma_r)
 
         # Reward update
-        self.r_tilde[sa1] += alpha*(reward - self.r_tilde[sa1])
-        self.r2_tilde[sa1] += alpha*(reward**2 - self.r2_tilde[sa1])
+        alpha = self.alpha(sa_idx, target=reward)
+        self.r_tilde[sa1] += alpha * (reward - self.r_tilde[sa1])
 
         # Q update
-        sigma_q = self.q2_tilde[sa1] - self.q_tilde[sa1] ** 2
+        if not absorbing:
+            q_next = self._next_q(next_state)
 
-        if self.delta is not None:
-            beta = alpha * self.delta(sa_idx, Sigma=sigma_q)
-        else:
-            beta = self.beta(sa_idx, Sigma=sigma_q)
+            if self.delta is not None:
+                beta = alpha * self.delta(sa_idx, target=q_next)
+            else:
+                beta = self.beta(sa_idx, target=q_next)
 
-        q_next = self._next_q(next_state) if not absorbing else 0.
-        self.q_tilde[sa1] += beta * (q_next - self.q_tilde[sa1])
-        self.q2_tilde[sa1] += beta * (q_next**2 - self.q2_tilde[sa1])
-
+            self.q_tilde[sa1] += beta * (q_next - self.q_tilde[sa1])
 
         # Update policy
         q = self.r_tilde[sa1] + self.mdp_info['gamma']*self.q_tilde[sa1]

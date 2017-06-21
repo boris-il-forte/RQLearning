@@ -1,29 +1,36 @@
 import numpy as np
 
-class VarianceParameter(object):
-    def __init__(self, value, exponential=False, min_value=None, shape=(1,)):
-        self._initial_value = value
+from PyPi.utils.parameters import Parameter
+
+
+class VarianceParameter(Parameter):
+    def __init__(self, value, exponential=False, min_value=None,
+                 shape=(1,)):
         self._exponential = exponential
-        self._min_value = min_value
-        self._n_updates = np.zeros(shape)
         self._weights_var = np.zeros(shape)
+        self._x = np.zeros(shape)
+        self._x2 = np.zeros(shape)
+        self._parameter_value = np.ones(shape)
 
-    def __call__(self, idx, **kwargs):
-        return self._compute(idx, kwargs['Sigma'])
+        super(VarianceParameter, self).__init__(value, min_value, shape)
 
-    def _compute(self, idx, Sigma):
-        self._n_updates[idx] += 1
+    def _compute(self, idx, **kwargs):
+        return self._parameter_value[idx]
 
-        Sigma_estimator = Sigma*self._weights_var[idx]
+    def _update(self, idx, **kwargs):
+        x = kwargs['target']
+
+        # compute parameter value
+        var = self._n_updates[idx]*(self._x2[idx]-self._x[idx]**2)/(self._n_updates[idx] - 1.0)
+        var_estimator = var*self._weights_var[idx]
 
         if self._n_updates[idx] < 2:
             parameter_value = self._initial_value
         else:
-            parameter_value = 1 - np.exp(-Sigma_estimator) if self._exponential else Sigma_estimator / (Sigma_estimator + 1.0)
+            parameter_value = 1 - np.exp(-var_estimator) if self._exponential else var_estimator / (var_estimator + 1.0)
 
-        if self._min_value is not None and parameter_value < self._min_value:
-            parameter_value = self._min_value
-
-        self._weights_var[idx] = (1.0 - parameter_value)**2 * self._weights_var[idx] + parameter_value**2.0
-
-        return parameter_value
+        # update state
+        self._x[idx] += (x - self._x[idx]) / self._n_updates[idx]
+        self._x2[idx] += (x ** 2 - self._x2[idx]) / self._n_updates[idx]
+        self._weights_var[idx] = (1.0 - parameter_value) ** 2 * self._weights_var[idx] + parameter_value ** 2.0
+        self._parameter_value[idx] = parameter_value

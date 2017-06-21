@@ -12,7 +12,7 @@ from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
 from PyPi.utils.callbacks import CollectMaxQ
 from PyPi.utils.dataset import compute_J, parse_dataset
-from PyPi.utils.parameters import Parameter
+from PyPi.utils.parameters import DecayParameter
 
 
 def experiment():
@@ -22,7 +22,7 @@ def experiment():
     mdp = GridWorldVanHasselt()
 
     # Policy
-    epsilon = Parameter(value=1, decay=True, decay_exp=.5,
+    epsilon = DecayParameter(value=1, decay_exp=.5,
                         shape=mdp.observation_space.shape)
     pi = EpsGreedy(epsilon=epsilon, observation_space=mdp.observation_space,
                    action_space=mdp.action_space)
@@ -33,7 +33,7 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = Parameter(value=1, decay=True, decay_exp=.8, shape=shape)
+    alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = DeltaParameter(value=0, shape=shape)
     #alpha = VarianceParameter(value=1, shape=shape)
     delta = DeltaParameter(value=0, shape=shape)
@@ -59,7 +59,7 @@ def experiment():
     return reward, max_Qs
 
 if __name__ == '__main__':
-    n_experiment = 10000
+    n_experiment = 10
 
     logger.Logger(1)
 
