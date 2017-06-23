@@ -28,7 +28,7 @@ class VarianceParameter(Parameter):
         else:
             var = n * (self._x2[idx] - self._x[idx] ** 2) / (n - 1.0)
             var_estimator = var * self._weights_var[idx]
-            parameter_value = _compute_parameter(var_estimator)
+            parameter_value = self._compute_parameter(var_estimator)
 
         # update state
         self._x[idx] += (x - self._x[idx]) / self._n_updates[idx]
