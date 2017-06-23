@@ -2,8 +2,7 @@ import numpy as np
 from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
-from DeltaParameter import DeltaParameter
-from VarianceParameter import VarianceParameter
+from VarianceParameter import VarianceIncreasingParameter, VarianceDecreasingParameter
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
@@ -35,8 +34,8 @@ def experiment():
     # Agent
     #alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = DeltaParameter(value=0, shape=shape)
-    alpha = VarianceParameter(value=1, shape=shape)
-    delta = DeltaParameter(value=0, shape=shape)
+    alpha = VarianceIncreasingParameter(value=1, shape=shape)
+    delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
