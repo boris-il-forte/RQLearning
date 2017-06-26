@@ -21,16 +21,30 @@ class VarianceParameter(Parameter):
         x = kwargs['target']
 
         # compute parameter value
-        var = self._n_updates[idx]*(self._x2[idx]-self._x[idx]**2)/(self._n_updates[idx] - 1.0)
-        var_estimator = var*self._weights_var[idx]
+        n = self._n_updates[idx] - 1
 
-        if self._n_updates[idx] < 2:
+        if n < 2:
             parameter_value = self._initial_value
         else:
-            parameter_value = 1 - np.exp(-var_estimator) if self._exponential else var_estimator / (var_estimator + 1.0)
+            var = n * (self._x2[idx] - self._x[idx] ** 2) / (n - 1.0)
+            var_estimator = var * self._weights_var[idx]
+            parameter_value = self._compute_parameter(var_estimator)
 
         # update state
         self._x[idx] += (x - self._x[idx]) / self._n_updates[idx]
         self._x2[idx] += (x ** 2 - self._x2[idx]) / self._n_updates[idx]
         self._weights_var[idx] = (1.0 - parameter_value) ** 2 * self._weights_var[idx] + parameter_value ** 2.0
         self._parameter_value[idx] = parameter_value
+
+    def _compute_parameter(self, sigma):
+        pass
+
+
+class VarianceIncreasingParameter(VarianceParameter):
+    def _compute_parameter(self, sigma):
+        return 1 - np.exp(-sigma) if self._exponential else sigma / (sigma + 1.0)
+
+
+class VarianceDecreasingParameter(VarianceParameter):
+    def _compute_parameter(self, sigma):
+        return np.exp(-sigma) if self._exponential else 1.0 / (sigma + 1.0)

@@ -2,8 +2,7 @@ import numpy as np
 from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
-from DeltaParameter import DeltaParameter
-from VarianceParameter import VarianceParameter
+from VarianceParameter import VarianceDecreasingParameter
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
@@ -23,7 +22,7 @@ def experiment():
 
     # Policy
     epsilon = DecayParameter(value=1, decay_exp=.5,
-                        shape=mdp.observation_space.shape)
+                             shape=mdp.observation_space.shape)
     pi = EpsGreedy(epsilon=epsilon, observation_space=mdp.observation_space,
                    action_space=mdp.action_space)
 
@@ -33,15 +32,17 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    #alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
+    alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = DeltaParameter(value=0, shape=shape)
-    alpha = VarianceParameter(value=1, shape=shape)
-    delta = DeltaParameter(value=0, shape=shape)
+    #alpha = VarianceIncreasingParameter(value=1, shape=shape)
+    delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
                     'fit_params': fit_params}
-    agent = QDecompositionLearning(approximator, pi, mdp.observation_space.shape, mdp.action_space.shape, **agent_params)
+    agent = QDecompositionLearning(approximator, pi,
+                                   mdp.observation_space.shape,
+                                   mdp.action_space.shape, **agent_params)
 
     # Algorithm
     collect_max_Q = CollectMaxQ(approximator, np.array([mdp._start]),
@@ -59,11 +60,12 @@ def experiment():
     return reward, max_Qs
 
 if __name__ == '__main__':
-    n_experiment = 10
+    n_experiment = 10000
 
-    logger.Logger(1)
+    logger.Logger(3)
 
-    out = Parallel(n_jobs=-1)(delayed(experiment)() for _ in xrange(n_experiment))
+    out = Parallel(n_jobs=-1)(delayed(
+        experiment)() for _ in xrange(n_experiment))
     r = np.array([o[0] for o in out])
     max_Qs = np.array([o[1] for o in out])
 
