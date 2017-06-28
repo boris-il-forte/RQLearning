@@ -2,7 +2,8 @@ import numpy as np
 from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
-from VarianceParameter import VarianceDecreasingParameter
+from VarianceParameter import VarianceDecreasingParameter,\
+    VarianceIncreasingParameter
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
@@ -32,9 +33,9 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
+    #alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = DeltaParameter(value=0, shape=shape)
-    #alpha = VarianceIncreasingParameter(value=1, shape=shape)
+    alpha = VarianceIncreasingParameter(value=1, shape=shape)
     delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()
@@ -71,4 +72,4 @@ if __name__ == '__main__':
 
     np.save('rQDec.npy',
             np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-    np.save('max_QQDec.npy', np.mean(max_Qs, 0))
+    np.save('maxQDec.npy', np.mean(max_Qs, 0))
