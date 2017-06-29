@@ -48,7 +48,7 @@ class QDecompositionLearning(Agent):
             q_next = self._next_q(next_state)
 
             if self.delta is not None:
-                beta = alpha * self.delta(sa_idx, target=q_next)
+                beta = alpha * self.delta(sa_idx, target=q_next, factor=alpha)
             else:
                 beta = self.beta(sa_idx, target=q_next)
 
