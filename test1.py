@@ -35,7 +35,7 @@ def experiment():
     # Agent
     #alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = DeltaParameter(value=0, shape=shape)
-    alpha = VarianceIncreasingParameter(value=1, shape=shape)
+    alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100)
     delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, delta=delta, offpolicy=True)
     fit_params = dict()

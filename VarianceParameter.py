@@ -31,7 +31,7 @@ class VarianceParameter(Parameter):
         else:
             var = n * (self._x2[idx] - self._x[idx] ** 2) / (n - 1.0)
             var_estimator = var * self._weights_var[idx]
-            parameter_value = self._compute_parameter(sqrt(var_estimator))
+            parameter_value = self._compute_parameter(var_estimator)
 
         # update state
         self._x[idx] += (x - self._x[idx]) / self._n_updates[idx]
@@ -45,9 +45,9 @@ class VarianceParameter(Parameter):
 
 class VarianceIncreasingParameter(VarianceParameter):
     def _compute_parameter(self, sigma):
-        return 1 - np.exp(sigma*log(0.5)/self._tol) if self._exponential else sigma / (sigma + self._tol)
+        return 1 - np.exp(sigma * log(0.5)/self._tol) if self._exponential else sigma / (sigma + self._tol)
 
 
 class VarianceDecreasingParameter(VarianceParameter):
     def _compute_parameter(self, sigma):
-        return np.exp(sigma*log(0.5)/self._tol) if self._exponential else 1.0 / (sigma + self._tol)
+        return np.exp(sigma * log(0.5)/self._tol) if self._exponential else 1.0 / (sigma + self._tol)
