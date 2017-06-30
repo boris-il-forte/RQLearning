@@ -13,19 +13,17 @@
 
 \begin{document}
 
-\title{Variable discount factor learning in Markov Decision Process}
+\title{Reducing Uncertainty Propagation in Markov Decision Processes}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
 \author{\IEEEauthorblockN{Davide Tateo, Alessandro Nuara, Carlo D'Eramo}
-\IEEEauthorblockA{Dipartimento di Elettronica, Informazione e Biongegneria
-Politecnico Di Milano\\
-Milano, Italy \\
+\IEEEauthorblockA{Department of Electronics, Information and Bioengineering\\
+Politecnico Di Milano, Milano, Italy\\
 Email: \{davide.tateo, alessandro.nuara, carlo.deramo\}@polimi.it}
 }
-
 
 % make the title area
 \maketitle
@@ -33,7 +31,7 @@ Email: \{davide.tateo, alessandro.nuara, carlo.deramo\}@polimi.it}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-TODO
+In many real-world problems stochasticity is a critical issue for the learning process. The sources of stochasticity come from the transition model, the explorative component of the policy or, even worse, from noisy observation of the reward function. For a finite number of samples, traditional reinforcement learning methods provide biased estimates of the action-value function. The presence of the bias leads to a poor estimation of the action-value function that is propagated to other action-values by the application of the Bellman operator. We propose an approach that significantly mitigates this issue avoiding the propagation of bad estimates of the action-value function.
 \end{abstract}
 
 % no keywords
@@ -49,13 +47,14 @@ TODO
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
-
-
 \section{Introduction}
-Motivations. \\
+It is well known that a key issue of reinforcement learning problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to poor performance. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could be have stochastic transition and this complicates the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
 
-State of the art (Q-Learning~\cite{watkins1992q}, SARSA, Double, Weighted, R-Learning)
+Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful reinforcement learning algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent but biased estimator. However with a finite number of samples the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, it propagates to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. To avoid the presence of the positive bias, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} that provides a negatively biased estimation of the action-values (i.e. it underestimates the optimal action-value) and this improves the performance when stochasticity is an issue. Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that balances between underestimation and overestimation. 
 
+However, the correlation between bias of the estimation and performance is still unclear; indeed, as also shown in the empirical section of this paper, Speedy Q-Learning algorithm \cite{NIPS2011_4251} has very good performance despite its extremely poor estimation of the action-value. This is due to the fact that most of the policies are not dependent on the accuracy of the action-values, but instead they rely on their ordering. Starting from this consideration, we try to address this problem from another point of view. Indeed, we do not focus on the estimation of the maximum expected value, but we care about avoiding the propagation of the action-value estimates. In fact, we propose this work starting from the consideration that it is not relevant whether the approximations of the point estimates of the maximum expected value are good or not, but how these information is propagated to the other states. Our idea is to propagate the information about the value of the best action only when there is sufficiently certainty about the estimation.
+
+The interesting aspect of this approach is that it is possible to use any maximum expected value estimator and, moreover, it can be easily extended in an on-policy scenario. Since we believe that in our approach the choice of the estimator is not a relevant issue, we choose the maximum operator as it is the simplest one.
 
 \section{Preliminaries}
 
@@ -113,10 +112,7 @@ With $\gamma'=\gamma\delta$. Notiche that $Q'(x,u)$ is the current Q function wi
  \alpha & =\dfrac{\sigma^{2}}{\sigma^{2}+1}
 \end{align}
 
-
 \section{Experimental results}
-
-
 
 \section{Conclusion}
 
