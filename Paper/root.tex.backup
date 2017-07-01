@@ -61,7 +61,7 @@ The interesting aspect of this approach is that it is possible to use any maximu
 
 \section{Preliminaries}
 ---TODO preso dal mio paper, va parafrasato, solo modifiche minori--
-A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ is the state space, $\actionspace$ is the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, and $D$ is the distribution of the initial state.
+A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ is the state space, $\actionspace$ is the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, $\Rmodel(r|x, u, x')$ defines the distribution of the reward, and $D$ is the distribution of the initial state.
 A stochastic policy is defined by a density distribution $\pol(\cdot|x)$ that specifies for each state $x$ the density distribution over the action space $\actionspace$.
 ---
 Given a policy $\pol$, we define the action value function as:
@@ -97,58 +97,61 @@ We can give an interpretation of this two functions. $\Rtilde(x,u)$ is the expec
 We can now write the optimal value function as:
 \begin{align}
  Q^*(x,u)=\Rtilde(x,u)+\Qtilde(x,u)
+ \label{eq:qdecrqtilde}
 \end{align}
 
-Our approach shift the focus of the reinforcement learning task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions.
+Our approach shift the focus of the reinforcement learning task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optmimal policy.
 
 \section{The proposed Method}
 
+In the following section we will derive our method from \ref{eq:qdecrqtilde}. We will propose the general schema, using the maximum estimator and we will show the relations with the standard Q learning update.
+
 \subsection{Decomposition of the TD error}
 
-Decompose Q function:
+Standard Q-Learning algorithm computes the temporal difference error given the tuple $(x,u,r,x')$ w.r.t. the current action-value estimates, and then updates such estimate proprotionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate is 1, the new sample substitutes the old estimate, if the learning rate is close to 0, the new sample is discarded, and the old estimate is kept unchanged. 
+As shown in \ref{eq:qdecrqtilde} the action-value function could be decomposed in two different components. Our method is based on the idea to give separate estimates for this two components,
+Instead of computing a TD error, we compute the error w.r.t. each component of the action-value function:
 
 \begin{align}
-Q(x,u) & =\mathbb{E}\left[R(x,u,x')+\gamma Q(x',\pi(x'))\right] \nonumber\\ 
- & =\mathbb{E}\left[R(x,u,x')\right]+\gamma\mathbb{E}\left[Q(x',\pi(x'))\right] \nonumber\\
- & =\tilde{R}(x,u)+\gamma\tilde{Q}(x,u)
+\Rtilde(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\Rtilde(x,u)) \label{eq:rtilupdedate}\\
+\Qtilde(x,u) & \leftarrow\tilde{Q}(x,u)+\beta(\max_{u'}Q(x',u')-\Qtilde(x,u))
+\label{eq:qtildeupdate}
 \end{align}
 
-Decomposed TD update:
-
-\begin{align}
-\tilde{R}(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u))\\
-\tilde{Q}(x,u) & \leftarrow\tilde{Q}(x,u)+\beta(Q(x',\pi(x'))-\tilde{Q}(x,u))
-\end{align}
-
-Update of the Q function:
+Separating the two components of the value function can be useful, as the two components has inherently different sources of stochasticity. Moreover, the information stored in $\Rtilde$ is local to each state-action pair, and doesn't contain the uncertainty of the estimation of others states. The information stored in $\Qtilde$ instead depends only on the action-value function of the states that could be reached after performing the action $u$ in the state $x$, which, depends, recursively, on the others action-value functions. It is clear that the propagation of uncertain values only affects the $\Qtilde$ component.
+As the actual action value function is the sum of the two estimates, we can write an equivalent update for the Q function:
 
 \begin{align}
 Q(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
- & +\gamma\left(\tilde{Q}(x,u)+\beta(Q(x',\pi(x'))-\tilde{Q}(x,u))\right) \nonumber\\
+ & +\gamma\left(\tilde{Q}(x,u)+\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))\right) \nonumber\\
  & =Q(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
- & +\gamma\beta(Q(x',\pi(x'))-\tilde{Q}(x,u))
+ & +\gamma\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))
+ \label{eq:cumulativeupdate}
 \end{align}
+
+notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However \ref{eq:cumulativeupdate} is useful to analyze the relations to standard Q-Learning algorithm.
 
 \subsection{Analysis of the decomposed update}
-If $\alpha=\beta$
-
+We will discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha(t)=\beta(t)$, $\forall t$.
+by combining \ref{eq:cumulativeupdate} and \ref{eq:qdecrqtilde} we obtain:
 \begin{align}
-Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma Q(x',\pi(x')) \nonumber\\
+Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\max_{u'}Q(x',u')\nonumber\\
  & -Q(x,u))
 \end{align}
+That is the classical Q-Learning update. 
 
-That is the classical Q-Learning update
-
-If $\beta=\delta\alpha$
+We consider now the setting $\alpha(t)\geq\beta(t)>0$, $\forall t$. Let $\beta(t)=\delta(t)\alpha(t)$, we obtain:
 \begin{align}
-Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\delta Q(x',\pi(x')) \nonumber\\
+Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\delta \max_{u'}Q(x',u') \nonumber\\
  & -(\tilde{R}(x,u)+\gamma\delta\tilde{Q}(x,u))) \nonumber\\
- & =Q(x,u)+\alpha(R(x,u,x')+\gamma'Q(x',\pi(x')) \nonumber\\
+ & =Q(x,u)+\alpha(R(x,u,x')+\gamma'\max_{u'}Q(x',u') \nonumber\\
  & -(\tilde{R}(x,u)+\gamma'\tilde{Q}(x,u))) \nonumber\\
- & =Q(x,u)+\alpha((R(x,u,x')+\gamma'Q(x',\pi(x'))) \nonumber\\
+ & =Q(x,u)+\alpha((R(x,u,x')+\gamma'\max_{u'}Q(x',u')) \nonumber\\
  & -Q'(x,u))
 \end{align}
-With $\gamma'=\gamma\delta$. Notiche that $Q'(x,u)$ is the current Q function with a different learning rate.
+With $\gamma'=\gamma\delta$. Notiche that $Q'(x,u)$ is the current Q function, but computed with a different discount factor. If the condition above is satisfied, then, we can see our method as a variable discount factor learning. If we consider $\delta(t)$ that increase monotonically in the interval $[0,1]$, our method is increasing each step the effective horizon, starting from trying to solve a greedy miopyc problem, and moving towards the real one. This approach, it has been used in practice to solve infinite horizon problems when the discount factor approach to 1,~\cite{}.
+
+
 
 \subsection{Variance dependent learning rate}
 \begin{align}
