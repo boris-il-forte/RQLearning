@@ -4,12 +4,15 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{algorithmic}
 %\usepackage{url}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+
+\input{commands.tex}
 
 \begin{document}
 
@@ -57,6 +60,46 @@ However, the correlation between bias of the estimation and performance is still
 The interesting aspect of this approach is that it is possible to use any maximum expected value estimator and, moreover, it can be easily extended in an on-policy scenario. Since we believe that in our approach the choice of the estimator is not a relevant issue, we choose the maximum operator as it is the simplest one.
 
 \section{Preliminaries}
+---TODO preso dal mio paper, va parafrasato, solo modifiche minori--
+A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ is the state space, $\actionspace$ is the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, $\Rmodel(r|x, u, x')$ defines the distribution of the reward, and $D$ is the distribution of the initial state.
+A stochastic policy is defined by a density distribution $\pol(\cdot|x)$ that specifies for each state $x$ the density distribution over the action space $\actionspace$.
+---
+Given a policy $\pol$, we define the action value function as:
+\begin{align}
+ Q^\pol(x,u)=\underset{\strut\mathclap{\substack{(x', u')\sim \\ \Pmodel(x'|x,u)\pol(u'|x')}}}{\mathbb{E}}\left[ r(x,u,x')+\gamma Q^\pol(x,u)(x',u')\right]
+ \label{eq:qpol}
+\end{align}
+
+The optmimal policy $\pol*$ is the policy with the highest expected return in the MDP. It has been proven that the optimal policy can be always represented by a deterministic policy. The optmimal action velue function $Q^*(x, u)$ is the action-value function of the optmimal policy.
+It has been shown that the optimal policy in any MDP can be always a deterministic policy that at each state chooses the action with the highest $Q^*(x, u)$ value.
+
+Given that we can always write the optimal action-value function as:
+\begin{align}
+ Q^*(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')+\gamma\max_{u'} Q^*(x',u')\right]
+ \label{eq:qopt}
+\end{align}
+
+As the expected value is a linear operator, we can always write \ref{eq:qopt} as:
+\begin{align}
+ Q^*(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]+\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ \gamma\max_{u'} Q^*(x',u')\right]
+ \label{eq:qdec}
+\end{align}
+
+We now introduce two functions, $\Rtilde$ and $\Qtilde$, defined as:
+\begin{align}
+ \Rtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right] \nonumber\ \\
+ \Qtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ \gamma\max_{u'} Q^*(x',u')\right]
+ \label{eq:rqtilde}
+\end{align}
+
+We can give an interpretation of this two functions. $\Rtilde(x,u)$ is the expected immediate reward of the action $u$ in the state $x$. $\Qtilde(x,u)$ is the expected discounted return of the states reached after performing action $u$ in state $x$, i.e. the expected gain of the reached state.
+
+We can now write the optimal value function as:
+\begin{align}
+ Q^*(x,u)=\Rtilde(x,u)+\Qtilde(x,u)
+\end{align}
+
+Our approach shift the focus of the reinforcement learning task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optmimal policy.
 
 \section{The proposed Method}
 
