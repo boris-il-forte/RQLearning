@@ -156,9 +156,31 @@ Finally, we can observe that, if the reward function and the transition model ar
 \subsection{Variance dependent learning rate}
 To have better performance on the estimation, we would like to weight the error of each sample w.r.t. the current estimate depending on how much we are sure about the current value of our estimate. We propose then a learning rate that depends on the variance of the current variable estimate.
 
+First of all we need to compute the variance of each estimator. To perform such computation we have to made the assumption that the learning rates are independent from the data. We will, of course, violate this assumption, but it is needed in order to have a closed form for the variance of the estimator, that can be used in practice. We will suppose also that the samples $X_i$ are i.i.d., with mean $\mu$ and variance $\sigma^2$. Consider the general form of the estimator:
+
 \begin{align}
- \alpha & =\dfrac{\sigma^{2}}{\sigma^{2}+1}
+ \widetilde{X}_{n+1} = (1-\alpha(t))\widetilde{X}_{n}+\alpha(t)*\widetilde{X}
 \end{align}
+
+We now compute the expected value and the variance of this estimator:
+\begin{align}
+ \mathbb{E}\left[\widetilde{X}_{n+1}\right]& = \mu\sum_i^n \alpha(i) \prod_{j=i+1}^{n} \left(1-\alpha(j)\right)\\
+ \mathrm{Var}\left[\widetilde{X}_{n+1}\right]& = \sigma^2\sum_i^n \alpha(i)^2 \prod_{j=i+1}^{n} \left(1-\alpha(j)\right)^2 = \sigma^2\omega
+\end{align}
+
+With $\omega=\sum_i^n \alpha(i)^2 \prod_{j=i+1}^{n} \left(1-\alpha(j)\right)^2$. Notice also that we can use the sample covariance $S_{n-1}$ of the random variable $X$ to estimate the real covariance $sigma^2$. It is possible to compute in an incremental way both the sample covariance, in the traditional way, and $\omega$:
+
+\begin{align}
+ \omega_{n+1}=(1-\alpha(n))^2\omega_n+\alpha(n)^2
+\end{align}
+
+Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
+
+\begin{align}
+ \alpha(t)=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}
+\end{align}
+
+Where $\eta$ is the amount of the estimator variance for wich the learning rate is $0.5$. It can be seen as a soft treshold to tune the speed of the decrease of the learning rate w.r.t. the estimator variance.
 
 \section{Experimental results}
 
