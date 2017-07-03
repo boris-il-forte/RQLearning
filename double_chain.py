@@ -48,7 +48,7 @@ def experiment():
                                    mdp.action_space.shape, **agent_params)
 
     # Algorithm
-    collect_max_Q = CollectMaxQ(approximator, np.array([mdp._start]),
+    collect_max_Q = CollectMaxQ(approximator, np.array([0]),
                                 mdp.action_space.values)
     collect_lr = CollectParameters(beta)
     callbacks = [collect_max_Q, collect_lr]
