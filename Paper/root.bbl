@@ -25,4 +25,37 @@
 C.~J. Watkins and P.~Dayan, ``Q-learning,'' \emph{Machine learning}, vol.~8,
   no. 3-4, pp. 279--292, 1992.
 
+\bibitem{smith2006optimizer}
+J.~E. Smith and R.~L. Winkler, ``The optimizer's curse: Skepticism and
+  postdecision surprise in decision analysis,'' \emph{Management Science},
+  vol.~52, no.~3, pp. 311--322, 2006.
+
+\bibitem{van2004rational}
+E.~Van~den Steen, ``Rational overoptimism (and other biases),'' \emph{American
+  Economic Review}, pp. 1141--1151, 2004.
+
+\bibitem{van2010double}
+H.~van Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
+  Processing Systems}, 2010, pp. 2613--2621.
+
+\bibitem{van2013estimating}
+------, ``Estimating the maximum expected value: an analysis of (nested)
+  cross-validation and the maximum sample average,'' \emph{arXiv preprint
+  arXiv:1302.7175}, 2013.
+
+\bibitem{d2016estimating}
+C.~D’Eramo, M.~Restelli, and A.~Nuara, ``Estimating maximum expected value
+  through gaussian approximation,'' in \emph{International Conference on
+  Machine Learning}, 2016, pp. 1032--1040.
+
+\bibitem{NIPS2011_4251}
+\BIBentryALTinterwordspacing
+M.~Ghavamzadeh, H.~J. Kappen, M.~G. Azar, and R.~Munos, ``Speedy q-learning,''
+  in \emph{Advances in Neural Information Processing Systems 24},
+  J.~Shawe-Taylor, R.~S. Zemel, P.~L. Bartlett, F.~Pereira, and K.~Q.
+  Weinberger, Eds.\hskip 1em plus 0.5em minus 0.4em\relax Curran Associates,
+  Inc., 2011, pp. 2411--2419. [Online]. Available:
+  \url{http://papers.nips.cc/paper/4251-speedy-q-learning.pdf}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

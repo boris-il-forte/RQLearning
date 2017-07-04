@@ -36,12 +36,10 @@ class QDecompositionLearning(Agent):
 
         sa_idx = state_action_idx(state, action)
         sa = state_action(state, action)
-        sa1 = state_action_idx(state, action)
-
 
         # Reward update
         alpha = self.alpha(sa_idx, target=reward)
-        self.r_tilde[sa1] += alpha * (reward - self.r_tilde[sa1])
+        self.r_tilde[sa_idx] += alpha * (reward - self.r_tilde[sa_idx])
 
         # Q update
         if not absorbing:
@@ -52,10 +50,10 @@ class QDecompositionLearning(Agent):
             else:
                 beta = self.beta(sa_idx, target=q_next)
 
-            self.q_tilde[sa1] += beta * (q_next - self.q_tilde[sa1])
+            self.q_tilde[sa_idx] += beta * (q_next - self.q_tilde[sa_idx])
 
         # Update policy
-        q = self.r_tilde[sa1] + self.mdp_info['gamma']*self.q_tilde[sa1]
+        q = self.r_tilde[sa_idx] + self.mdp_info['gamma']*self.q_tilde[sa_idx]
         self.approximator.fit(sa, np.array([q]), **self.params['fit_params'])
 
     def __str__(self):
