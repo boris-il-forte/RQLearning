@@ -123,7 +123,7 @@ if __name__ == '__main__':
         for a in algs:
             out = Parallel(n_jobs=-1)(
                 delayed(experiment2)(a, e) for _ in xrange(n_experiment))
-            Qs = np.array([o[1] for o in out])
+            Qs = np.array(out)
 
             Qs = np.mean(Qs, 0)
 
@@ -131,8 +131,8 @@ if __name__ == '__main__':
 
         out = Parallel(n_jobs=-1)(delayed(
             experiment1)(e) for _ in xrange(n_experiment))
-        Qs = np.array([o[1] for o in out])
-        lr = np.array([o[2] for o in out])
+        Qs = np.array([o[0] for o in out])
+        lr = np.array([o[1] for o in out])
 
         Qs = np.mean(Qs, 0)
         lr = np.mean(lr, 0)
