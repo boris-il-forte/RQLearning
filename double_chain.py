@@ -70,8 +70,8 @@ def experiment2(algorithm_class, decay_exp):
     np.random.seed()
 
     # MDP
-    p = np.load('chain_structure/p.npy')
-    rew = np.load('chain_structure/rew.npy')
+    p = np.load('p.npy')
+    rew = np.load('rew.npy')
     mdp = FiniteMDP(p, rew, gamma=.9)
 
     # Policy
