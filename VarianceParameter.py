@@ -71,11 +71,13 @@ class VarianceIncreasingParameterAutoTol2(VarianceParameter):
         old_value = self._parameter_value[idx]
         new_value = 1 - np.exp(sigma * log(0.5)/self._curTol) if self._exponential else sigma / (sigma + self._curTol)
 
-        if abs(new_value - old_value) < 1e-3:
+        if abs(new_value-old_value)/old_value < 0.005:
             self._curTol += 1
         elif new_value > old_value:
             self._curTol -= 1
             self._curTol = max(self._curTol, self._tol)
+
+        print self._curTol
 
         return new_value
 
