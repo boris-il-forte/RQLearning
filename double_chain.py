@@ -13,7 +13,7 @@ from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
 from PyPi.utils.callbacks import CollectMaxQ
 from PyPi.utils.dataset import compute_J, parse_dataset
-from PyPi.utils.parameters import DecayParameter
+from PyPi.utils.parameters import DecayParameter, Parameter
 
 
 def experiment():
@@ -23,9 +23,9 @@ def experiment():
     p = np.load('p.npy')
     rew = np.load('rew.npy')
     mdp = FiniteMDP(p, rew, gamma=.9)
+
     # Policy
-    epsilon = DecayParameter(value=1, decay_exp=.5,
-                             shape=mdp.observation_space.shape)
+    epsilon = Parameter(value=1)
     pi = EpsGreedy(epsilon=epsilon, observation_space=mdp.observation_space,
                    action_space=mdp.action_space)
 
@@ -35,9 +35,11 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
+    alpha = DecayParameter(value=1, decay_exp=1, shape=shape)
+    #alpha = Parameter(value=.1)
     #alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
     beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
+    #beta = Parameter(value=1)
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
     fit_params = dict()
@@ -55,7 +57,7 @@ def experiment():
     core = Core(agent, mdp, callbacks)
 
     # Train
-    core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
+    core.learn(n_iterations=5000, how_many=1, n_fit_steps=1,
                iterate_over='samples')
 
     _, _, reward, _, _, _ = parse_dataset(core.get_dataset())
@@ -65,7 +67,7 @@ def experiment():
     return reward, max_Qs, lr
 
 if __name__ == '__main__':
-    n_experiment = 10000
+    n_experiment = 100
 
     logger.Logger(3)
 
