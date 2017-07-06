@@ -178,6 +178,8 @@ With $\omega=\sum_i^n \alpha(i)^2 \prod_{j=i+1}^{n} \left(1-\alpha(j)\right)^2$.
  \omega_{n+1}=(1-\alpha(n))^2\omega_n+\alpha(n)^2
 \end{align}
 
+A weak assumption of this model, is that the variables are identically distribuited. While this should be true for the reward function, if the MDP is stationary, this is not true for the Q function values, whose distribution is affected by the policy and by the others states current estimates. However, a good approximation, could be to consider a window lenght in which the distribution is approximatively stationary: using such approach, we can compute the variance of the process in a given time window, forgetting old values that can lead to a biased estimation of the current variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation has in practice have very good results.
+
 Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
 
 \begin{align}
