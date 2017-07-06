@@ -201,49 +201,18 @@ Where $\eta$ has the same iterpretation of the previous scenario.
 
 TODO -- chiedere anche a restelli. Non banale!
 
-<<<<<<< HEAD
-\section{Experimental results}
-\begin{figure*}[t]
- \begin{minipage}{\textwidth}
- \centering
-  \includegraphics[width=.475\textwidth]{./imgs/gridHasselt/allAlgs1.pdf}
-  \includegraphics[width=.475\textwidth]{./imgs/gridHasselt/allAlgs08.pdf}\\
- \end{minipage}
-  \caption{..}
-  \label{F:hasselt_all}
-\end{figure*}
-\begin{figure*}[t]
- \begin{minipage}{\textwidth}
- \centering
-  \includegraphics[width=.475\textwidth]{./imgs/gridHasselt/QDecs1.pdf}
-  \includegraphics[width=.475\textwidth]{./imgs/gridHasselt/QDecs08.pdf}\\
- \end{minipage}
-  \caption{..}
-  \label{F:hasselt_all}
-\end{figure*}
-\begin{figure*}[t]
- \begin{minipage}{\columnwidth}
- \centering
-  \includegraphics[width=\textwidth]{./imgs/gridHasselt/lrs.pdf}
- \end{minipage}
-  \caption{..}
-  \label{F:hasselt_all}
-\end{figure*}
-=======
 
 \section{Experimental Results}
 In this section we comparred the performance of the \emph{QD-Learning} with the most performing state of the art approaches (\emph{Q-learning,  Double Q-learning, Weighted Q-learning, Speedy Q-learning}) in three different problems.
 \subsection{Stochastic (Van Hasselt?) GridWorld}
-We analyzed the performance in terms of average reward and Q-function estimation accuracy of the QD-Learning in a $3$x$3$ Gridworld with settings used in. In this environment, the agent starts the episod from the lower-left position and has to reach the goal in the opposite position. The agent receives a Bernoullian reward -12 or +10 in all intermediate states and a deterministic reward +5 at the goal state. We used, for all algorithms, an	$\epsilon$-greedy policy $\epsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$.
+We analyzed the performance in terms of average reward and Q-function estimation accuracy of the QD-Learning in a $3$x$3$ Gridworld with settings used in AAA. In this environment, the agent starts the episod from the lower-left position and has to reach the goal in the opposite position. The agent receives a Bernoullian reward -12 or +10 in all intermediate states and a deterministic reward +5 at the goal state. We used, for all algorithms, an	$\epsilon$-greedy policy $\epsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$.
 
 
 In Double Q-Learning we use two learning rates $\alpha_t^A(s, a) = \frac{1}{n_t^A(s, a)^{0.8}}$ and $\alpha_t^B(s, a) = \frac{1}{n_t^B(s, a)^{0.8}}$ where $n_t^A(s, a)$ and $n_t^B(s, a)$ are respectively the number of times when table A and table B are updated. 
-
-Once in the goal state, each action ends the episode and returns a reward of $5$. Since the optimal policy ends the episode in five actions, the optimal average reward per step is $0.2$. Moreover, the optimal value of the action maximizing the Q-value is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
+The optimal average reward per step is $0.2$ and the maximum action-value function of the starting state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
 \subsection{Come si chiama Gridworld}
 
 \subsection{Double Chain}
->>>>>>> dbfc27d04e35c7b94142063ac2618bb6c0f4afa1
 
 \section{Conclusion}
 
