@@ -77,7 +77,7 @@ class VarianceIncreasingParameterAutoTol2(VarianceParameter):
             self._curTol -= 1
             self._curTol = max(self._curTol, self._tol)
 
-        print self._curTol
+        #print self._curTol
 
         return new_value
 

@@ -4,6 +4,7 @@ from joblib import Parallel, delayed
 from QDecompositionLearning import QDecompositionLearning
 from VarianceParameter import VarianceDecreasingParameter,\
     VarianceIncreasingParameter, VarianceIncreasingParameterAutoTol2
+from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
 from collectParameters import CollectParameters
 from PyPi.algorithms.td import QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning
 from PyPi.approximators import Ensemble, Regressor, Tabular
@@ -16,7 +17,7 @@ from PyPi.utils.dataset import parse_dataset
 from PyPi.utils.parameters import Parameter, DecayParameter
 
 
-def experiment1(decay_exp):
+def experiment1(decay_exp, beta_type):
     np.random.seed()
 
     # MDP
@@ -36,11 +37,12 @@ def experiment1(decay_exp):
 
     # Agent
     alpha = DecayParameter(value=1, decay_exp=decay_exp, shape=shape)
-    #alpha = Parameter(value=.1)
-    #alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
-    beta = VarianceIncreasingParameterAutoTol2(value=1, shape=shape, tol=1.)
-    #beta = Parameter(value=1)
-    #delta = VarianceDecreasingParameter(value=0, shape=shape)
+
+    if beta_type == 'Win':
+        beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=10., window=50)
+    else:
+        beta = VarianceIncreasingParameter(value=1, shape=shape, tol=10.)
+
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
@@ -109,7 +111,7 @@ def experiment2(algorithm_class, decay_exp):
     return Qs
 
 if __name__ == '__main__':
-    n_experiment = 100
+    n_experiment = 500
 
     logger.Logger(3)
 
@@ -118,7 +120,7 @@ if __name__ == '__main__':
 
     exps = [1, .51]
     algs = [QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning]
-    algs = []
+    beta_types=['', 'Win']
 
     for e in exps:
         for a in algs:
@@ -130,13 +132,14 @@ if __name__ == '__main__':
 
             np.save(names[a] + names[e] + '.npy', Qs)
 
-        out = Parallel(n_jobs=-1)(delayed(
-            experiment1)(e) for _ in xrange(n_experiment))
-        Qs = np.array([o[0] for o in out])
-        lr = np.array([o[1] for o in out])
+        for t in beta_types:
+            out = Parallel(n_jobs=-1)(delayed(
+                experiment1)(e, t) for _ in xrange(n_experiment))
+            Qs = np.array([o[0] for o in out])
+            lr = np.array([o[1] for o in out])
 
-        Qs = np.mean(Qs, 0)
-        lr = np.mean(lr, 0)
+            Qs = np.mean(Qs, 0)
+            lr = np.mean(lr, 0)
 
-        np.save('QDec' + names[e] + '.npy', Qs)
-        np.save('lrQDec' + names[e] + '.npy', lr)
+            np.save('QDec' + t + names[e] + '.npy', Qs)
+            np.save('lrQDec'+ t + names[e] + '.npy', lr)
