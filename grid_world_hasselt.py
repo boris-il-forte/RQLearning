@@ -4,6 +4,7 @@ from joblib import Parallel, delayed
 from QDecompositionLearning import QDecompositionLearning
 from VarianceParameter import VarianceDecreasingParameter,\
     VarianceIncreasingParameter
+from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
 from collectParameters import CollectParameters
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
@@ -36,7 +37,8 @@ def experiment():
     # Agent
     alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
     #alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
-    beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
+    #beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
+    beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=1., window=50)
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
     fit_params = dict()
