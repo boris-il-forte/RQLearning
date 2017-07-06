@@ -7,6 +7,8 @@
 \usepackage{mathtools}
 \usepackage{algorithmic}
 \usepackage{tikz}
+\newlength\figureheight
+\newlength\figurewidth
 %\usepackage{url}
 
 % correct bad hyphenation here
@@ -206,7 +208,6 @@ TODO -- chiedere anche a restelli. Non banale!
 \section{Experimental Results}
 In this section we comparred the performance of the \emph{QD-Learning} with the most performing state of the art approaches (\emph{Q-learning,  Double Q-learning, Weighted Q-learning, Speedy Q-learning}) in three different problems.
 \subsection{Stochastic (Van Hasselt?) GridWorld}
-\section{Experimental results}
  \begin{figure*}[t]
   \begin{minipage}{\textwidth}
   \centering
@@ -236,12 +237,19 @@ In this section we comparred the performance of the \emph{QD-Learning} with the 
 We analyzed the performance in terms of average reward and Q-function estimation accuracy of the QD-Learning in a $3$x$3$ Gridworld with settings used in AAA. In this environment, the agent starts the episod from the lower-left position and has to reach the goal in the opposite position. The agent receives a Bernoullian reward -12 or +10 in all intermediate states and a deterministic reward +5 at the goal state. We used, for all algorithms, an	$\epsilon$-greedy policy $\epsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$.
 
 
-In Double Q-Learning we use two learning rates $\alpha_t^A(s, a) = \frac{1}{n_t^A(s, a)^{0.8}}$ and $\alpha_t^B(s, a) = \frac{1}{n_t^B(s, a)^{0.8}}$ where $n_t^A(s, a)$ and $n_t^B(s, a)$ are respectively the number of times when table A and table B are updated. 
+In Double Q-Learning we use two learning rates $\alpha_t^A(s, a) = \frac{1}{n_t^A(s, a)^{0.8}}$ and $\alpha_t^B(s, a) = \frac{1}{n_t^B(s, a)^{0.8}}$ where $n_t^A(s, a)$ and $n_t^B(s, a)$ are respectively the number of times when table A and table B are updated. In Q-learning, SpeedyQ-learning, 
 The optimal average reward per step is $0.2$ and the maximum action-value function of the starting state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
 \subsection{Come si chiama Gridworld}
+\begin{figure}
+
+\begin{minipage}{\textwidth}
+  \centering
+   \includegraphics[width=.475\textwidth]{./imgs/gridHole/reward.pdf}
+   \includegraphics[width=.475\textwidth]{./imgs/gridHole/maxQ.pdf}
+  \end{minipage}
+  \end{figure}
 
 \subsection{Double Chain}
-
 
 \begin{center}
 \begin{tikzpicture}[scale=0.2]
@@ -314,9 +322,13 @@ The optimal average reward per step is $0.2$ and the maximum action-value functi
 \end{tikzpicture}
 \end{center}
 
-
 \section{Conclusion}
 
+%\begin{figure}
+ %    \setlength\figureheight{5cm}
+  %  \setlength\figurewidth{2cm}
+%    \input{tikz/double_chain.tikz }
+%\end{figure}
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
