@@ -3,7 +3,7 @@ from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
 from VarianceParameter import VarianceDecreasingParameter,\
-    VarianceIncreasingParameter
+    VarianceIncreasingParameter, VarianceIncreasingParameterAutoTol2
 from collectParameters import CollectParameters
 from PyPi.algorithms.td import QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning
 from PyPi.approximators import Ensemble, Regressor, Tabular
@@ -38,7 +38,7 @@ def experiment1(decay_exp):
     alpha = DecayParameter(value=1, decay_exp=decay_exp, shape=shape)
     #alpha = Parameter(value=.1)
     #alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
-    beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
+    beta = VarianceIncreasingParameterAutoTol2(value=1, shape=shape, tol=1.)
     #beta = Parameter(value=1)
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
@@ -118,6 +118,7 @@ if __name__ == '__main__':
 
     exps = [1, .51]
     algs = [QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning]
+    algs = []
 
     for e in exps:
         for a in algs:

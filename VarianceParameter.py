@@ -31,7 +31,7 @@ class VarianceParameter(Parameter):
         else:
             var = n * (self._x2[idx] - self._x[idx] ** 2) / (n - 1.0)
             var_estimator = var * self._weights_var[idx]
-            parameter_value = self._compute_parameter(var_estimator, sigma_process=var)
+            parameter_value = self._compute_parameter(var_estimator, sigma_process=var, index=idx)
 
         # update state
         self._x[idx] += (x - self._x[idx]) / self._n_updates[idx]
@@ -57,6 +57,29 @@ class VarianceIncreasingParameterAutoTol(VarianceParameter):
     def _compute_parameter(self, sigma, **kwargs):
         sigma_process = kwargs['sigma_process']
         return 1 - np.exp(sigma * log(0.5)/self._tol) if self._exponential else sigma / (sigma + sigma_process + 1e-8)
+
+
+class VarianceIncreasingParameterAutoTol2(VarianceParameter):
+
+    def __init__(self, value, exponential=False, min_value=None, tol=1.0,
+                 shape=(1,)):
+        self._curTol = tol
+        super(VarianceIncreasingParameterAutoTol2, self).__init__(value, exponential, min_value, tol, shape)
+
+    def _compute_parameter(self, sigma, **kwargs):
+        idx = kwargs['index']
+        old_value = self._parameter_value[idx]
+        new_value = 1 - np.exp(sigma * log(0.5)/self._curTol) if self._exponential else sigma / (sigma + self._curTol)
+
+        if abs(new_value-old_value)/old_value < 0.005:
+            self._curTol += 1
+        elif new_value > old_value:
+            self._curTol -= 1
+            self._curTol = max(self._curTol, self._tol)
+
+        print self._curTol
+
+        return new_value
 
 
 class VarianceDecreasingParameterAutoTol(VarianceParameter):
