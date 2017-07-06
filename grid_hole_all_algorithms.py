@@ -16,7 +16,7 @@ def experiment(algorithm_class, decay_exp):
     np.random.seed()
 
     # MDP
-    grid_map="/home/alessandro/QDecomposition/gridmap.txt"
+    grid_map="/home/alessandro/QDecomposition/simple_gridmap.txt"
     mdp = GridWorldGenerator(grid_map=grid_map)
 
     # Policy
@@ -48,7 +48,7 @@ def experiment(algorithm_class, decay_exp):
     core = Core(agent, mdp, callbacks)
 
     # Train
-    core.learn(n_iterations=10, how_many=1, n_fit_steps=1,
+    core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
                iterate_over='samples')
 
     _, _, reward, _, _, _ = parse_dataset(core.get_dataset())
@@ -82,9 +82,9 @@ if __name__ == '__main__':
             plt.subplot(2, 1, 1)
             plt.plot(r)
 
-            rew_file_name = "r_" + names[a] +".npy"
+            rew_file_name = "r_" + names[a] +"simple_gridhole.npy"
             np.save(rew_file_name,r)
-            maxQs_file_name = "maxQ_"+ names[a]+".npy"
+            maxQs_file_name = "maxQ_"+ names[a]+"simple_gridhole.npy"
             np.save(maxQs_file_name,max_Qs)
             plt.subplot(2, 1, 2)
             plt.plot(max_Qs)
