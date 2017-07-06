@@ -22,10 +22,10 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Davide Tateo, Alessandro Nuara, Carlo D'Eramo}
+\author{\IEEEauthorblockN{Davide Tateo, Carlo D'Eramo, Alessandro Nuara, Marcello Restelli, Andrea Bonarini}
 \IEEEauthorblockA{Department of Electronics, Information and Bioengineering\\
 Politecnico Di Milano, Milano, Italy\\
-Email: \{davide.tateo, alessandro.nuara, carlo.deramo\}@polimi.it}
+Email: \{davide.tateo, carlo.deramo,  alessandro.nuara, marcello.restelli, andre.bonarini\}@polimi.it}
 }
 
 % make the title area
@@ -106,11 +106,11 @@ We can now write the optimal value function as:
 
 Our approach shift the focus of the RL task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optmimal policy.
 
-\section{The proposed Method}
+\section{The Proposed Method}
 
 In the following section we will derive our method from \ref{eq:qdecrqtilde}. We will propose the general schema, using the maximum estimator and we will show the relations with the standard Q learning update.
 
-\subsection{Decomposition of the TD error}
+\subsection{Decomposition of the TD Error}
 
 Standard Q-Learning algorithm computes the temporal difference error given the tuple $(x,u,r,x')$ w.r.t. the current action-value estimates, and then updates such estimate proprotionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate is 1, the new sample substitutes the old estimate, if the learning rate is close to 0, the new sample is discarded, and the old estimate is kept unchanged. 
 As shown in \ref{eq:qdecrqtilde} the action-value function could be decomposed in two different components. Our method is based on the idea to give separate estimates for this two components,
@@ -135,7 +135,7 @@ Q(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
 
 notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However \ref{eq:cumulativeupdate} is useful to analyze the relations to standard Q-Learning algorithm.
 
-\subsection{Analysis of the decomposed update}
+\subsection{Analysis of the Decomposed Update}
 We will discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha(t)=\beta(t)$, $\forall t$.
 by combining \ref{eq:cumulativeupdate} and \ref{eq:qdecrqtilde} we obtain:
 \begin{align}
@@ -197,13 +197,18 @@ If we consider the case $\beta(t)=\alpha(t)\delta(t)$, then we have tu use a dif
 Where $\eta$ has the same iterpretation of the previous scenario.
 
 
-\subsection{Convergence properties}
+\subsection{Convergence Properties}
 
 TODO -- chiedere anche a restelli. Non banale!
 
 
-\section{Experimental results}
-...
+\section{Experimental Results}
+In this section we compare the performance of the Q-Decomposition with the other state of the art approaches in three different problems.
+\subsection{Stochastic (Van Hasselt?) GridWorld}
+AA
+\subsection{Come si chiama Gridworld}
+
+\subsection{Double Chain}
 
 \section{Conclusion}
 
