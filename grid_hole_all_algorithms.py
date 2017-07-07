@@ -16,7 +16,7 @@ def experiment(algorithm_class, decay_exp):
     np.random.seed()
 
     # MDP
-    grid_map="/home/alessandro/QDecomposition/simple_gridmap.txt"
+    grid_map="/home/alessandro/QDecomposition/basic_gridmap.txt"
     mdp = GridWorldGenerator(grid_map=grid_map)
 
     # Policy
@@ -48,7 +48,7 @@ def experiment(algorithm_class, decay_exp):
     core = Core(agent, mdp, callbacks)
 
     # Train
-    core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
+    core.learn(n_iterations=1000, how_many=1, n_fit_steps=1,
                iterate_over='samples')
 
     _, _, reward, _, _, _ = parse_dataset(core.get_dataset())
@@ -61,11 +61,11 @@ if __name__ == '__main__':
 
     logger.Logger(3)
 
-    names = { .8: '08', QLearning: 'Q', DoubleQLearning: 'DQ',
+    names = { 1.: '08', QLearning: 'Q', DoubleQLearning: 'DQ',
              WeightedQLearning: 'WQ', SpeedyQLearning: 'SPQ'}
     alg_list=[QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning]
     #alg_list = [QLearning]
-    for e in [.8]:
+    for e in [1.]:
         for a in alg_list:
 
             out = Parallel(n_jobs=-1)(
@@ -73,14 +73,14 @@ if __name__ == '__main__':
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
 
-            r = np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid')
+            r1 = np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid')
             max_Qs = np.mean(max_Qs, 0)
 
             from matplotlib import pyplot as plt
             plt.figure()
             plt.suptitle(names[a] + ' ' + names[e])
             plt.subplot(2, 1, 1)
-            plt.plot(r)
+            plt.plot(r1)
 
             rew_file_name = "r_" + names[a] +"simple_gridhole.npy"
             np.save(rew_file_name,r)
