@@ -17,7 +17,7 @@ from PyPi.utils.dataset import compute_J, parse_dataset
 from PyPi.utils.parameters import DecayParameter
 
 
-def experiment():
+def experiment(decay_exp, alphaType):
     np.random.seed()
 
     # MDP
@@ -35,8 +35,10 @@ def experiment():
     approximator = Regressor(Tabular, **approximator_params)
 
     # Agent
-    alpha = DecayParameter(value=1, decay_exp=.8, shape=shape)
-    #alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
+    if alphaType == 'Decay':
+        alpha = DecayParameter(value=1, decay_exp=decay_exp, shape=shape)
+    else:
+        alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
     #beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
     beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=1., window=50)
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
@@ -66,17 +68,29 @@ def experiment():
     return reward, max_Qs, lr
 
 if __name__ == '__main__':
-    n_experiment = 10000
+    n_experiment = 1#0000
 
     logger.Logger(3)
 
+    names = {1: '1', 0.8: '08'}
+    exp = [1, 0.8]
+    for e in exp:
+        out = Parallel(n_jobs=-1)(delayed(
+            experiment)(e, 'Decay') for _ in xrange(n_experiment))
+        r = np.array([o[0] for o in out])
+        max_Qs = np.array([o[1] for o in out])
+        lr = np.array([o[2] for o in out])
+
+        np.save('rQDecWin'+ names[e] +'.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
+        np.save('maxQDecWin'+ names[e] +'.npy', np.mean(max_Qs, 0))
+        np.save('lrQDecWin'+ names[e] +'.npy', np.mean(lr, 0))
+
     out = Parallel(n_jobs=-1)(delayed(
-        experiment)() for _ in xrange(n_experiment))
+        experiment)(0, '') for _ in xrange(n_experiment))
     r = np.array([o[0] for o in out])
     max_Qs = np.array([o[1] for o in out])
     lr = np.array([o[2] for o in out])
 
-    np.save('rQDec.npy',
-            np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-    np.save('maxQDec.npy', np.mean(max_Qs, 0))
-    np.save('lrQDec.npy', np.mean(lr, 0))
+    np.save('rQDecWinAlpha.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
+    np.save('maxQDecWinAlpha.npy', np.mean(max_Qs, 0))
+    np.save('lrQDecWinAlpha.npy', np.mean(lr, 0))
