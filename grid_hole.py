@@ -21,7 +21,7 @@ def experiment():
     np.random.seed()
 
     # MDP
-    grid_map = "simple_gridmap.txt"
+    grid_map = "gridmap.txt"
     mdp = GridWorldGenerator(grid_map=grid_map)
 
     # Policy
@@ -56,14 +56,16 @@ def experiment():
     core = Core(agent, mdp, callbacks)
 
     # Train
-    core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
+    core.learn(n_iterations=200000, how_many=1, n_fit_steps=1,
                iterate_over='samples')
 
     _, _, reward, _, _, _ = parse_dataset(core.get_dataset())
     max_Qs = collect_max_Q.get_values()
-    lr = collect_lr.get_values()
+    #lr = collect_lr.get_values()
 
-    return reward, max_Qs, lr
+    #return reward, max_Qs, lr
+    return reward, max_Qs
+
 
 if __name__ == '__main__':
     n_experiment =1
@@ -74,7 +76,7 @@ if __name__ == '__main__':
         experiment)() for _ in xrange(n_experiment))
     r = np.array([o[0] for o in out])
     max_Qs = np.array([o[1] for o in out])
-    lr = np.array([o[2] for o in out])
+    #lr = np.array([o[2] for o in out])
     """
     np.save('/home/alessandro/Dropbox/Q-decomposition/results/complex_grid_hole/r_QDec.npy',
             np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
@@ -84,4 +86,4 @@ if __name__ == '__main__':
 
     np.save('r_QDec_complexGrid.npy',r)
     np.save('maxQ_QDec_complexGrid.npy', max_Qs)
-    np.save('lr_QDec_complexGrid.npy',lr)
+    #np.save('lr_QDec_complexGrid.npy',lr)
