@@ -1,11 +1,11 @@
 \documentclass[conference]{IEEEtran}
-
-
-
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{algorithmic}
+\usepackage{tikz}
+\newlength\figureheight
+\newlength\figurewidth
 %\usepackage{url}
 
 % correct bad hyphenation here
@@ -22,10 +22,10 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Davide Tateo, Alessandro Nuara, Carlo D'Eramo}
+\author{\IEEEauthorblockN{Davide Tateo, Carlo D'Eramo, Alessandro Nuara, Marcello Restelli, Andrea Bonarini}
 \IEEEauthorblockA{Department of Electronics, Information and Bioengineering\\
 Politecnico Di Milano, Milano, Italy\\
-Email: \{davide.tateo, alessandro.nuara, carlo.deramo\}@polimi.it}
+Email: \{davide.tateo, carlo.deramo,  alessandro.nuara, marcello.restelli, andrea.bonarini\}@polimi.it}
 }
 
 % make the title area
@@ -34,7 +34,7 @@ Email: \{davide.tateo, alessandro.nuara, carlo.deramo\}@polimi.it}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-In many real-world problems stochasticity is a critical issue for the learning process. The sources of stochasticity come from the transition model, the explorative component of the policy or, even worse, from noisy observation of the reward function. For a finite number of samples, traditional reinforcement learning methods provide biased estimates of the action-value function. The presence of the bias leads to a poor estimation of the action-value function that is propagated to other action-values by the application of the Bellman operator. We propose an approach that significantly mitigates this issue avoiding the propagation of bad estimates of the action-value function.
+In many real-world problems stochasticity is a critical issue for the learning process. The sources of stochasticity come from the transition model, the explorative component of the policy or, even worse, from noisy observations of the reward function. For a finite number of samples, traditional Reinforcement Learning (RL) methods provide biased estimates of the action-value function leading to a poor estimation of the action-value function that is propagated to other action-values by the application of the Bellman operator. We propose an approach that significantly mitigates this issue avoiding the propagation of bad estimates of the action-value function.
 \end{abstract}
 
 % no keywords
@@ -51,9 +51,9 @@ In many real-world problems stochasticity is a critical issue for the learning p
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-It is well known that a key issue of reinforcement learning problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to poor performance. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could be have stochastic transition and this complicates the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
+It is well known that a key issue of Reinforcement Learning (RL) problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to poor performance. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could have stochastic transition and this complicates the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
 
-Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful reinforcement learning algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent but biased estimator. However with a finite number of samples the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, it propagates to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. 
+Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful RL algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent but biased estimator. However with a finite number of samples the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, it propagates to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. 
 %It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. To avoid the presence of the positive bias, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} that provides a negatively biased estimation of the action-values (i.e. it underestimates the optimal action-value) and this improves the performance when stochasticity is an issue. Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that, computing a weighted average of the action-value functions estimates, balances between underestimation and overestimation. 
 It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update equation) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. In order to avoid this issue, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} to compute the maximum in the updating formula of the Q-function. Providing a negatively biased estimation this value (i.e. it underestimates the optimal action-value),this approach can improve the performance especially in noisy environments.
 Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that, computing a weighted average of the action-value functions estimates, balances between underestimation and overestimation. 
@@ -92,7 +92,7 @@ As the expected value is a linear operator, we can always write \ref{eq:qopt} as
 We now introduce two functions, $\Rtilde$ and $\Qtilde$, defined as:
 \begin{align}
  \Rtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right] \nonumber\ \\
- \Qtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\gamma\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]
+ \Qtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]
  \label{eq:rqtilde}
 \end{align}
 
@@ -104,13 +104,13 @@ We can now write the optimal value function as:
  \label{eq:qdecrqtilde}
 \end{align}
 
-Our approach shift the focus of the reinforcement learning task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optmimal policy.
+Our approach shift the focus of the RL task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optmimal policy.
 
-\section{The proposed Method}
+\section{The Proposed Method}
 
 In the following section we will derive our method from \ref{eq:qdecrqtilde}. We will propose the general schema, using the maximum estimator and we will show the relations with the standard Q learning update.
 
-\subsection{Decomposition of the TD error}
+\subsection{Decomposition of the TD Error}
 
 Standard Q-Learning algorithm computes the temporal difference error given the tuple $(x,u,r,x')$ w.r.t. the current action-value estimates, and then updates such estimate proprotionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate is 1, the new sample substitutes the old estimate, if the learning rate is close to 0, the new sample is discarded, and the old estimate is kept unchanged. 
 As shown in \ref{eq:qdecrqtilde} the action-value function could be decomposed in two different components. Our method is based on the idea to give separate estimates for this two components,
@@ -135,7 +135,7 @@ Q(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
 
 notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However \ref{eq:cumulativeupdate} is useful to analyze the relations to standard Q-Learning algorithm.
 
-\subsection{Analysis of the decomposed update}
+\subsection{Analysis of the Decomposed Update}
 We will discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha(t)=\beta(t)$, $\forall t$.
 by combining \ref{eq:cumulativeupdate} and \ref{eq:qdecrqtilde} we obtain:
 \begin{align}
@@ -178,7 +178,7 @@ With $\omega=\sum_i^n \alpha(i)^2 \prod_{j=i+1}^{n} \left(1-\alpha(j)\right)^2$.
  \omega_{n+1}=(1-\alpha(n))^2\omega_n+\alpha(n)^2
 \end{align}
 
-A weak assumption of this model, is that the variables are identically distribuited. While this should be true for the reward function, 
+A weak assumption of this model, is that the variables are identically distribuited. While this should be true for the reward function, if the MDP is stationary, this is not true for the Q function values, whose distribution is affected by the policy and by the others states current estimates. However, a good approximation, could be to consider a window lenght in which the distribution is approximatively stationary: using such approach, we can compute the variance of the process in a given time window, forgetting old values that can lead to a biased estimation of the current variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation has in practice have very good results.
 
 Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
 
@@ -196,16 +196,147 @@ If we consider the case $\beta(t)=\alpha(t)\delta(t)$, then we have tu use a dif
 
 Where $\eta$ has the same iterpretation of the previous scenario.
 
-
-\subsection{Convergence properties}
+\subsection{Convergence Properties}
 
 TODO -- chiedere anche a restelli. Non banale!
 
+\section{Experimental Results}
+As we said before, QDec-Learning is helpful in stochastic environments. In this section, we highlight the main advantages of the adaptation of the learning rate according to the uncertainty of the estimates in three noisy discrete MDPs. Moreover, we compare the performance of QDec-Learning against Q-Learning and some of its variants that only use a single decaying learning rate.
 
-\section{Experimental results}
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\centering
+  \includegraphics[scale=.25]{./imgs/gridHasselt/allAlgs1.pdf}
+  \includegraphics[scale=.25]{./imgs/gridHasselt/allAlgs08.pdf}\\
+\end{minipage}
+  \caption{..}
+  \label{F:hasselt_all}
+\end{figure}
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\centering
+  \includegraphics[scale=.25]{./imgs/gridHasselt/QDecs1.pdf}
+  \includegraphics[scale=.25]{./imgs/gridHasselt/QDecs08.pdf}\\
+\end{minipage}
+  \caption{..}
+  \label{F:hasselt_QDecs}
+\end{figure}
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\centering
+  \includegraphics[scale=.25]{./imgs/gridHasselt/lrs.pdf}
+\end{minipage}
+  \caption{..}
+  \label{F:hasselt_lrs}
+\end{figure}
+
+\subsection{Noisy Grid World}
+This environment consists in a $3 \times 3$ grid with the initial position in the lower-left cell and the goal state in the upper-right cell. Each action performed in a non-goal state obtains a reward $-12$ and $10$ with equal probability. In the goal state, every action obtains a reward of $5$ and terminates the episode. The policy is $\varepsilon$-greedy with $\varepsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$. We analyse the performance of QDec-Learning with different choices of learning rates, on the other hand for all the other algorithms we use a decaying learning rate $\alpha(s, a) = \frac{1}{n(s, a)^{k}}$ where $n(s, a)$ and $k$ are respectively the number of updates for each action $a$ in state $s$\footnote{Double Q-Learning splits $n(s,a)$ in $n_A(s,a)$ and $n_B(s,a)$ that are the number of updates for each action $a$ in state $s$ in the two Q-Tables.} and a coefficient to tune the rate of decay.
+
+Figure \ref{hasselt_all} shows the mean reward per step and the approximation of the maximum action-value in the initial state computed by the empirically best setting of QDec-Learning and the other algorithms. Figure \ref{hasselt_QDecs} shows the same QDec-Learning performance of the previous figure in comparison with other less effective QDec-Learning settings. In this figures, the optimal average reward per step is $0.2$ and the maximum action-value function of the starting state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$. QDec-Learning is able to deal with the high stochasticity of the reward function overcoming the performance of the other algorithms. 
+
+\subsection{Trap Gridworld}
+We tested our algorithm on a GridWorld problem variant, introducing some traps in the grid. In the 5x5 grid shown in Figure~\ref{F:gridhole} we have 4 traps in the central row. The agent receives a reward equal to zero in all white cells, a positive +10 reward if she reaches the goal, while she receives a negative reward -10 if she falls in the traps. When he reaches the goal or fall in a trap the episode ends.
+The parameters settings used in this environment are the same described in the van Hasselt GridWorld. Figure~\ref{F:gridhole_results} shows the performance in terms of average reward per step and Q-function estimation of all tested algorithms.
+As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. Howewer, an inaccurate estimation of the Q-function does not necessarly imply a worse optimal policy estimation. Indeed, as we can see in Figure~\ref{avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms. 
+
+\begin{figure}
+\centering
+\includegraphics[width=.2\textwidth]{./imgs/gridHole/grid_hole.jpg}
+\caption{GridWorld with traps}
+\label{F:gridhole}
+\end{figure}
+
+\begin{figure}
+\begin{minipage}{\textwidth}
+  
+   \includegraphics[width=.375\textwidth]{./imgs/gridHole/reward.pdf}\label{avg_rew_gridhole}\caption{Reward per step averaged on 1000 experiments }
+   \includegraphics[width=.375\textwidth]{./imgs/gridHole/maxQ.pdf}	\label{maxq_gridhole}\caption{maxQ(s,a) estimation averaged on 1000 experiments}
+  \end{minipage}
+  \label{F:gridhole_results}
+  \caption{Results Gridworld traps}
+  \end{figure}
+
+\subsection{Double Chain}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (10.4,-17.1) circle (3);
+\draw (10.4,-17.1) node {$1$};
+\draw [black] (20.1,-6.5) circle (3);
+\draw (20.1,-6.5) node {$2$};
+\draw [black] (34.4,-6.3) circle (3);
+\draw (34.4,-6.3) node {$3$};
+\draw [black] (48.2,-6.3) circle (3);
+\draw (48.2,-6.3) node {$4$};
+\draw [black] (61.6,-6.3) circle (3);
+\draw (61.6,-6.3) node {$5$};
+\draw [black] (19.4,-26) circle (3);
+\draw (19.4,-26) node {$6$};
+\draw [black] (34.4,-26) circle (3);
+\draw (34.4,-26) node {$7$};
+\draw [black] (48.2,-26) circle (3);
+\draw (48.2,-26) node {$8$};
+\draw [black] (61.6,-26) circle (3);
+\draw (61.6,-26) node {$9$};
+\draw [black] (10.195,-14.122) arc (-186.01298:-258.90993:8.628);
+\fill [black] (17.12,-6.56) -- (16.23,-6.22) -- (16.43,-7.2);
+\draw (11.87,-7.74) node [left] {$r(1,1)=0$};
+\draw [black] (16.449,-26.391) arc (-94.70547:-174.65436:7.013);
+\fill [black] (16.45,-26.39) -- (15.69,-25.83) -- (15.61,-26.82);
+\draw (8.26,-24.87) node [below] {$r(1,2)=2$};
+\draw [black] (13.375,-17.324) arc (75.15536:15.48481:8.153);
+\fill [black] (13.37,-17.32) -- (14.02,-18.01) -- (14.28,-17.05);
+\draw [black] (19.363,-9.401) arc (-21.12574:-63.79717:12.497);
+\fill [black] (13.22,-16.11) -- (14.16,-16.2) -- (13.72,-15.31);
+\draw [black] (32.152,-8.285) arc (-50.72552:-80.81899:39.653);
+\fill [black] (13.38,-16.73) -- (14.25,-17.1) -- (14.09,-16.11);
+\draw [black] (45.468,-7.539) arc (-66.30261:-81.8066:123.727);
+\fill [black] (13.37,-16.71) -- (14.24,-17.09) -- (14.09,-16.1);
+\draw [black] (58.752,-7.242) arc (-72.09117:-84.0864:221.864);
+\fill [black] (13.39,-16.81) -- (14.23,-17.23) -- (14.13,-16.23);
+\draw [black] (13.385,-17.393) arc (82.46666:56.84042:44.631);
+\fill [black] (13.39,-17.39) -- (14.11,-17.99) -- (14.24,-17);
+\draw [black] (13.394,-17.292) arc (85.54014:67.96192:107.716);
+\fill [black] (13.39,-17.29) -- (14.15,-17.85) -- (14.23,-16.86);
+\draw [black] (13.398,-17.219) arc (87.26949:73.00835:185.371);
+\fill [black] (13.4,-17.22) -- (14.17,-17.76) -- (14.22,-16.76);
+\draw (38.03,-18.9) node [above] {$r(s,2)=2$};
+\draw [black] (22.4,-26) -- (31.4,-26);
+\fill [black] (31.4,-26) -- (30.6,-25.5) -- (30.6,-26.5);
+\draw (26.9,-26.5) node [below] {$r(6,1)=0$};
+\draw [black] (37.4,-26) -- (45.2,-26);
+\fill [black] (45.2,-26) -- (44.4,-25.5) -- (44.4,-26.5);
+\draw (41.3,-26.5) node [below] {$r(7,1)=0$};
+\draw [black] (51.2,-26) -- (58.6,-26);
+\fill [black] (58.6,-26) -- (57.8,-25.5) -- (57.8,-26.5);
+\draw (54.9,-26.5) node [below] {$r(8,1)=0$};
+\draw [black] (51.2,-6.3) -- (58.6,-6.3);
+\fill [black] (58.6,-6.3) -- (57.8,-5.8) -- (57.8,-6.8);
+\draw (54.9,-5.8) node [above] {$r(4,1)=0$};
+\draw [black] (37.4,-6.3) -- (45.2,-6.3);
+\fill [black] (45.2,-6.3) -- (44.4,-5.8) -- (44.4,-6.8);
+\draw (41.3,-5.8) node [above] {$r(3,1)=0$};
+\draw [black] (23.1,-6.46) -- (31.4,-6.34);
+\fill [black] (31.4,-6.34) -- (30.59,-5.85) -- (30.61,-6.85);
+\draw (27.23,-5.85) node [above] {$r(2,1)=0$};
+\draw [black] (64.28,-4.977) arc (144:-144:2.25);
+\draw (68.85,-6.3) node [right] {$r(5,1)=10$};
+\fill [black] (64.28,-7.62) -- (64.63,-8.5) -- (65.22,-7.69);
+\draw [black] (64.117,-24.39) arc (150.34019:-137.65981:2.25);
+\draw (68.96,-25.15) node [right] {$r(9,1)=5$};
+\fill [black] (64.41,-27.02) -- (64.86,-27.85) -- (65.35,-26.98);
+\end{tikzpicture}
+\end{center}
 
 \section{Conclusion}
 
+%\begin{figure}
+ %    \setlength\figureheight{5cm}
+  %  \setlength\figurewidth{2cm}
+%    \input{tikz/double_chain.tikz }
+%\end{figure}
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
