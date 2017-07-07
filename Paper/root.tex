@@ -1,7 +1,4 @@
 \documentclass[conference]{IEEEtran}
-
-
-
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
@@ -239,14 +236,26 @@ We analyzed the performance in terms of average reward and Q-function estimation
 
 In Double Q-Learning we use two learning rates $\alpha_t^A(s, a) = \frac{1}{n_t^A(s, a)^{0.8}}$ and $\alpha_t^B(s, a) = \frac{1}{n_t^B(s, a)^{0.8}}$ where $n_t^A(s, a)$ and $n_t^B(s, a)$ are respectively the number of times when table A and table B are updated. In Q-learning, SpeedyQ-learning, 
 The optimal average reward per step is $0.2$ and the maximum action-value function of the starting state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
-\subsection{Come si chiama Gridworld}
-\begin{figure}
+\subsection{Trap Gridworld}
+We tested our algorithm on a GridWorld problem variant, introducing some traps in the grid. In the 5x5 grid shown in Figure~\ref{F:gridhole} we have 4 traps in the central row. The agent receives a reward equal to zero in all white cells, a positive +10 reward if she reaches the goal, while she receives a negative reward -10 if she falls in the traps. When he reaches the goal or fall in a trap the episode ends.
+The parameters settings used in this environment are the same described in the van Hasselt GridWorld. Figure~\ref{F:gridhole_results} shows the performance in terms of average reward per step and Q-function estimation of all tested algorithms.
+As shown in the plot in \ref{F:maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. Howewer, an inaccurate estimation of the Q-function does not necessarly imply a worse optimal policy estimation. Indeed, as we can see in Figure \ref{F:avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms. 
 
+
+\begin{figure}
+\centering
+\includegraphics[width=.2\textwidth]{./imgs/gridHole/grid_hole.jpg}
+\caption{GridWorld with traps}
+\label{F:gridhole}
+\end{figure}
+
+\begin{figure}
 \begin{minipage}{\textwidth}
   \centering
-   \includegraphics[width=.475\textwidth]{./imgs/gridHole/reward.pdf}
-   \includegraphics[width=.475\textwidth]{./imgs/gridHole/maxQ.pdf}
+   \includegraphics[width=.475\textwidth]{./imgs/gridHole/reward.pdf}\label{F:avg_rew_gridhole}
+   \includegraphics[width=.475\textwidth]{./imgs/gridHole/maxQ.pdf}	\label{F:maxq_gridhole}
   \end{minipage}
+  \label{F:gridhole_results}
   \end{figure}
 
 \subsection{Double Chain}
