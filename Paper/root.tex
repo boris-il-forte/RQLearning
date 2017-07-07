@@ -164,7 +164,7 @@ To have better performance on the estimation, we would like to weight the error 
 First of all we need to compute the variance of each estimator. To perform such computation we have to made the assumption that the learning rates are independent from the data. We will, of course, violate this assumption, but it is needed in order to have a closed form for the variance of the estimator, that can be used in practice. We will suppose also that the samples $X_i$ are i.i.d., with mean $\mu$ and variance $\sigma^2$. Consider the general form of the estimator:
 
 \begin{align}
- \widetilde{X}_{n+1} = (1-\alpha(t))\widetilde{X}_{n}+\alpha(t)*\widetilde{X}
+ \widetilde{X}_{n+1} = (1-\alpha(t))\widetilde{X}_{n}+\alpha(t)X_{n}
 \end{align}
 
 We now compute the expected value and the variance of this estimator:
