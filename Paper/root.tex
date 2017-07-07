@@ -239,7 +239,7 @@ The optimal average reward per step is $0.2$ and the maximum action-value functi
 \subsection{Trap Gridworld}
 We tested our algorithm on a GridWorld problem variant, introducing some traps in the grid. In the 5x5 grid shown in Figure~\ref{F:gridhole} we have 4 traps in the central row. The agent receives a reward equal to zero in all white cells, a positive +10 reward if she reaches the goal, while she receives a negative reward -10 if she falls in the traps. When he reaches the goal or fall in a trap the episode ends.
 The parameters settings used in this environment are the same described in the van Hasselt GridWorld. Figure~\ref{F:gridhole_results} shows the performance in terms of average reward per step and Q-function estimation of all tested algorithms.
-As shown in the plot in \ref{F:maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. Howewer, an inaccurate estimation of the Q-function does not necessarly imply a worse optimal policy estimation. Indeed, as we can see in Figure \ref{F:avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms. 
+As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. Howewer, an inaccurate estimation of the Q-function does not necessarly imply a worse optimal policy estimation. Indeed, as we can see in Figure~\ref{avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms. 
 
 
 \begin{figure}
@@ -251,11 +251,12 @@ As shown in the plot in \ref{F:maxq_gridhole} the QD-learning provides the best 
 
 \begin{figure}
 \begin{minipage}{\textwidth}
-  \centering
-   \includegraphics[width=.475\textwidth]{./imgs/gridHole/reward.pdf}\label{F:avg_rew_gridhole}
-   \includegraphics[width=.475\textwidth]{./imgs/gridHole/maxQ.pdf}	\label{F:maxq_gridhole}
+  
+   \includegraphics[width=.375\textwidth]{./imgs/gridHole/reward.pdf}\label{avg_rew_gridhole}\caption{Reward per step averaged on 1000 experiments }
+   \includegraphics[width=.375\textwidth]{./imgs/gridHole/maxQ.pdf}	\label{maxq_gridhole}\caption{maxQ(s,a) estimation averaged on 1000 experiments}
   \end{minipage}
   \label{F:gridhole_results}
+  \caption{Results Gridworld traps}
   \end{figure}
 
 \subsection{Double Chain}
