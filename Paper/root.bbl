@@ -35,7 +35,7 @@ E.~Van~den Steen, ``Rational overoptimism (and other biases),'' \emph{American
   Economic Review}, pp. 1141--1151, 2004.
 
 \bibitem{van2010double}
-H.~van Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
+H.~v. Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
   Processing Systems}, 2010, pp. 2613--2621.
 
 \bibitem{van2013estimating}
@@ -57,5 +57,9 @@ M.~Ghavamzadeh, H.~J. Kappen, M.~G. Azar, and R.~Munos, ``Speedy q-learning,''
   Inc., 2011, pp. 2411--2419. [Online]. Available:
   \url{http://papers.nips.cc/paper/4251-speedy-q-learning.pdf}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Peters2010RelativeEP}
+J.~Peters, K.~Mulling, and Y.~Altun, ``Relative entropy policy search,'' in
+  \emph{AAAI}, 2010.
 
 \end{thebibliography}

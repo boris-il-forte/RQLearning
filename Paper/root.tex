@@ -12,13 +12,11 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-
 \input{commands.tex}
 
 \begin{document}
 
 \title{Reducing Uncertainty Propagation in Markov Decision Processes}
-
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -26,7 +24,7 @@
 \author{\IEEEauthorblockN{Davide Tateo, Carlo D'Eramo, Alessandro Nuara, Marcello Restelli, Andrea Bonarini}
 \IEEEauthorblockA{Department of Electronics, Information and Bioengineering\\
 Politecnico Di Milano, Milano, Italy\\
-Email: \{davide.tateo, carlo.deramo,  alessandro.nuara, marcello.restelli, andre.bonarini\}@polimi.it}
+Email: \{davide.tateo, carlo.deramo,  alessandro.nuara, marcello.restelli, andrea.bonarini\}@polimi.it}
 }
 
 % make the title area
@@ -55,7 +53,6 @@ In many real-world problems stochasticity is a critical issue for the learning p
 It is well known that a key issue of Reinforcement Learning (RL) problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to poor performance. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could have stochastic transition and this complicates the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
 
 Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful RL algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent but biased estimator. However with a finite number of samples the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, it propagates to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. 
-%It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. To avoid the presence of the positive bias, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} that provides a negatively biased estimation of the action-values (i.e. it underestimates the optimal action-value) and this improves the performance when stochasticity is an issue. Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that, computing a weighted average of the action-value functions estimates, balances between underestimation and overestimation. 
 It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update equation) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. In order to avoid this issue, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} to compute the maximum in the updating formula of the Q-function. Providing a negatively biased estimation this value (i.e. it underestimates the optimal action-value),this approach can improve the performance especially in noisy environments.
 Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that, computing a weighted average of the action-value functions estimates, balances between underestimation and overestimation. 
 
@@ -192,11 +189,11 @@ Where $\eta$ is the amount of the estimator variance for wich the learning rate 
 
 If we consider the case $\beta(t)=\alpha(t)\delta(t)$, then we have tu use a different learning rate. As we want an increase of the discount factor faster than the decrease of the general learning rate, we can use an exponentialy increasing learning rate for the delta parameter:
 
-\begin{align}\label{E:delta_eq}
+\begin{align}\label{eq:delta_eq}
  \delta(t) = 1- e^{\frac{\sigma^2}{\eta}\log(0.5)}
 \end{align}
 
-Where $\eta$ has the same iterpretation of the previous scenario.
+Where $\eta$ has the same interpretation of the previous scenario.
 
 
 \subsection{Convergence Properties}
@@ -205,7 +202,7 @@ TODO -- chiedere anche a restelli. Non banale!
 
 
 \section{Experimental Results}
-Despite being suitable also for deterministic problems, as described before QDec-Learning is helpful in stochastic environments. In this section, we highlight the main advantages of the adaptation of the learning rate according to the uncertainty of the estimates, in three noisy discrete MDPs. Moreover, we compare the performance of QDec-Learning against Q-Learning and some of its variants. These other algorithms are Q-Learning \cite{watkins1992q}, Double Q-Learning \cite{van2010double}, Weighted Q-Learning \cite{d2016estimating} and Speedy Q-Learning \cite{NIPS2011_4251}. They use a single decaying learning rate and generally focus on the bias of the estimate of the action-value, however in this section we show how this is empirically not the main issue in the problem we analyse.
+Despite being suitable also for deterministic problems, as described before \alg is helpful in stochastic environments. In this section, we highlight the main advantages of the adaptation of the learning rate according to the uncertainty of the estimates, in three noisy discrete MDPs. Moreover, we compare the performance of \alg against Q-Learning and some of its variants. These other algorithms are Q-Learning \cite{watkins1992q}, Double Q-Learning \cite{van2010double}, Weighted Q-Learning \cite{d2016estimating} and Speedy Q-Learning \cite{NIPS2011_4251}. They use a single decaying learning rate and generally focus on the bias of the estimate of the action-value, however in this section we show how this is empirically not the main issue in the problem we analyse.
 
 \begin{figure}[t]
 \begin{minipage}{\columnwidth}
@@ -213,7 +210,7 @@ Despite being suitable also for deterministic problems, as described before QDec
   \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:hasselt_1}]{\includegraphics[scale=.7]{./imgs/gridHasselt/allAlgs1.pdf}}\hspace{-.5cm}
   \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.8}}$\label{F:hasselt_08}]{\includegraphics[scale=.7]{./imgs/gridHasselt/allAlgs08.pdf}}
 \end{minipage}
-  \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of QDec-Learning for this experiment. Results are averaged over 10000 experiments.}
+  \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of \alg for this experiment. Results are averaged over 10000 experiments.}
   \label{F:hasselt_all}
 \end{figure}
 \begin{figure}[t]
@@ -222,25 +219,51 @@ Despite being suitable also for deterministic problems, as described before QDec
   \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:hasselt_1}]{\includegraphics[scale=.7]{./imgs/gridHasselt/QDecs1.pdf}}\hspace{-.5cm}
   \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.8}}$\label{F:hasselt_08}]{\includegraphics[scale=.7]{./imgs/gridHasselt/QDecs08.pdf}}
 \end{minipage}
-  \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of the best setting of QDec-Learning for this experiment together with other less effective setting of QDec-Learning. Results are averaged over 10000 experiments.}
+  \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of the best setting of \alg for this experiment together with other less effective setting of \alg. Results are averaged over 10000 experiments.}
   \label{F:hasselt_QDecs}
 \end{figure}
 
 \subsection{Noisy Grid World}
-This environment consists in a $3 \times 3$ grid with the initial position in the lower-left cell and the goal state in the upper-right cell. Each action performed in a non-goal state obtains a reward $-12$ and $10$ with equal probability. In the goal state, every action obtains a reward of $5$ and terminates the episode. The policy is $\varepsilon$-greedy with $\varepsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$. We analyse the performance of QDec-Learning with different choices of learning rates, on the other hand for all the other algorithms we use a decaying learning rate $\alpha(s, a) = \frac{1}{n(s, a)^{k}}$ where $n(s, a)$ and $k$ are respectively the number of updates for each action $a$ in state $s$\footnote{Double Q-Learning splits $n(s,a)$ in $n_A(s,a)$ and $n_B(s,a)$ that are the number of updates for each action $a$ in state $s$ in the two Q-Tables.} and a coefficient to tune the rate of decay. In QDec-Learning experiments generally $\eta = 1$, unless otherwise specified.
+This environment consists in a $3 \times 3$ grid with the initial position in the lower-left cell and the goal state in the upper-right cell. Each action performed in a non-goal state obtains a reward $-12$ and $10$ with equal probability. In the goal state, every action obtains a reward of $5$ and terminates the episode. The policy is $\varepsilon$-greedy with $\varepsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$. We analyse the performance of \alg with different choices of learning rates, on the other hand for all the other algorithms we use a decaying learning rate $\alpha(s, a) = \frac{1}{n(s, a)^{k}}$ where $n(s, a)$ and $k$ are respectively the number of updates for each action $a$ in state $s$\footnote{Double Q-Learning splits $n(s,a)$ in $n_A(s,a)$ and $n_B(s,a)$ that are the number of updates for each action $a$ in state $s$ in the two Q-Tables.} and a coefficient to tune the rate of decay. In \alg experiments generally $\eta = 1$, unless otherwise specified.
 
-The optimal average reward per step is $0.2$ and the maximum action-value function of the initial state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$. Figure \ref{F:hasselt_all} shows the mean reward per step and the approximation of the maximum action-value in the initial state computed by the other algorithms and QDec-Learning with the same learning rate $\alpha$, but with the separated variance-dependent learning rate for the action-value estimate, that is the most effective setting of QDec-Learning that we tried in this problem. Note how the performance of QDec-Learning w.r.t. reward are the best one and, moreover, how the estimate of the action-value is also the best one. This interestingly suggests that excellent performance can be reached ignoring the problem of the bias of the estimate described in \cite{van2010double}. Figure \ref{F:hasselt_QDecs} shows the same QDec-Learning performance of the previous figure (setting ``QDecBeta'') in comparison with other less effective QDec-Learning settings. Using a variance-dependent learning rate $\alpha$ with $\eta = 100$ for the estimate of the reward function and a variance-dependent learning rate $\beta$ for the estimate of the action-value function (setting ``QDecAlphaBeta''), gives similar result of setting ``QDecBeta''. Setting ``QDecDelta'' uses the learning rate $\delta$ described in Equation \ref{E:delta_eq} and gives poor results due to the high stocasticity of the problem.
+The optimal average reward per step is $0.2$ and the maximum action-value function of the initial state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$. Figure \ref{F:hasselt_all} shows the mean reward per step and the approximation of the maximum action-value in the initial state computed by the other algorithms and \alg with the same learning rate $\alpha$, but with the separated variance-dependent learning rate for the action-value estimate, that is the most effective setting of \alg that we tried in this problem. Note how the performance of \alg w.r.t. reward are the best one and, moreover, how the estimate of the action-value is also the best one. This interestingly suggests that excellent performance can be reached ignoring the problem of the bias of the estimate described in \cite{van2010double}. Figure \ref{F:hasselt_QDecs} shows the same \alg performance of the previous figure (setting ``QDecBeta'') in comparison with other less effective \alg settings. Using a variance-dependent learning rate $\alpha$ with $\eta = 100$ for the estimate of the reward function and a variance-dependent learning rate $\beta$ for the estimate of the action-value function (setting ``QDecAlphaBeta''), gives similar result of setting ``QDecBeta''. Setting ``QDecDelta'' uses the learning rate $\delta$ described in Equation \ref{eq:delta_eq} and gives poor results due to the high stochasticity of the problem.
+
+\begin{figure*}[t]
+\begin{minipage}{\textwidth}
+\centering
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:double_chain_1_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/v1-1.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:double_chain_1_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/v1-51.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:double_chain_5_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/v5-1.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:double_chain_5_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/v5-51.pdf}}
+\end{minipage}
+\caption{...}
+  \label{F:double_chain}
+\end{figure*}
+
+\begin{figure*}[t]
+\begin{minipage}{\textwidth}
+\centering
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:lrs_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/lrs1-1.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:lrs_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/lrs1-51.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:lrs_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/lrs5-1.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:lrs_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/lrs5-51.pdf}}
+\end{minipage}
+\caption{...}
+  \label{F:double_chain}
+\end{figure*}
 
 \subsection{Trap Gridworld}
 We tested our algorithm on a GridWorld problem variant, introducing some traps in the grid. In the 5x5 grid shown in Figure~\ref{F:gridhole} we have 4 traps in the central row. The agent receives a reward equal to zero in all white cells, a positive +10 reward if she reaches the goal, while she receives a negative reward -10 if she falls in the traps. When he reaches the goal or fall in a trap the episode ends.
 The parameters settings used in this environment are the same described in the van Hasselt GridWorld. Figure~\ref{F:gridhole_results} shows the performance in terms of average reward per step and Q-function estimation of all tested algorithms.
-As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. Howewer, an inaccurate estimation of the Q-function does not necessarly imply a worse optimal policy estimation. Indeed, as we can see in Figure~\ref{avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms.
+As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the best Q-function estimation in few steps. However, an inaccurate estimation of the Q-function does not necessarily imply a worse optimal policy estimation. Indeed, as we can see in Figure~\ref{avg_rew_gridhole}, Q-learning and SpeedyQ-learning have the better performance in terms of average reward per step, while QD-learning outperforms the Double Q-learning and the WQ-learning algorithms.
 
 \subsection{Double Chain}
+This is a problem proposed in \cite{Peters2010RelativeEP} which consists in a Markov chain with two branches (Figure \ref{F:double-chain}). In state 1, action 1 yields a reward of 0 and moves the agent in state 2; action 2 yields a reward of 2 and moves the agent in state 6. In all other states, action 2 moves the agent in state 1 and returns a reward of 2; action 1 moves the agent in the next state of the chain returning a reward of 0. In state 5 and 9, action 1 yields a reward of respectively 10 and 5. In all states, each action has a probability of success of $0.8$ and, if the action fails, the agent remains in the current state. The discount factor is $\gamma = 0.9$.
 
+\begin{figure}
 \begin{center}
-\begin{tikzpicture}[scale=0.2]
-\tikzstyle{every node}+=[inner sep=0pt]
+\begin{tikzpicture}[scale=0.11]
+\tikzstyle{every node}+=[inner sep=0pt, style={scale=0.65}]
 \draw [black] (10.4,-17.1) circle (3);
 \draw (10.4,-17.1) node {$1$};
 \draw [black] (20.1,-6.5) circle (3);
@@ -261,10 +284,10 @@ As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the 
 \draw (61.6,-26) node {$9$};
 \draw [black] (10.195,-14.122) arc (-186.01298:-258.90993:8.628);
 \fill [black] (17.12,-6.56) -- (16.23,-6.22) -- (16.43,-7.2);
-\draw (11.87,-7.74) node [left] {$r(1,1)=0$};
+\draw (11.87,-7.74) node [left] {$r(1)=0$};
 \draw [black] (16.449,-26.391) arc (-94.70547:-174.65436:7.013);
 \fill [black] (16.45,-26.39) -- (15.69,-25.83) -- (15.61,-26.82);
-\draw (8.26,-24.87) node [below] {$r(1,2)=2$};
+\draw (8.26,-24.87) node [below] {$r(2)=2$};
 \draw [black] (13.375,-17.324) arc (75.15536:15.48481:8.153);
 \fill [black] (13.37,-17.32) -- (14.02,-18.01) -- (14.28,-17.05);
 \draw [black] (19.363,-9.401) arc (-21.12574:-63.79717:12.497);
@@ -281,33 +304,36 @@ As shown in the plot in Figure~\ref{maxq_gridhole} the QD-learning provides the 
 \fill [black] (13.39,-17.29) -- (14.15,-17.85) -- (14.23,-16.86);
 \draw [black] (13.398,-17.219) arc (87.26949:73.00835:185.371);
 \fill [black] (13.4,-17.22) -- (14.17,-17.76) -- (14.22,-16.76);
-\draw (38.03,-18.9) node [above] {$r(s,2)=2$};
+\draw (38.03,-18.9) node [above] {$r(2)=2$};
 \draw [black] (22.4,-26) -- (31.4,-26);
 \fill [black] (31.4,-26) -- (30.6,-25.5) -- (30.6,-26.5);
-\draw (26.9,-26.5) node [below] {$r(6,1)=0$};
+\draw (26.9,-26.5) node [below] {$r(1)=0$};
 \draw [black] (37.4,-26) -- (45.2,-26);
 \fill [black] (45.2,-26) -- (44.4,-25.5) -- (44.4,-26.5);
-\draw (41.3,-26.5) node [below] {$r(7,1)=0$};
+\draw (41.3,-26.5) node [below] {$r(1)=0$};
 \draw [black] (51.2,-26) -- (58.6,-26);
 \fill [black] (58.6,-26) -- (57.8,-25.5) -- (57.8,-26.5);
-\draw (54.9,-26.5) node [below] {$r(8,1)=0$};
+\draw (54.9,-26.5) node [below] {$r(1)=0$};
 \draw [black] (51.2,-6.3) -- (58.6,-6.3);
 \fill [black] (58.6,-6.3) -- (57.8,-5.8) -- (57.8,-6.8);
-\draw (54.9,-5.8) node [above] {$r(4,1)=0$};
+\draw (54.9,-5.8) node [above] {$r(1)=0$};
 \draw [black] (37.4,-6.3) -- (45.2,-6.3);
 \fill [black] (45.2,-6.3) -- (44.4,-5.8) -- (44.4,-6.8);
-\draw (41.3,-5.8) node [above] {$r(3,1)=0$};
+\draw (41.3,-5.8) node [above] {$r(1)=0$};
 \draw [black] (23.1,-6.46) -- (31.4,-6.34);
 \fill [black] (31.4,-6.34) -- (30.59,-5.85) -- (30.61,-6.85);
-\draw (27.23,-5.85) node [above] {$r(2,1)=0$};
+\draw (27.23,-5.85) node [above] {$r(1)=0$};
 \draw [black] (64.28,-4.977) arc (144:-144:2.25);
-\draw (68.85,-6.3) node [right] {$r(5,1)=10$};
+\draw (68.85,-6.3) node [right] {$r(1)=10$};
 \fill [black] (64.28,-7.62) -- (64.63,-8.5) -- (65.22,-7.69);
 \draw [black] (64.117,-24.39) arc (150.34019:-137.65981:2.25);
-\draw (68.96,-25.15) node [right] {$r(9,1)=5$};
+\draw (68.96,-25.15) node [right] {$r(1)=5$};
 \fill [black] (64.41,-27.02) -- (64.86,-27.85) -- (65.35,-26.98);
 \end{tikzpicture}
 \end{center}
+\caption{Structure of the double-chain problem.}
+\label{F:double-chain}
+\end{figure}
 
 \section{Conclusion}
 
