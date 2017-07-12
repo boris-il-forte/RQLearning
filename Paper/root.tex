@@ -238,11 +238,11 @@ We analyze the performance of \alg with different choices of learning rates. All
 \begin{figure*}[t]
 \begin{minipage}{\textwidth}
 \centering
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:lrs_1_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/max_a-1.pdf}}
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:lrs_1_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/max_a-51.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:max_a_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/max_a-1.pdf}}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:max_a_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/max_a-51.pdf}}
 \end{minipage}
-\caption{Learning rate of the two actions in state 1 (\ref{F:lrs_1_1}, \ref{F:lrs_1_51}) and state 5 (\ref{F:lrs_5_1}, \ref{F:lrs_5_51}) for RQ-Learning with and without windowed variance estimation. Results are averaged over 500 experiments.}
-  \label{F:double_chain_lr}
+\caption{Action with maximum value in state $1$ and state $9$ for Q-Learning and windowed RQ-Learning.}
+  \label{F:max_a}
 \end{figure*}
 
 \begin{figure}[t]
@@ -332,6 +332,8 @@ This is a problem proposed in \cite{Peters2010RelativeEP} which consists in a Ma
 
 Figure \ref{F:double_chain_q} shows the estimate of the maximum action-value in state $1$ and $5$. State $5$ is the state with the highest maximum action-value. \alg approaches the optimal value faster than the other algorithms in both configurations. However, in state $1$, only \alg with windowed variance estimation converges to the optimal value because the non-windowed approach suffers from variance overestimation due to the fact that the distribution of the next action-values changes during learning; this issue, together with the stochasticity of the transitions, causes the oscillation of the estimate and slow convergence rate. This behavior is highlighted in Figure \ref{F:double_chain_lr} where we show the learning rates of the action-value in the considered states. While initially the learning rates are similar, the windowed learning rate converges to $0$, instead in the non-windowed case the learning rates decrease slowly. Note that in state $5$ the learning rate of action $2$ is almost stationary because of the complexity of the double chain structure. In this cases, increasing $\eta$ can be helpful to speedup the decreasing of the learning rate.
 
+In this experiment, \alg does not only approximate the value function very well, but it is also able to converge to the optimal policy faster than the other algorithms. Figure \ref{F:max_a} shows a comparison between Q-Learning and windowed \alg. We do not show performance of the other algorithms since they behave similarly to Q-Learning. Notice that using $k = 1$ Q-Learning (and the other algorithms, except from windowed \alg) is not able to converge to the optimal policy in state $9$. Indeed, the value of action $2$ in state $9$ is the most difficult to estimate, considering the structure of the MDP.
+
 Note that in this problem, where the only source of stochasticity is in the transition function, Double Q-Learning suffers the most. On the other hand Speedy Q-Learning is still the best approach compared with the others. This empirical results confirm our conjecture described above.
 
 \subsection{Grid World with Holes}
@@ -339,11 +341,22 @@ Note that in this problem, where the only source of stochasticity is in the tran
 \centering
 \includegraphics[scale=.75]{./imgs/gridHole/gridhole.pdf}
 \caption{Structure of the grid world with holes problem.}
-  \label{F:grid_hole}
+  \label{F:grid_hole_map}
+\end{figure}
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\centering
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:hole_1}]{\includegraphics[scale=.7]{./imgs/gridHole/grid_hole1.pdf}}\hspace{-.5cm}
+  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.8}}$\label{F:hole_08}]{\includegraphics[scale=.7]{./imgs/gridHole/grid_hole08.pdf}}
+\end{minipage}
+  \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of \alg for this experiment. Results are averaged over 10000 experiments.}
+  \label{F:hole}
 \end{figure}
 
-This environment consists in a $5 \times 5$ grid with the initial position in the lower-left cell, the goal position in the upper-right cell and four holes in the middle row in such a way that only the cell in the middle is walkable (Figure \ref{F:grid_hole}). The agent receives a reward of $0$ in all non-hole cells, a reward of $10$ when it reaches the goal state and a reward of $-10$ when it reaches a cell with a hole. The episode ends when the agent reaches a cell with a hole. The discount factor is $\gamma = 0.9$.
+This environment consists in a $5 \times 5$ grid with the initial position in the lower-left cell, the goal position in the upper-right cell and four holes in the middle row in such a way that only the cell in the middle is walkable (Figure \ref{F:grid_hole_map}). The agent receives a reward of $0$ in all non-hole cells, a reward of $10$ when it reaches the goal state and a reward of $-10$ when it reaches a cell with a hole. The episode ends when the agent reaches a cell with a hole. The discount factor is $\gamma = 0.9$.
 The learning rate settings are the same of the previous problem.
+
+We consider this simple problem to highlight the limitations of pessimistic action-value estimates. In this MDP the optimal policy consists in avoiding the hole cells stepping through the state in the middle. Notice that in this state the episode terminates with negative reward with probability $\frac{\varepsilon}{2}$ due to the $\varepsilon$-greedy policy used for exploration, resulting in a very low value of the state especially at the beginning of learning. Figure \ref{F:hole} shows that while Q-Learning, Speedy Q-Learning and \alg behave similarly well, Double Q-Learning and Weighted Q-Learning obtain very poor results due to the pessimistic estimate of the value function of the state in the middle.
 
 \section{Conclusion}
 
