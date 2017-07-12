@@ -42,9 +42,9 @@ def experiment(decay_exp, alphaType,betaType):
     else:
         alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
     if betaType == 'WindowedVarianceIncreasing':
-        beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=1., window=50)
+        beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=0.5, window=50)
     else:
-        beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
+        beta = VarianceIncreasingParameter(value=1, shape=shape, tol=0.5)
 
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     names = {1: '1', 0.8: '08'}
     exp = [1, 0.8]
-    beta_types = ['VarianceIncreasing','WindowedVarianceIncreasing']
+    beta_types = ['','Win']
     for b in beta_types:
         for e in exp:
             out = Parallel(n_jobs=-1)(delayed(
@@ -88,9 +88,9 @@ if __name__ == '__main__':
             max_Qs = np.array([o[1] for o in out])
             lr = np.array([o[2] for o in out])
 
-            np.save('results_gridhole/rQDec_'+ b + "_" + names[e] +'.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-            np.save('results_gridhole/maxQDec_'+ b + "_" + names[e] +'.npy', np.mean(max_Qs, 0))
-            np.save('results_gridhole/lrQDec_'+ b + "_" + names[e] +'.npy', np.mean(lr, 0))
+            np.save('results_gridhole/rQDec'+ b + names[e] +'.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
+            np.save('results_gridhole/maxQDec'+ b + names[e] +'.npy', np.mean(max_Qs, 0))
+            np.save('results_gridhole/lrQDec'+ b + names[e] +'.npy', np.mean(lr, 0))
 
     """
     out = Parallel(n_jobs=-1)(delayed(
