@@ -53,8 +53,8 @@ In many real-world problems stochasticity is a critical issue for the learning p
 It is well known that a key issue of Reinforcement Learning (RL) problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to poor performance. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could have stochastic transition and this complicates the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
 
 Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful RL algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent but biased estimator. However, with a finite number of samples, the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. 
-It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update equation) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. In order to avoid this issue, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} to compute the maximum in the updating formula of the Q-function. Providing a negatively biased estimation (i.e. underestimating) this value, this approach can improve the performance especially in noisy environments.
-Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that balances between underestimation and overestimation computing a weighted average of the action-value functions estimates.
+It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update equation) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. In order to avoid this issue, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} to compute the maximum action-value to calculate the temporal-difference error: providing a negatively biased estimation (i.e. underestimating) of the maximum action-value, this approach can improve the performance especially in noisy environments.
+Another recently proposed approach is the Weighted Q-Learning \cite{d2016estimating} that computes a weighted average of the action-value functions estimates balancing between underestimation and overestimation.
 
 However, an inaccurate estimation of the action value function does not always imply bad performance; indeed most of the policies are not dependent on the accuracy of the action-values, but instead they rely on their ordering. For instance, in the empirical section of this paper, we show how Speedy Q-Learning algorithm \cite{NIPS2011_4251} reaches very good performance despite sometimes estimating the action-values very poorly. Starting from this considerations, we try to address this problem from another point of view. Indeed, we do not focus on the estimation of the maximum expected value, but we care about weighting the new samples according to the uncertainty of the current estimates.
 In fact, we propose this work starting from the consideration that it is not sufficient to accurately estimate the maximum expected value of the Q-function of the next state, but we also need to consider how these information are propagated to other states.
@@ -339,15 +339,14 @@ Note that in this problem, where the only source of stochasticity is in the tran
 \subsection{Grid World with Holes}
 \begin{figure}[t]
 \centering
-\includegraphics[scale=.75]{./imgs/gridHole/gridhole.pdf}
+\includegraphics[scale=.55]{./imgs/gridHole/gridhole.pdf}
 \caption{Structure of the grid world with holes problem.}
   \label{F:grid_hole_map}
 \end{figure}
 \begin{figure}[t]
 \begin{minipage}{\columnwidth}
 \centering
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:hole_1}]{\includegraphics[scale=.7]{./imgs/gridHole/grid_hole1.pdf}}\hspace{-.5cm}
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.8}}$\label{F:hole_08}]{\includegraphics[scale=.7]{./imgs/gridHole/grid_hole08.pdf}}
+  \includegraphics[scale=.7]{./imgs/gridHole/grid_hole.pdf}
 \end{minipage}
   \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of \alg for this experiment. Results are averaged over 10000 experiments.}
   \label{F:hole}
@@ -356,9 +355,10 @@ Note that in this problem, where the only source of stochasticity is in the tran
 This environment consists in a $5 \times 5$ grid with the initial position in the lower-left cell, the goal position in the upper-right cell and four holes in the middle row in such a way that only the cell in the middle is walkable (Figure \ref{F:grid_hole_map}). The agent receives a reward of $0$ in all non-hole cells, a reward of $10$ when it reaches the goal state and a reward of $-10$ when it reaches a cell with a hole. The episode ends when the agent reaches a cell with a hole. The discount factor is $\gamma = 0.9$.
 The learning rate settings are the same of the previous problem.
 
-We consider this simple problem to highlight the limitations of pessimistics action-value estimates. In this MDP the optimal policy consists in avoiding the hole cells stepping through the state in the middle. Notice that in this state the episode terminates with negative reward with probability $\frac{\varepsilon}{2}$ due to the $\varepsilon$-greedy policy used for exploration. Figure \ref{F:hole} while Q-Learning, Speedy Q-Learning and \alg behave similarly well, Double Q-Learning and Weighted Q-Learning obtain very poor results. 
+We consider this simple problem to highlight the limitations of pessimistic action-value estimates. In this MDP the optimal policy consists in avoiding the hole cells stepping through the state in the middle. Notice that in this state the episode terminates with negative reward with probability $\frac{\varepsilon}{2}$ due to the $\varepsilon$-greedy policy used for exploration, resulting in a very low value of the state especially at the beginning of learning. Figure \ref{F:hole} shows that while Q-Learning, Speedy Q-Learning and \alg behave similarly well, Double Q-Learning and Weighted Q-Learning obtain very poor results due to the pessimistic estimate of the value function of the state in the middle.
 
 \section{Conclusion}
+In this paper we proposed a method to improve the learning process in stochastic MDPs exploiting the structure of the Bellman operator. 
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
