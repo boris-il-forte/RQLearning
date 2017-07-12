@@ -4,18 +4,7 @@
 \usetikzlibrary{patterns}
 \usepgfplotslibrary{groupplots}
 
-\pgfplotsset{my legend style/.style={
-            legend entries={
-                blue plot,
-                red plot,
-                green plot
-            },
-            legend style={
-                at={([yshift=2pt]0,1)},
-                anchor=south west,
-            },
-            legend columns=4,
-        },every tick label/.append style={font=\large}}
+\pgfplotsset{every tick label/.append style={font=\large}}
 
 \begin{document}
 
@@ -27,6 +16,7 @@
 
 \begin{groupplot}[group style={group size=2 by 2}]
 \nextgroupplot[
+title={\Large $\alpha=\frac{1}{n(s,a)}$},
 ylabel={\Large Reward},
 xmin=0, xmax=500,
 ymin=-0.63958, ymax=1.33998,
@@ -37,8 +27,12 @@ xmajorticks=false,
 ytick pos=left,
 x grid style={lightgray!92.026143790849673!black},
 y grid style={lightgray!92.026143790849673!black},
+legend style={fill=none,draw=none,font=\tiny},
+legend columns=-1,
+legend entries={Q,DQ,WQ, SQ, RQ, RQWin},
+legend to name=named,
 ]
-\addplot [very thick, blue, forget plot]
+\addplot [very thick, blue]
 table {%
 0 -0.5405
 1 -0.4916
@@ -537,7 +531,7 @@ table {%
 494 1.1518
 495 1.1551
 };
-\addplot [very thick, red, forget plot]
+\addplot [very thick, red, ]
 table {%
 0 -0.5325
 1 -0.475
@@ -1036,7 +1030,7 @@ table {%
 494 0.0375
 495 0.0376
 };
-\addplot [very thick, color0, forget plot]
+\addplot [very thick, color0, ]
 table {%
 0 -0.529
 1 -0.4546
@@ -1535,7 +1529,7 @@ table {%
 494 -0.0011
 495 -0.0014
 };
-\addplot [very thick, color1, forget plot]
+\addplot [very thick, color1, ]
 table {%
 0 -0.5384
 1 -0.4871
@@ -2034,7 +2028,7 @@ table {%
 494 1.1515
 495 1.1486
 };
-\addplot [very thick, color2, forget plot]
+\addplot [very thick, color2, ]
 table {%
 0 -0.5409
 1 -0.4833
@@ -2533,7 +2527,7 @@ table {%
 494 1.1364
 495 1.1358
 };
-\addplot [very thick, green!50.196078431372548!black, dashed, forget plot]
+\addplot [very thick, green!50.196078431372548!black, dashed, ]
 table {%
 0 -0.5496
 1 -0.4879
@@ -3032,7 +3026,7 @@ table {%
 494 1.1419
 495 1.1431
 };
-\addplot [black, forget plot]
+\addplot [black, ]
 table {%
 0 1.25
 1 1.25
@@ -3536,6 +3530,7 @@ table {%
 499 1.25
 };
 \nextgroupplot[
+title={\Large $\alpha=\frac{1}{n(s,a)^{0.8}}$},
 xmin=0, xmax=500,
 ymin=-0.64126, ymax=1.34006,
 width=6cm,
@@ -3546,7 +3541,7 @@ ytick pos=left,
 x grid style={lightgray!92.026143790849673!black},
 y grid style={lightgray!92.026143790849673!black}
 ]
-\addplot [very thick, blue, forget plot]
+\addplot [very thick, blue, ]
 table {%
 0 -0.5512
 1 -0.4958
@@ -4045,7 +4040,7 @@ table {%
 494 1.1485
 495 1.1459
 };
-\addplot [very thick, red, forget plot]
+\addplot [very thick, red, ]
 table {%
 0 -0.5276
 1 -0.4725
@@ -4544,7 +4539,7 @@ table {%
 494 0.1405
 495 0.141
 };
-\addplot [very thick, color0, forget plot]
+\addplot [very thick, color0, ]
 table {%
 0 -0.5307
 1 -0.4496
@@ -5043,7 +5038,7 @@ table {%
 494 -0.0013
 495 -0.001
 };
-\addplot [very thick, color1, forget plot]
+\addplot [very thick, color1, ]
 table {%
 0 -0.5412
 1 -0.487
@@ -5542,7 +5537,7 @@ table {%
 494 1.1447
 495 1.1428
 };
-\addplot [very thick, color2, forget plot]
+\addplot [very thick, color2, ]
 table {%
 0 -0.5442
 1 -0.498
@@ -6041,7 +6036,7 @@ table {%
 494 1.137
 495 1.1414
 };
-\addplot [very thick, green!50.196078431372548!black, dashed, forget plot]
+\addplot [very thick, green!50.196078431372548!black, dashed, ]
 table {%
 0 -0.5381
 1 -0.4761
@@ -6540,7 +6535,7 @@ table {%
 494 1.1401
 495 1.1389
 };
-\addplot [black, forget plot]
+\addplot [black, ]
 table {%
 0 1.25
 1 1.25
@@ -7057,7 +7052,7 @@ tick pos=left,
 x grid style={lightgray!92.026143790849673!black},
 y grid style={lightgray!92.026143790849673!black}
 ]
-\addplot [very thick, blue, forget plot]
+\addplot [very thick, blue, ]
 table {%
 0 0
 1 0
@@ -7560,7 +7555,7 @@ table {%
 498 1.21994642112239
 499 1.22190022536839
 };
-\addplot [very thick, red, forget plot]
+\addplot [very thick, red, ]
 table {%
 0 0
 1 0
@@ -8063,7 +8058,7 @@ table {%
 498 -1.18333309052342
 499 -1.18362329041652
 };
-\addplot [very thick, color0, forget plot]
+\addplot [very thick, color0, ]
 table {%
 0 0
 1 -0.0015073193765366
@@ -8566,7 +8561,7 @@ table {%
 498 -0.0658653081488324
 499 -0.0658391621840827
 };
-\addplot [very thick, color1, forget plot]
+\addplot [very thick, color1, ]
 table {%
 0 0
 1 0
@@ -9069,7 +9064,7 @@ table {%
 498 1.22926149546586
 499 1.23124549090711
 };
-\addplot [very thick, color2, forget plot]
+\addplot [very thick, color2, ]
 table {%
 0 0
 1 0
@@ -9572,7 +9567,7 @@ table {%
 498 4.78296899999994
 499 4.78296899999994
 };
-\addplot [very thick, green!50.196078431372548!black, dashed, forget plot]
+\addplot [very thick, green!50.196078431372548!black, dashed, ]
 table {%
 0 0
 1 0
@@ -10075,7 +10070,7 @@ table {%
 498 4.78290005719571
 499 4.78290005719571
 };
-\addplot [black, forget plot]
+\addplot [black, ]
 table {%
 0 4.782969
 1 4.782969
@@ -10591,7 +10586,7 @@ tick pos=left,
 x grid style={lightgray!92.026143790849673!black},
 y grid style={lightgray!92.026143790849673!black}
 ]
-\addplot [very thick, blue, forget plot]
+\addplot [very thick, blue, ]
 table {%
 0 0
 1 0
@@ -11094,7 +11089,7 @@ table {%
 498 4.61574687120874
 499 4.61672439559373
 };
-\addplot [very thick, red, forget plot]
+\addplot [very thick, red, ]
 table {%
 0 0
 1 0
@@ -11597,7 +11592,7 @@ table {%
 498 -1.25304438471492
 499 -1.25246085919378
 };
-\addplot [very thick, color0, forget plot]
+\addplot [very thick, color0, ]
 table {%
 0 0
 1 -0.00177090194476381
@@ -12100,7 +12095,7 @@ table {%
 498 -0.0523569310813983
 499 -0.0523226462312837
 };
-\addplot [very thick, color1, forget plot]
+\addplot [very thick, color1, ]
 table {%
 0 0
 1 0
@@ -12603,7 +12598,7 @@ table {%
 498 4.60944031986825
 499 4.6104493861798
 };
-\addplot [very thick, color2, forget plot]
+\addplot [very thick, color2, ]
 table {%
 0 0
 1 0
@@ -13106,7 +13101,7 @@ table {%
 498 4.78296899999994
 499 4.78296899999994
 };
-\addplot [very thick, green!50.196078431372548!black, dashed, forget plot]
+\addplot [very thick, green!50.196078431372548!black, dashed, ]
 table {%
 0 0
 1 0
@@ -13609,7 +13604,7 @@ table {%
 498 4.78296899999958
 499 4.78296899999958
 };
-\addplot [black, forget plot]
+\addplot [black, ]
 table {%
 0 4.782969
 1 4.782969
@@ -14112,7 +14107,10 @@ table {%
 498 4.782969
 499 4.782969
 };
-\end{groupplot}
+ 
+\end{groupplot}  
+
+\node at (5, -6) {\ref{named}};
 
 \end{tikzpicture}
 
