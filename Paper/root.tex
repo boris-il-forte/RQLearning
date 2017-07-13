@@ -170,7 +170,7 @@ A weak assumption of this model is that the variables are identically distribute
 
 Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
 
-\begin{align}
+\begin{align}\label{eq:alpha_eq}
  \alpha_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}
 \end{align}
 where $\eta$ is the amount of the estimator variance for which the learning rate is $0.5$ (i.e. when $\sigma_e=\eta$ the learning rate is 0.5). It can be seen as a soft threshold to tune the speed of the decrease of the learning rate w.r.t. the estimator variance.
@@ -183,9 +183,41 @@ If we consider the case $\beta_t=\alpha_t\delta_t$, then we have to use a differ
 
 Where $\eta$ has the same interpretation of the previous scenario.
 
-\subsection{Convergence Properties}
+\subsection{Discussion on convergence}
 
-TODO -- chiedere anche a restelli. Non banale!
+Althought we do not have strong results about convergence of this method if using the variance dependent learning rate, we designed the variance dependent learning rate functions with the convergence in mind.
+
+Suppose that the variance of the estimator $\sigma_e^2(t)$ is a variance of the sample mean. Is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\dfrac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generate samples.
+This assumption is in general false, as we can see from the formula of the learning rate, however in some cases this could be a good approximation,as the sample mean is a special case of the estimator.
+
+Now, just consider the proposed learning rate in (\ref{eq:alpha_eq}), substituting the sample mean into the variance of the estimator:
+
+\begin{align}\label{eq:alpha_smv}
+ \alpha_t=\dfrac{\sigma^2}{\sigma^2+\eta t}
+\end{align}
+
+It can be easily shown that:
+\begin{align}
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\dfrac{\sigma^2}{\sigma^2+\eta t} & \rightarrow\infty \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\dfrac{\sigma^2}{\sigma^2+\eta t}\right)^2 & =K
+\end{align}
+
+Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario we proposed an exponential learning rate. Let $\alpha_t=\dfrac{1}{t}$ for simplicity.
+now consider the learning rate (\ref{eq:delta_eq}), substituting the sample mean into the variance of the estimator:
+
+\begin{align}\label{eq:beta_delta_smv}
+ \beta(t) = \dfrac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)}
+\end{align}
+
+
+It can be easily shown that:
+\begin{align}
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\dfrac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)} & \rightarrow\infty \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\dfrac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)}\right)^2 & =K
+\end{align}
+
+Unfortunately, the analysis of the generic variance estimator is more complex. We suppose that convergence could be assured with some mild conditions on $\eta$ and $\sigma$.
+
 
 \section{Experimental Results}\label{S:empirical}
 In this section, we highlight the main advantages of exploiting the structure of the TD-Error with \alg in three discrete MDPs. We compare \alg against Q-Learning \cite{watkins1992q}, Double Q-Learning \cite{van2010double}, Weighted Q-Learning \cite{d2016estimating} and Speedy Q-Learning\footnote{In these experiments we consider the asynchronous version of Speedy Q-Learning.} \cite{NIPS2011_4251}. We choose this set of algorithms because we want to analyze the impact of the maximum expected value estimator in the learning process. Indeed, while \cite{van2010double} strongly suggests that a negatively biased estimator should be used to deal with stochastic MDPs, the following empirical results will show that positively biased estimators are able to achieve better performance in highly stochastic problems as well. We want to show that instead the main point consists in exploiting data in the best way, in particular in the estimation of the action-value, giving higher relevancy to more recent samples. We conjecture that the trade-off between keeping the old estimate and updating it with the new one is the key issue in highly stochastic environments. Both \alg and Speedy Q-Learning exploit this idea, in particular the latter uses an increasing learning rate on the difference between the target computed with the current estimation and the one computed with the previous estimation; on the other hand \alg weights the update considering the uncertainty of the current estimation.
