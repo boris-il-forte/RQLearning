@@ -119,10 +119,10 @@ Separating the two components of the value function can be useful, as the two co
 As the actual action value function is the sum of the two estimates, we can write an equivalent update for the Q function:
 
 \begin{align}
-Q(x,u) & \leftarrow\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
- & +\gamma\left(\tilde{Q}(x,u)+\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))\right) \nonumber\\
- & =Q(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
- & +\gamma\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))
+Q(x,u)\leftarrow&\tilde{R}(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
+  & +\gamma\left(\tilde{Q}(x,u)+\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))\right) \nonumber\\
+= & Q(x,u)+\alpha(R(x,u,x')-\tilde{R}(x,u)) \nonumber\\
+  & +\gamma\beta(\max_{u'}Q(x',u')-\tilde{Q}(x,u))
  \label{eq:cumulativeupdate}
 \end{align}
 notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However Equation \ref{eq:cumulativeupdate} is useful to analyze the relations to standard Q-Learning algorithm.
@@ -130,21 +130,21 @@ notice that this update cannot be used in practice in the algorithm, as it is no
 \subsection{Analysis of the Decomposed Update}
 We will discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha(t)=\beta(t)$, $\forall t$ by combining Equation \ref{eq:cumulativeupdate} and Equation \ref{eq:qdecrqtilde} we obtain:
 \begin{align}
-Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\max_{u'}Q(x',u')\nonumber\\
+Q(x,u) \leftarrow & Q(x,u)+\alpha(R(x,u,x')+\gamma\max_{u'}Q(x',u')\nonumber\\
  & -Q(x,u))
 \end{align}
 That is the classical Q-Learning update. 
 
 We consider now the setting $\alpha(t)\geq\beta(t)>0$, $\forall t$. Let $\beta(t)=\delta(t)\alpha(t)$, we obtain:
 \begin{align}
-Q(x,u) & \leftarrow Q(x,u)+\alpha(R(x,u,x')+\gamma\delta \max_{u'}Q(x',u') \nonumber\\
- & -(\tilde{R}(x,u)+\gamma\delta\tilde{Q}(x,u))) \nonumber\\
- & =Q(x,u)+\alpha(R(x,u,x')+\gamma'\max_{u'}Q(x',u') \nonumber\\
- & -(\tilde{R}(x,u)+\gamma'\tilde{Q}(x,u))) \nonumber\\
- & =Q(x,u)+\alpha((R(x,u,x')+\gamma'\max_{u'}Q(x',u')) \nonumber\\
- & -Q'(x,u))
+Q(x,u) \leftarrow & Q(x,u)+\alpha(R(x,u,x')+\gamma\delta \max_{u'}Q(x',u') \nonumber\\
+  & -(\tilde{R}(x,u)+\gamma\delta\tilde{Q}(x,u))) \nonumber\\
+= & Q(x,u)+\alpha(R(x,u,x')+\gamma'\max_{u'}Q(x',u') \nonumber\\
+  & -(\tilde{R}(x,u)+\gamma'\tilde{Q}(x,u))) \nonumber\\
+= & Q(x,u)+\alpha((R(x,u,x')+\gamma'\max_{u'}Q(x',u')) \nonumber\\
+  & -Q'(x,u))
 \end{align}
-with $\gamma'=\gamma\delta$. Notice that $Q'(x,u)$ is the current Q function, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta(t)$ that increases monotonically in the interval $[0,1]$, our method works increasing the effective horizon each step, starting from trying to solve a greedy myopic problem and moving towards the real one. This approach has been used in practice to solve infinite horizon problems when the discount factor is close to $1$,~\cite{}.
+with $\gamma'=\gamma\delta$. Notice that $Q'(x,u)$ is the current Q function, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta(t)$ that increases monotonically in the interval $[0,1]$, our method works increasing the effective horizon each step, starting from trying to solve a greedy myopic problem and moving towards the real one. This approach has been used in practice to solve infinite horizon problems when the discount factor is close to $1$,~\cite{crites1996improving, bao2008infinite, franccois2015discount}.
 
 Finally, we can observe that if the reward function and the transition model are deterministic, we can use $\alpha=1$ and consider only $\beta(t)=\delta(t)$,
 
@@ -178,7 +178,7 @@ where $\eta$ is the amount of the estimator variance for which the learning rate
 If we consider the case $\beta(t)=\alpha(t)\delta(t)$, then we have to use a different learning rate. As we want an increase of the discount factor faster than the decrease of the general learning rate, we can use an exponentially increasing learning rate for the delta parameter:
 
 \begin{align}\label{eq:delta_eq}
- \delta(t) = 1- e^{\frac{\sigma^2}{\eta}\log(0.5)}
+ \delta(t) = e^{\frac{\sigma^2}{\eta}\log(0.5)}
 \end{align}
 
 Where $\eta$ has the same interpretation of the previous scenario.
