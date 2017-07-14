@@ -62,16 +62,15 @@ In fact, we propose this work starting from the consideration that it is not suf
 The interesting aspect of this approach is that it is possible to use any maximum expected value estimator and, moreover, it can be easily extended in an on-policy scenario. Since we believe that the choice of the estimator is not a relevant issue in our approach, we choose the maximum operator as it is the simplest one.
 
 \section{Preliminaries}
-A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ is the state space, $\actionspace$ is the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, $\Rmodel(r|x, u, x')$ defines the distribution of the reward, and $D$ is the distribution of the initial state.
-A stochastic policy is defined by a density distribution $\pol(\cdot|x)$ that specifies for each state $x$ the density distribution over the action space $\actionspace$.
----
-Given a policy $\pol$, we define the action value function as:
+A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ denotes the state space, $\actionspace$ denotes the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, $\Rmodel(r|x, u, x')$ defines the distribution of the reward, and $D$ is the distribution of the initial states.
+A stochastic policy is a density distribution $\pol(\cdot|x)$ specifying the density distribution over the action space $\actionspace$ for each state $x$.
+
+Given a policy $\pol$, we define the action-value function as:
 \begin{align}
  Q^\pol(x,u)=\underset{\strut\mathclap{\substack{(x', u')\sim \\ \Pmodel(x'|x,u)\pol(u'|x')}}}{\mathbb{E}}\left[ r(x,u,x')+\gamma Q^\pol(x,u)(x',u')\right].
  \label{eq:qpol}
 \end{align}
-
-The optimal policy $\pol*$ is the policy with the highest expected return in the MDP. The optimal action-value function $Q^*(x, u)$ is the action-value function of the optimal policy.
+The optimal policy $\pol*$ is the policy with the highest expected return in the MDP and the optimal action-value function $Q^*(x, u)$ is the action-value function of the optimal policy.
 It has been shown that the optimal policy in any MDP can be always a deterministic policy that at each state chooses the action with the highest $Q^*(x, u)$ value.
 Given that we can always write the optimal action-value function as:
 \begin{align}
@@ -177,12 +176,18 @@ where $\eta$ is the amount of the estimator variance for which the learning rate
 If we consider the case $\beta_t=\alpha_t\delta_t$, then we have to use a different learning rate. As we want an increase of the discount factor faster than the decrease of the general learning rate, we can use an exponentially increasing learning rate for the delta parameter:
 
 \begin{align}\label{eq:delta_eq}
- \delta(t) = e^{\frac{\sigma_e^2}{\eta}\log(0.5)}
+ \delta(t) = e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}
 \end{align}
-where $\eta$ has the same interpretation of the previous scenario.
+where $\eta$ has the same interpretation of the previous scenario thanks to the $\log\frac{1}{2}$ factor.
 
 \subsection{Discussion on convergence}
-Suppose that the variance of the estimator $\sigma_e^2(t)$ is the variance of the sample mean. It is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\frac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generates the samples.
+Convergence of the Q-Learning algorithm is guaranteed under some conditions, including some properties on the learning rates:
+\begin{align}
+ 0 \leq \alpha < 1,\nonumber \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t & = \infty,\nonumber \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t^2 & < \infty. \label{eq:lr_cond}
+\end{align}
+In order to give some preliminary results about the convergence of \alg and to motivate the choice of the formulas of learning rates $\alpha$ and $\delta$, we show that, under some assumptions, the proposed formulas (\ref{eq:alpha_eq}) (\ref{eq:delta_eq}) satisfy (\ref{eq:lr_cond}). Suppose that the variance of the estimator $\sigma_e^2(t)$ is the variance of the sample mean. It is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\frac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generates the samples.
 This assumption does not hold in general as we can see from the formula of the learning rate, however in some cases this could be a good approximation as the sample mean is a special case of the estimator.
 
 Now, just consider the proposed learning rate in (\ref{eq:alpha_eq}), replacing the variance of the sample mean into the variance of the estimator:
@@ -192,18 +197,18 @@ Now, just consider the proposed learning rate in (\ref{eq:alpha_eq}), replacing 
 it can be easily shown that:
 \begin{align}
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{\sigma^2}{\sigma^2+\eta t} & = \infty \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{\sigma^2}{\sigma^2+\eta t}\right)^2 & = K.
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{\sigma^2}{\sigma^2+\eta t}\right)^2 & < \infty.
 \end{align}
 Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario we propose an exponential learning rate. Let $\alpha_t=\frac{1}{t}$ for simplicity and consider the learning rate (\ref{eq:delta_eq}) replacing the sample mean into the variance of the estimator:
 \begin{align}\label{eq:beta_delta_smv}
- \beta(t) = \frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)}.
+ \beta(t) = \frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}.
 \end{align}
 Then:
 \begin{align}
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)} & = \infty \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log(0.5)}\right)^2 & = K.
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}\right)^2 & < \infty.
 \end{align}
-This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we suppose that convergence could be guaranteed with some mild conditions on $\eta$ and $\sigma$.
+This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we conjecture that convergence could be guaranteed under some mild conditions on $\eta$ and $\sigma$.
 
 \section{Experimental Results}\label{S:empirical}
 In this section, we highlight the main advantages of exploiting the structure of the TD-Error with \alg in three discrete MDPs. We compare \alg against Q-Learning \cite{watkins1992q}, Double Q-Learning \cite{van2010double}, Weighted Q-Learning \cite{d2016estimating} and Speedy Q-Learning\footnote{In these experiments we consider the asynchronous version of Speedy Q-Learning.} \cite{NIPS2011_4251}. We choose this set of algorithms because we want to analyze the impact of the maximum expected value estimator in the learning process. Indeed, while \cite{van2010double} strongly suggests that a negatively biased estimator should be used to deal with stochastic MDPs, the following empirical results will show that positively biased estimators are able to achieve better performance in highly stochastic problems as well. We want to show that instead the main point consists in exploiting data in the best way, in particular in the estimation of the action-value, giving higher relevancy to more recent samples. We conjecture that the trade-off between keeping the old estimate and updating it with the new one is the key issue in highly stochastic environments. Both \alg and Speedy Q-Learning exploit this idea, in particular the latter uses an increasing learning rate on the difference between the target computed with the current estimation and the one computed with the previous estimation; on the other hand \alg weights the update considering the uncertainty of the current estimation.
@@ -400,7 +405,7 @@ In this paper we proposed a method to improve the learning process in stochastic
 
 In the experimental section, we empirically show that good results in highly stochastic MDPs can also be reached by algorithms that overestimates the action-value function. These results demonstrate that there seems not to be such a strong correlation between the underestimation of the action-value function and good performance in these kind of environments, as suggested in recent literature. Indeed, while the propagation of overestimates could lead to divergent estimates, in some cases this is not an issue as the optimal policy only depends on the order of the action-values. Moreover, our method is able to converge to the optimal action-value even with a initially high overestimation. It demonstrates how overestimation allows a better exploration given that the learning rate properly decreases. On the contrary, methods that underestimate the action-values suffer from poor exploration as we show in a simple deterministic environment.
 
-
+As future work, it would be useful to derive the conditions of convergence of \alg starting from the preliminary results proposed in this paper.
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page

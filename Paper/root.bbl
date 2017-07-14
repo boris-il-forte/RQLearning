@@ -75,6 +75,13 @@ V.~Fran{\c{c}}ois-Lavet, R.~Fonteneau, and D.~Ernst, ``How to discount deep
   reinforcement learning: Towards new dynamic strategies,'' \emph{arXiv
   preprint arXiv:1512.02011}, 2015.
 
+\bibitem{EvenDar2001}
+\BIBentryALTinterwordspacing
+E.~Even-Dar and Y.~Mansour, \emph{Learning Rates for Q-Learning}.\hskip 1em
+  plus 0.5em minus 0.4em\relax Springer Berlin Heidelberg, 2001, pp. 589--604.
+  [Online]. Available: \url{http://dx.doi.org/10.1007/3-540-44581-1_39}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Peters2010RelativeEP}
 J.~Peters, K.~Mulling, and Y.~Altun, ``Relative entropy policy search,'' in
   \emph{AAAI}, 2010.
