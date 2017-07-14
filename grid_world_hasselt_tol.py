@@ -40,8 +40,6 @@ def experiment(decay_exp, alphaType, tol):
     else:
         alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
     beta = VarianceIncreasingParameter(value=1, shape=shape, tol=tol)
-    #beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=tol, window=50)
-    #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
@@ -72,9 +70,9 @@ if __name__ == '__main__':
 
     logger.Logger(3)
 
-    names = {5: '5', 1: '1', 0.8: '08', 0.1: '01', 10: '10'}
+    names = {0.8: '08', 1: '1', 5: '5', 6: '6', 8: '8', 10: '10'}
     exp = [0.8]
-    tol = [.1, 1, 5, 10]
+    tol = [1, 5, 8, 10]
     for e in exp:
         for t in tol:
             out = Parallel(n_jobs=-1)(delayed(
@@ -86,16 +84,4 @@ if __name__ == '__main__':
             np.save('rQDec'+ names[e] + names[t] + '.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
             np.save('maxQDec'+ names[e] + names[t] + '.npy', np.mean(max_Qs, 0))
             #np.save('lrQDecWin'+ names[e] + names[t] + '.npy', np.mean(lr, 0))
-
-    '''
-    out = Parallel(n_jobs=-1)(delayed(
-        experiment)(0, '') for _ in xrange(n_experiment))
-    r = np.array([o[0] for o in out])
-    max_Qs = np.array([o[1] for o in out])
-    #lr = np.array([o[2] for o in out])
-
-    np.save('rQDecWinAlpha.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-    np.save('maxQDecWinAlpha.npy', np.mean(max_Qs, 0))
-    #np.save('lrQDecWinAlpha.npy', np.mean(lr, 0))
-    '''
 
