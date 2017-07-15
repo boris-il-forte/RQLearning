@@ -48,6 +48,12 @@ C.~D'Eramo, M.~Restelli, and A.~Nuara, ``Estimating maximum expected value
   through gaussian approximation,'' in \emph{International Conference on
   Machine Learning}, 2016, pp. 1032--1040.
 
+\bibitem{lee2013bias}
+D.~Lee, B.~Defourny, and W.~B. Powell, ``Bias-corrected q-learning to control
+  max-operator bias in q-learning,'' in \emph{Adaptive Dynamic Programming And
+  Reinforcement Learning (ADPRL), 2013 IEEE Symposium on}.\hskip 1em plus 0.5em
+  minus 0.4em\relax IEEE, 2013, pp. 93--99.
+
 \bibitem{NIPS2011_4251}
 \BIBentryALTinterwordspacing
 M.~Ghavamzadeh, H.~J. Kappen, M.~G. Azar, and R.~Munos, ``Speedy q-learning,''
@@ -57,6 +63,31 @@ M.~Ghavamzadeh, H.~J. Kappen, M.~G. Azar, and R.~Munos, ``Speedy q-learning,''
   Inc., 2011, pp. 2411--2419. [Online]. Available:
   \url{http://papers.nips.cc/paper/4251-speedy-q-learning.pdf}
 \BIBentrySTDinterwordspacing
+
+\bibitem{mohagheghi2007proportional}
+S.~Mohagheghi, Y.~del Valle, G.~K. Venayagamoorthy, and R.~G. Harley, ``A
+  proportional-integrator type adaptive critic design-based neurocontroller for
+  a static compensator in a multimachine power system,'' \emph{IEEE
+  Transactions on Industrial Electronics}, vol.~54, no.~1, pp. 86--96, 2007.
+
+\bibitem{Tewari2007}
+A.~Tewari and P.~L. Bartlett, \emph{Bounded Parameter Markov Decision Processes
+  with Average Reward Criterion}, 2007, pp. 263--277.
+
+\bibitem{schweighofer2003meta}
+N.~Schweighofer and K.~Doya, ``Meta-learning in reinforcement learning,''
+  \emph{Neural Networks}, vol.~16, no.~1, pp. 5--9, 2003.
+
+\bibitem{Kobayashi2009}
+K.~Kobayashi, H.~Mizoue, T.~Kuremoto, and M.~Obayashi, \emph{A Meta-learning
+  Method Based on Temporal Difference Error}.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer Berlin Heidelberg, 2009, pp. 530--537.
+
+\bibitem{yoshida2013reinforcement}
+N.~Yoshida, E.~Uchibe, and K.~Doya, ``Reinforcement learning with
+  state-dependent discount factor,'' in \emph{Development and Learning and
+  Epigenetic Robotics (ICDL), 2013 IEEE Third Joint International Conference
+  on}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2013, pp. 1--6.
 
 \bibitem{crites1996improving}
 R.~H. Crites and A.~G. Barto, ``Improving elevator performance using
