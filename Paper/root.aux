@@ -37,11 +37,11 @@
 \newlabel{eq:rqtilde}{{4}{2}{Preliminaries}{equation.2.4}{}}
 \newlabel{eq:qdecrqtilde}{{5}{2}{Preliminaries}{equation.2.5}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {III}The Proposed Method}{2}{section.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Decomposition of the TD Error}{2}{subsection.3.1}}
-\newlabel{eq:rtilupdedate}{{6}{2}{Decomposition of the TD Error}{equation.3.6}{}}
-\newlabel{eq:qtildeupdate}{{7}{2}{Decomposition of the TD Error}{equation.3.7}{}}
-\newlabel{eq:cumulativeupdate}{{8}{2}{Decomposition of the TD Error}{equation.3.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Analysis of the Decomposed Update}{2}{subsection.3.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Decomposition of the TD error}{2}{subsection.3.1}}
+\newlabel{eq:rtilupdedate}{{6}{2}{Decomposition of the TD error}{equation.3.6}{}}
+\newlabel{eq:qtildeupdate}{{7}{2}{Decomposition of the TD error}{equation.3.7}{}}
+\newlabel{eq:cumulativeupdate}{{8}{2}{Decomposition of the TD error}{equation.3.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Analysis of the decomposed update}{2}{subsection.3.2}}
 \citation{crites1996improving}
 \citation{bao2008infinite}
 \citation{franccois2015discount}
@@ -58,6 +58,8 @@
 \citation{NIPS2011_4251}
 \citation{van2010double}
 \citation{van2010double}
+\citation{van2010double}
+\citation{d2016estimating}
 \newlabel{eq:alpha_smv}{{18}{4}{Discussion on convergence}{equation.3.18}{}}
 \newlabel{eq:beta_delta_smv}{{21}{4}{Discussion on convergence}{equation.3.21}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Results}{4}{section.4}}
@@ -71,8 +73,6 @@
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)}$}}}{4}{figure.1}}
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)^{0.8}}$}}}{4}{figure.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-A}}Noisy Grid World}{4}{subsection.4.1}}
-\citation{van2010double}
-\citation{d2016estimating}
 \citation{Peters2010RelativeEP}
 \newlabel{F:hasselt_qdec_1}{{2(a)}{5}{Subfigure 2(a)}{subfigure.2.1}{}}
 \newlabel{sub@F:hasselt_qdec_1}{{(a)}{5}{Subfigure 2(a)\relax }{subfigure.2.1}{}}
@@ -134,8 +134,15 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of RQ-Learning\xspace  for this experiment. Results are averaged over $10000$ experiments.}}{7}{figure.9}}
 \newlabel{F:hole}{{9}{7}{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of all the other algorithms and of the best setting of \alg for this experiment. Results are averaged over $10000$ experiments}{figure.9}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}}Grid World with Holes}{7}{subsection.4.3}}
+\newlabel{F:sarsa_1}{{10(a)}{7}{Subfigure 10(a)}{subfigure.10.1}{}}
+\newlabel{sub@F:sarsa_1}{{(a)}{7}{Subfigure 10(a)\relax }{subfigure.10.1}{}}
+\newlabel{F:sarsa_08}{{10(b)}{7}{Subfigure 10(b)}{subfigure.10.2}{}}
+\newlabel{sub@F:sarsa_08}{{(b)}{7}{Subfigure 10(b)\relax }{subfigure.10.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of SARSA and of the on-policy windowed version of RQ-Learning\xspace  for this experiment. Results are averaged over $1000$ experiments.}}{7}{figure.10}}
+\newlabel{F:sarsa}{{10}{7}{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of SARSA and of the on-policy windowed version of \alg for this experiment. Results are averaged over $1000$ experiments}{figure.10}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)}$}}}{7}{figure.10}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)^{0.8}}$}}}{7}{figure.10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}}On-policy learning}{7}{subsection.4.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusion}{7}{section.5}}
 \bibstyle{IEEEtran}
 \bibdata{biblio}
 \bibcite{watkins1992q}{1}
@@ -156,12 +163,5 @@
 \bibcite{franccois2015discount}{16}
 \bibcite{EvenDar2001}{17}
 \bibcite{Peters2010RelativeEP}{18}
-\newlabel{F:sarsa_1}{{10(a)}{8}{Subfigure 10(a)}{subfigure.10.1}{}}
-\newlabel{sub@F:sarsa_1}{{(a)}{8}{Subfigure 10(a)\relax }{subfigure.10.1}{}}
-\newlabel{F:sarsa_08}{{10(b)}{8}{Subfigure 10(b)}{subfigure.10.2}{}}
-\newlabel{sub@F:sarsa_08}{{(b)}{8}{Subfigure 10(b)\relax }{subfigure.10.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of SARSA and of the on-policy windowed version of RQ-Learning\xspace  for this experiment. Results are averaged over $1000$ experiments.}}{8}{figure.10}}
-\newlabel{F:sarsa}{{10}{8}{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of SARSA and of the on-policy windowed version of \alg for this experiment. Results are averaged over $1000$ experiments}{figure.10}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)}$}}}{8}{figure.10}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$\alpha = \genfrac {}{}{}0{1}{n(s,a)^{0.8}}$}}}{8}{figure.10}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusion}{8}{section.5}}
 \@writefile{toc}{\contentsline {section}{References}{8}{section*.1}}

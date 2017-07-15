@@ -62,11 +62,9 @@ In fact, we propose this work starting from the consideration that it is not suf
 The work proposed in this paper follows this line of research.
 
 The interesting aspect of this approach is that it is possible to use any maximum expected value estimator and, moreover, it can be easily extended in an on-policy scenario. Since we believe that the choice of the estimator is not a relevant issue in our approach, we choose the maximum operator as it is the simplest one.
-
 \section{Preliminaries}
 A Markov Decision Process (MDP) is defined by $\mathcal{M} = \langle \statespace,\actionspace,\Pmodel,\gamma,\Rmodel, D\rangle$, where $\statespace$ denotes the state space, $\actionspace$ denotes the action space, $\Pmodel$ is a Markovian transition model where $\Pmodel(x'|x,u)$ defines the transition density between state $x$ and $x'$ under action $u$, $\gamma\in[0,1)$ is the discount factor, $\Rmodel(r|x, u, x')$ defines the distribution of the reward, and $D$ is the distribution of the initial states.
 A stochastic policy is a density distribution $\pol(\cdot|x)$ specifying the density distribution over the action space $\actionspace$ for each state $x$.
-
 Given a policy $\pol$, we define the action-value function as:
 \begin{align}
  Q^\pol(x,u)=\underset{\strut\mathclap{\substack{(x', u')\sim \\ \Pmodel(x'|x,u)\pol(u'|x')}}}{\mathbb{E}}\left[ r(x,u,x')+\gamma Q^\pol(x,u)(x',u')\right].
@@ -91,8 +89,7 @@ We now introduce two functions, $\Rtilde$ and $\Qtilde$, defined as:
  \Qtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right].
  \label{eq:rqtilde}
 \end{align}
-We can give an interpretation of these two functions. $\Rtilde(x,u)$ is the expected immediate reward of the action $u$ in the state $x$. $\Qtilde(x,u)$ is the expected discounted return of the states reached after performing action $u$ in state $x$, i.e. the expected gain of the reached state.
-
+We can give an interpretation of these two functions: $\Rtilde(x,u)$ is the expected immediate reward of the action $u$ in the state $x$; $\Qtilde(x,u)$ is the expected discounted return of the states reached after performing action $u$ in state $x$ (i.e. the expected gain of the reached state).
 We can now write the optimal value function as:
 \begin{align}
  Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u).
@@ -100,38 +97,31 @@ We can now write the optimal value function as:
 \end{align}
 
 Our approach shifts the focus of the RL task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for the $\Rtilde$ and $\Qtilde$ functions. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: the $\Rtilde$ function only depends on the transition and reward models, while $\Qtilde$ also depends on the optimal policy.
-
 \section{The Proposed Method}
-
 In the following section we derive our method from (\ref{eq:qdecrqtilde}). We propose the general schema, using the maximum estimator and we show the relations with the standard Q learning update. We call this method \emph{\alg} as it decomposes the TD-Error in a reward component and an action-value component.
-
-\subsection{Decomposition of the TD Error}
-
-Standard Q-Learning algorithm computes the temporal difference error given the tuple $(x,u,r,x')$ w.r.t. the current action-value estimates, and then updates such estimate proportionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate equals to $1$, the new sample substitutes the old estimate; if the learning rate equals to $0$, the new sample is discarded, and the old estimate is kept unchanged. 
-As shown in (\ref{eq:qdecrqtilde}) the action-value function could be decomposed in two different components. Our method is based on the idea to give separate estimates for these two components, instead of computing a TD error, we compute the error w.r.t. each component of the action-value function:
-
+\subsection{Decomposition of the TD error}
+Standard Q-Learning algorithm computes the temporal difference error given the tuple $(x,u,r,x')$ w.r.t. the current action-value estimates and then updates such estimate proportionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate equals to $1$, the new sample substitutes the old estimate; if the learning rate equals to $0$, the new sample is discarded and the old estimate is kept unchanged. 
+As shown in (\ref{eq:qdecrqtilde}) the action-value function could be decomposed in two different components. Our method is based on the idea of giving separate estimates for these two components by, instead of computing the TD error, computing the error w.r.t. each component of the action-value function:
 \begin{align}
 \Rtilde_{t+1}(x,u) & \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)), \label{eq:rtilupdedate}\\
 \Qtilde_{t+1}(x,u) & \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u)).
 \label{eq:qtildeupdate}
 \end{align}
-Separating the two components of the value function can be useful, as the two components have inherently different sources of stochasticity. Moreover, the information stored in $\Rtilde$ is local to each state-action pair, and does not contain the uncertainty of the estimation of others states. The information stored in $\Qtilde$ instead depends only on the action-value function of the states that could be reached after performing the action $u$ in the state $x$, which depends, recursively, on the other action-value functions. It is clear that the propagation of uncertain values only affects the $\Qtilde$ component.
-As the actual action value function is the sum of the two estimates, we can write an equivalent update for the Q function:
-
+Separating the two components of the value function can be useful, as the two components have inherently different sources of stochasticity. Moreover, the information stored in $\Rtilde$ is local to each state-action pair and does not contain the uncertainty of the estimation of others states. The information stored in $\Qtilde$ instead depends only on the action-value function of the states that could be reached after performing the action $u$ in the state $x$ which depends, recursively, on the other action-value functions. It is clear that the propagation of uncertain values only affects the $\Qtilde$ component.
+As the actual action value function is the sum of the two estimates, we can write an equivalent update for the Q-function:
 \begin{align}
 Q_{t+1}(x,u)\leftarrow&\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)) \nonumber\\
   & +\gamma\left(\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))\right) \nonumber\\
 = & Q_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)) \nonumber\\
-  & +\gamma\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))
+  & +\gamma\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u)).
  \label{eq:cumulativeupdate}
 \end{align}
-notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However (\ref{eq:cumulativeupdate}) is useful to analyze the relations to standard Q-Learning algorithm.
-
-\subsection{Analysis of the Decomposed Update}
-We discuss now the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha_t=\beta_t$, $\forall t$ by combining (\ref{eq:cumulativeupdate}) and (\ref{eq:qdecrqtilde}) we obtain:
+Notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However (\ref{eq:cumulativeupdate}) is useful to analyze the relations to standard Q-Learning algorithm.
+\subsection{Analysis of the decomposed update}
+Now we discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha_t=\beta_t$, $\forall t$ by combining (\ref{eq:cumulativeupdate}) and (\ref{eq:qdecrqtilde}) we obtain:
 \begin{align}
 Q_{t+1}(x,u) \leftarrow & Q_t(x,u)+\alpha_t(R(x,u,x')+\gamma\max_{u'}Q_t(x',u')\nonumber\\
- & - Q_t(x,u))
+ & - Q_t(x,u)).
 \end{align}
 That is the classical Q-Learning update. 
 
@@ -144,17 +134,15 @@ Q_{t+1}(x,u) \leftarrow & Q_t(x,u)+\alpha_t(R(x,u,x')+\gamma\delta_t \max_{u'}Q_
 = & Q_t(x,u)+\alpha_t((R(x,u,x')+\gamma_t'\max_{u'}Q_t(x',u')) \nonumber\\
   & - Q_t'(x,u))
 \end{align}
-with $\gamma_t'=\gamma\delta_t$. Notice that $Q_t'(x,u)$ is the Q function at time step $t$, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta_t$ that increases monotonically in the interval $[0,1]$, our method works increasing the effective horizon each step, starting from trying to solve a greedy myopic problem and moving towards the real one. This approach has been used in practice to solve infinite horizon problems when the discount factor is close to $1$ ~\cite{crites1996improving, bao2008infinite, franccois2015discount}.
+with $\gamma_t'=\gamma\delta_t$. Notice that $Q_t'(x,u)$ is the Q-function at time step $t$, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta_t$ that increases monotonically in the interval $[0,1]$, our method works increasing the effective horizon each step starting from trying to solve a greedy myopic problem and moving towards the real one. This approach has been used in practice to solve infinite horizon problems when the discount factor is close to $1$ ~\cite{crites1996improving, bao2008infinite, franccois2015discount}.
 
-Finally, we can observe that, if the reward function and the transition model are deterministic, we can use $\alpha=1$ and consider only $\beta_t=\delta_t$.
-
+Finally we can observe that, if the reward function and the transition model are deterministic, we can use $\alpha=1$ and consider only $\beta_t=\delta_t$.
 \subsection{Variance dependent learning rate}
 To improve performance on the estimation, we would like to weight the error of each sample w.r.t. the current estimate depending on how much we are sure about the current value of our estimate. Thus, we propose a learning rate that depends on the variance of the current variable estimate.
 
 First of all we need to compute the variance of each estimator. To perform such computation we have to make the assumption that the learning rates are independent from the data. Of course, we violate this assumption, but it is needed in order to have a closed form for the variance of the estimator and works well in practice. We will suppose also that the samples $X_i$ are i.i.d., with mean $\mu$ and variance $\sigma^2$. Consider the general form of the estimator:
-
 \begin{align}
- \widetilde{X}_{n+1} = (1-\alpha_t)\widetilde{X}_{n}+\alpha_tX_{n}
+ \widetilde{X}_{n+1} = (1-\alpha_t)\widetilde{X}_{n}+\alpha_tX_{n}.
 \end{align}
 We now compute the expected value and the variance of this estimator:
 \begin{align}
@@ -162,21 +150,18 @@ We now compute the expected value and the variance of this estimator:
  \mathrm{Var}\left[\widetilde{X}_{n+1}\right]& = \sigma^2\sum_i^n \alpha_i^2 \prod_{j=i+1}^{n} \left(1-\alpha_j\right)^2 = \sigma^2\omega
 \end{align}
 with $\omega=\sum_i^n \alpha_i^2 \prod_{j=i+1}^{n} \left(1-\alpha_j\right)^2$. Notice also that we can use the sample covariance $S_{n-1}$ of the random variable $X$ to estimate the real covariance $\sigma^2$. It is possible to compute in an incremental way both the sample covariance, in the traditional way, and $\omega$:
-
 \begin{align}
  \omega_{n+1}=(1-\alpha_n)^2\omega_n+\alpha_n^2.
 \end{align}
-A weak assumption of this model is that the variables are identically distributed. While this should be true for the reward function, if the MDP is stationary, this is not true for the Q function values whose distribution is affected by the policy and by the other states current estimates. However, a good approximation, could be to consider data collected in a temporal window in which the distribution is approximately stationary: using such approach, we can compute the variance of the process in a given time window forgetting old values that can lead to a biased estimation of the current window variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation leads to very good results in practice as we show in the empirical Section \ref{S:empirical}.
+A weak assumption of this model is that the variables are identically distributed. While this should be true for the reward function, if the MDP is stationary, this is not true for the Q-function values whose distribution is affected by the policy and by the other states current estimates. However, a good approximation could be to consider data collected in a temporal window in which the distribution is approximately stationary. Using this approach we can compute the variance of the process in a given time window forgetting old values that can lead to a biased estimation of the current window variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation leads to very good results in practice as we show in the empirical Section \ref{S:empirical}.
 
 Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
-
 \begin{align}\label{eq:alpha_eq}
  \alpha_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}
 \end{align}
 where $\eta$ is the amount of the estimator variance for which the learning rate is $0.5$ (i.e. when $\sigma_e=\eta$ the learning rate is 0.5). It can be seen as a soft threshold to tune the speed of the decrease of the learning rate w.r.t. the estimator variance.
 
 If we consider the case $\beta_t=\alpha_t\delta_t$, then we have to use a different learning rate. As we want an increase of the discount factor faster than the decrease of the general learning rate, we can use an exponentially increasing learning rate for the delta parameter:
-
 \begin{align}\label{eq:delta_eq}
  \delta(t) = e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}
 \end{align}
@@ -189,16 +174,16 @@ Convergence of the Q-Learning algorithm is guaranteed under some conditions, inc
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t & = \infty,\nonumber \\
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t^2 & < \infty. \label{eq:lr_cond}
 \end{align}
-In order to give some preliminary results about the convergence of \alg and to motivate the choice of the formulas of learning rates $\alpha$ and $\delta$, we show that, under some assumptions, the proposed formulas (\ref{eq:alpha_eq}) (\ref{eq:delta_eq}) satisfy (\ref{eq:lr_cond}). Suppose that the variance of the estimator $\sigma_e^2(t)$ is the variance of the sample mean. It is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\frac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generates the samples.
+In order to give some preliminary results about the convergence of \alg and to motivate the choice of the formulas of learning rates $\alpha$ and $\delta$ we show that, under some assumptions, the proposed formulas (\ref{eq:alpha_eq}) (\ref{eq:delta_eq}) satisfy (\ref{eq:lr_cond}). Suppose that the variance of the estimator $\sigma_e^2(t)$ is the variance of the sample mean. It is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\frac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generates the samples.
 This assumption does not hold in general as we can see from the formula of the learning rate, however in some cases this could be a good approximation as the sample mean is a special case of the estimator.
 
-Now, just consider the proposed learning rate in (\ref{eq:alpha_eq}), replacing the variance of the sample mean into the variance of the estimator:
+Now just consider the proposed learning rate in (\ref{eq:alpha_eq}), replacing the variance of the sample mean into the variance of the estimator:
 \begin{align}\label{eq:alpha_smv}
  \alpha_t=\frac{\sigma^2}{\sigma^2+\eta t}
 \end{align}
 it can be easily shown that:
 \begin{align}
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{\sigma^2}{\sigma^2+\eta t} & = \infty \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{\sigma^2}{\sigma^2+\eta t} & = \infty, \\
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{\sigma^2}{\sigma^2+\eta t}\right)^2 & < \infty.
 \end{align}
 Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario we propose an exponential learning rate. Let $\alpha_t=\frac{1}{t}$ for simplicity and consider the learning rate (\ref{eq:delta_eq}) replacing the sample mean into the variance of the estimator:
@@ -207,7 +192,7 @@ Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario we propose an exponen
 \end{align}
 Then:
 \begin{align}
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty \\
+ \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty, \\
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}\right)^2 & < \infty.
 \end{align}
 This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we conjecture that convergence could be guaranteed under some mild conditions on $\eta$ and $\sigma$.
@@ -393,16 +378,6 @@ The learning rate settings are the same of the previous problem.
 
 We consider this simple problem to highlight the limitations of pessimistic action-value estimates. In this MDP the optimal policy consists in avoiding the hole cells stepping through the state in the middle. Notice that in this state the episode terminates with negative reward with probability $\frac{\varepsilon}{2}$ due to the $\varepsilon$-greedy policy used for exploration, resulting in a very low value of the state especially at the beginning of learning. Figure \ref{F:hole} shows that while Q-Learning, Speedy Q-Learning and \alg behave similarly well, Double Q-Learning and Weighted Q-Learning obtain very poor results due to the pessimistic estimate of the value function of the state in the middle.
 
-\subsection{On-policy learning}
-As we have discussed in the previous sections, our approach can be used also in a on-policy setting. A simple on-policy version of our algorithm can be implemented by estimating the action-value function of the current policy in the same way of the SARSA algorithm, i.e. by using the action-value function of the next action. Let $u'$ be the next action sampled by the current policy in the current state, the on-policy update is:
-\begin{align*}
-\Rtilde_{t+1}(x,u) & \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)),\\
-\Qtilde_{t+1}(x,u) & \leftarrow\Qtilde_t(x,u)+\beta_t(Q_t(x',u')-\Qtilde_t(x,u)).
-\end{align*}
-
-Figure \ref{F:sarsa} compares the windowed, on-policy version of \alg with the SARSA algorithm, in the Noisy Grid World environment. It is clear that our algorithm outperforms SARSA in this MDP.
-Since this is an on-policy setting, at each step the algorithm is estimating the current policy action-value function, not the optimal one. Indeed, by looking at the mean reward per step, our approach estimates the current action-value function of the policy better than the SARSA algorithm, i.e. the estimated action-value function is coherent with the performance of the policy.
-
 \begin{figure}[t]
 \begin{minipage}{\columnwidth}
 \centering
@@ -412,6 +387,16 @@ Since this is an on-policy setting, at each step the algorithm is estimating the
   \caption{Mean reward per step (top) and maximum action-value estimate in the initial state (bottom) of SARSA and of the on-policy windowed version of \alg for this experiment. Results are averaged over $1000$ experiments.}
   \label{F:sarsa}
 \end{figure}
+
+\subsection{On-policy learning}
+As we have discussed in the previous sections, our approach can be used also in a on-policy setting. A simple on-policy version of our algorithm can be implemented by estimating the action-value function of the current policy in the same way of the SARSA algorithm, i.e. by using the action-value function of the next action. Let $u'$ be the next action sampled by the current policy in the current state, the on-policy update is:
+\begin{align*}
+\Rtilde_{t+1}(x,u) & \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)),\\
+\Qtilde_{t+1}(x,u) & \leftarrow\Qtilde_t(x,u)+\beta_t(Q_t(x',u')-\Qtilde_t(x,u)).
+\end{align*}
+
+Figure \ref{F:sarsa} compares the windowed, on-policy version of \alg with the SARSA algorithm, in the Noisy Grid World environment. It is clear that our algorithm outperforms SARSA in this MDP.
+Since this is an on-policy setting, at each step the algorithm is estimating the current policy action-value function, not the optimal one. Indeed, by looking at the mean reward per step, our approach estimates the current action-value function of the policy better than the SARSA algorithm, i.e. the estimated action-value function is coherent with the performance of the policy.
 
 \section{Conclusion}
 In this paper we proposed a method to improve the learning process in stochastic MDPs exploiting the structure of the Bellman operator. The decomposition in two components of the Bellman error allows to consider separately the sources of uncertainty. One of these components is the expected immediate reward whose uncertainty depends only on local properties of the MDP. The other component consists in the expected value function of the next state whose uncertainty depends on the policy (in an on-line setting), on the transition model and on other action-value estimates. We showed how the proposed method obtains good results in stochastic MDPs exploiting the information on the uncertainty of the estimates by adapting the learning rate according to it. Interestingly, this method is applicable both in off-policy and in on-policy settings; moreover, it is independent from the choice of the estimator of the expected value function of the next state.
