@@ -34,7 +34,7 @@ Email: \{davide.tateo, carlo.deramo,  alessandro.nuara, marcello.restelli, andre
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-In many real-world problems stochasticity is a critical issue for the learning process. The sources of stochasticity come from the transition model, the explorative component of the policy or, even worse, from noisy observations of the reward function. For a finite number of samples, traditional Reinforcement Learning (RL) methods may provide biased estimates of the action-value function leading to poor estimates and propagating them by the application of the Bellman operator. While some approaches assume that the estimation bias is the key problem in the learning process, we show that in some cases this assumption does not necessarily hold. We propose a method that exploits the structure of the Bellman update and the uncertainty of the estimation in order to better use the amount of information provided by the samples. We show theoretical considerations about this method and its relation w.r.t. Q-Learning. Moreover, we test it in environments available in literature in order to demonstrate its effectiveness against other algorithms that focus on bias and sample-efficiency.
+In many real-world problems stochasticity is a critical issue for the learning process. The sources of stochasticity come from the transition model, the explorative component of the policy or, even worse, from noisy observations of the reward function. For a finite number of samples, traditional Reinforcement Learning (RL) methods provide biased estimates of the action-value function leading to poor estimates and propagating them by the application of the Bellman operator. While some approaches assume that the estimation bias is the key problem in the learning process, we show that in some cases this assumption does not necessarily hold. We propose a method that exploits the structure of the Bellman update and the uncertainty of the estimation in order to better use the amount of information provided by the samples. We show theoretical considerations about this method and its relation w.r.t. Q-Learning. Moreover, we test it in environments available in literature in order to demonstrate its effectiveness against other algorithms that focus on bias and sample-efficiency.
 \end{abstract}
 
 % no keywords
@@ -71,8 +71,8 @@ Given a policy $\pol$, we define the action-value function as:
  \label{eq:qpol}
 \end{align}
 The optimal policy $\pol*$ is the policy with the highest expected return in the MDP and the optimal action-value function $Q^*(x, u)$ is the action-value function of the optimal policy.
-It has been shown that the optimal policy in any MDP can be always a deterministic policy that at each state chooses the action with the highest $Q^*(x, u)$ value. %TODO ANDY Manca citazione, qui
-Given that we can always write the optimal action-value function as: %TODO ANDY Qui o manca un verbo o manca una virgola dopo il that, che in questo caso farei diventare this.
+It has been shown that the optimal policy in any MDP can be always a deterministic policy that at each state chooses the action with the highest $Q^*(x, u)$ value \cite{watkins1992q}.
+Given this, we can always write the optimal action-value function as:
 \begin{align}
  Q^*(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')+\gamma\max_{u'} Q^*(x',u')\right].
  \label{eq:qopt}
@@ -98,7 +98,7 @@ We can now write the optimal value function as:
 
 Our approach shifts the focus of the RL task from finding a good estimator for the optimal action-value function, to the task of finding good estimators for $\Rtilde$ and $\Qtilde$. The main motivation is that the sources of uncertainty of the two components of the action-value function are different: $\Rtilde$ only depends on transition and reward models, while $\Qtilde$ also depends on the optimal policy.
 \section{The Proposed Method}
-In the following section, we derive our method from (\ref{eq:qdecrqtilde}). We propose the general schema, using the maximum estimator, and we show the relations with the standard Q-learning update. We call this method \emph{\alg} as it decomposes the TD-Error in a reward component and an action-value component.
+In the following section, we derive our method from (\ref{eq:qdecrqtilde}). We propose the general schema, using the maximum estimator, and we show the relations with the standard Q-Learning update. We call this method \emph{\alg} as it decomposes the TD-Error in a reward component and an action-value component.
 
 \subsection{Decomposition of the TD error}
 The standard Q-Learning algorithm, given the tuple $(x,u,r,x')$, computes the temporal difference error w.r.t. the current action-value estimates, and then updates such estimate proportionally to the error. The amount of correction in the direction of the new sample is measured by the learning rate: if the learning rate equals to $1$, the new sample substitutes the old estimate; if the learning rate equals to $0$, the new sample is discarded and the old estimate is kept unchanged. 
@@ -136,7 +136,7 @@ Q_{t+1}(x,u) \leftarrow & Q_t(x,u)+\alpha_t(R(x,u,x')+\gamma\delta_t \max_{u'}Q_
 = & Q_t(x,u)+\alpha_t((R(x,u,x')+\gamma_t'\max_{u'}Q_t(x',u')) \nonumber\\
   & - Q_t'(x,u))
 \end{align}
-with $\gamma_t'=\gamma\delta_t$. Notice that $Q_t'(x,u)$ is the Q-value at time step $t$, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta_t$ that increases monotonically in the interval $[0,1]$, our method works by increasing the effective horizon each step starting from trying to solve a greedy myopic problem and moving towards the real one. %TODO ANDY one quale: horizon, step problem??
+with $\gamma_t'=\gamma\delta_t$. Notice that $Q_t'(x,u)$ is the Q-value at time step $t$, but computed with a different discount factor. If the condition above is satisfied, then we can see our method as a variable discount factor learning. If we consider $\delta_t$ that increases monotonically in the interval $[0,1]$, our method works by increasing the effective horizon each step starting from trying to solve a greedy myopic problem and moving towards the real one.
 This approach has been used in practice to solve infinite horizon problems when the discount factor is close to $1$ ~\cite{crites1996improving, bao2008infinite, franccois2015discount}.
 
 Finally, we can observe that, if the reward function and the transition model are deterministic, we can set $\alpha=1$ and consider only $\beta_t=\delta_t$.
@@ -199,7 +199,7 @@ Then:
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty, \\
  \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}\right)^2 & < \infty.
 \end{align}
-This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we conjecture that convergence could be guaranteed under some mild conditions on $\eta$ and $\sigma$. %TODO ANDY senza prove e' un po' debole... Val la pena di dirlo?
+This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we conjecture that convergence could be guaranteed under some mild conditions on $\eta$ and $\sigma$.
 
 \section{Experimental Results}\label{S:empirical}
 In this section, we highlight the main advantages of exploiting the structure of the TD-Error with \alg in three discrete MDPs. We compare \alg against Q-Learning \cite{watkins1992q}, Double Q-Learning \cite{van2010double}, Weighted Q-Learning \cite{d2016estimating} and Speedy Q-Learning\footnote{In these experiments we consider the asynchronous version of Speedy Q-Learning.} \cite{NIPS2011_4251}. We choose this set of algorithms because we want to analyze the impact of the maximum expected value estimator in the learning process. Indeed, while \cite{van2010double} strongly suggests that a negatively biased estimator should be used to deal with stochastic MDPs, the  empirical results reported in the following will show that positively biased estimators are able to achieve better performance in highly stochastic problems as well. Instead, we want to show that the main point consists in exploiting data in the best way, in particular in the estimation of the action-value, giving higher relevancy to more recent samples. We conjecture that the trade-off between keeping the old estimate and updating it with the new one is the key issue in highly stochastic environments. Both \alg and Speedy Q-Learning exploit this idea; in particular, the latter uses an increasing learning rate on the difference between the target computed with the current estimation and the one computed with the previous estimation, while \alg weights the update considering the uncertainty of the current estimation.
