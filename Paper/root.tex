@@ -51,7 +51,7 @@ In many real-world problems stochasticity is a critical issue for the learning p
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-It is well known that a key issue of Reinforcement Learning (RL) problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to slow learning. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could have stochastic transitions and this may affect the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are potentially visited infinitely many times, that is required to guarantee the convergence of the algorithm; the policy could change during the learning process resulting in very different behaviors; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
+It is well known that a key issue of Reinforcement Learning (RL) problems is the accuracy of the estimation of the action-value with a limited number of samples. While most algorithms guarantee the convergence of the estimates to the optimal action-value, in practice the presence of stochastic components lead to slow learning. In fact, the majority of real-world problems have significant sources of stochasticity: the environment could have stochastic transitions and this may affect the estimation of the effectiveness of an action; most of the times it is necessary to use stochastic policies to guarantee that all states are potentially visited infinitely many times, that is required to guarantee the convergence of the algorithm; the reward function is often corrupted by noisy observations and, in other cases, the reward function is stochastic itself. Moreover, it usually happens that some deterministic environments are partially observable and, thus, are perceived by the agent as stochastic decision processes (e.g. Blackjack).
 
 Since Monte-Carlo estimates of action-values are affected by high variance of the returns, the most successful RL algorithms are based on bootstrapping (e.g. Q-Learning \cite{watkins1992q}), that trades off the variance of the estimation with a consistent, but biased estimator. However, with a finite number of samples, the bias of the estimation could be significantly relevant when propagating the action-values to the next state and, recursively, to all the other states. Recent works tried to deal with this issue, in particular focusing on the estimation of the maximum expected value. 
 It is well known \cite{smith2006optimizer, van2004rational} that the maximum operator (used in the Q-Learning update equation) is positively biased, thus it overestimates the optimal action-value. In highly stochastic environments, this overestimation leads to unstable learning and poor convergence rates. In order to avoid this issue, the Double Q-Learning algorithm \cite{van2010double} has been proposed. This algorithm uses the double estimator \cite{van2013estimating} to compute the maximum action-value to calculate the temporal-difference error: providing a negatively biased estimation (i.e. underestimating) of the maximum action-value, this approach can improve the performance especially in noisy environments.
@@ -70,7 +70,7 @@ Given a policy $\pol$, we define the action-value function as:
  Q^\pol(x,u)=\underset{\strut\mathclap{\substack{(x', u')\sim \\ \Pmodel(x'|x,u)\pol(u'|x')}}}{\mathbb{E}}\left[ r(x,u,x')+\gamma Q^\pol(x',u')\right].
  \label{eq:qpol}
 \end{align}
-The optimal policy $\pol*$ is the policy with the highest expected return in the MDP and the optimal action-value function $Q^*(x, u)$ is the action-value function of the optimal policy.
+The optimal policy $\pol^*$ is the policy with the highest expected return in the MDP and the optimal action-value function $Q^*(x, u)$ is the action-value function of the optimal policy.
 It has been shown that the optimal policy in any MDP can be always a deterministic policy that at each state chooses the action with the highest $Q^*(x, u)$ value \cite{watkins1992q}.
 Given this, we can always write the optimal action-value function as:
 \begin{align}
@@ -117,7 +117,7 @@ Q_{t+1}(x,u)\leftarrow&\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u)) \nonumb
   & +\gamma\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u)).
  \label{eq:cumulativeupdate}
 \end{align}
-Notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components. However, (\ref{eq:cumulativeupdate}) is useful to analyze the relationship with the standard Q-Learning algorithm.
+Notice that this update cannot be used in practice in the algorithm, as it is not keeping the current values of the single components as in (\ref{eq:rtilupdedate}) and (\ref{eq:qtildeupdate}).
 
 \subsection{Analysis of the decomposed update}
 Now, we discuss the relationship of our method with standard temporal difference methods. Let $t$ be the learning step. As a first step of our analysis we can consider the simplest case $\alpha_t=\beta_t$, $\forall t$ by combining (\ref{eq:cumulativeupdate}) and (\ref{eq:qdecrqtilde}) we obtain:
@@ -144,7 +144,7 @@ Finally, we can observe that, if the reward function and the transition model ar
 \subsection{Variance dependent learning rate}
 To improve performance on the estimation, we would like to weight the error of each sample w.r.t. the current estimate depending on how much we are sure about the current value of our estimate. Thus, we propose a learning rate that depends on the variance of the current variable estimate.
 
-First of all we need to compute the variance of each estimator. To perform such computation we have to make the assumption that the learning rates are independent from data. Of course, we violate this assumption, but it is needed in order to have a closed form for the variance of the estimator, and it works well in practice. We will assume also that the samples $X_i$ are i.i.d., with mean $\mu$ and variance $\sigma^2$. Consider the general form of the estimator:
+First of all we need to compute the variance of each estimator. To perform such computation we have to make the assumption that the learning rates are independent from data. This assumption is needed in order to have a closed form for the variance of the estimator, and it works well in practice. We will assume also that the samples $X_i$ are i.i.d., with mean $\mu$ and variance $\sigma^2$. Consider the general form of the estimator:
 \begin{align}
  \widetilde{X}_{n+1} = (1-\alpha_t)\widetilde{X}_{n}+\alpha_tX_{n}.
 \end{align}
@@ -167,7 +167,7 @@ where $\eta$ is the amount of the estimator variance for which the learning rate
 
 If we consider the case $\beta_t=\alpha_t\delta_t$, then we have to use a different learning rate. As we want an increase of the discount factor faster than the decrease of the general learning rate, we can use an exponentially increasing learning rate for the delta parameter:
 \begin{align}\label{eq:delta_eq}
- \delta(t) = e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}
+ \delta_t = e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}
 \end{align}
 where $\eta$ has the same interpretation of the previous scenario thanks to the $\log\frac{1}{2}$ factor.
 
@@ -175,20 +175,20 @@ where $\eta$ has the same interpretation of the previous scenario thanks to the 
 Convergence of the Q-Learning algorithm is guaranteed under some conditions, including some properties on the learning rates ~\cite{EvenDar2001, watkins1992q}:
 \begin{align}
  0 \leq \alpha < 1,\nonumber \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t & = \infty,\nonumber \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\alpha_t^2 & < \infty. \label{eq:lr_cond}
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\alpha_t & = \infty,\nonumber \\
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\alpha_t^2 & < \infty. \label{eq:lr_cond}
 \end{align}
 In order to give some preliminary results about the convergence of \alg and to motivate the choice of the formulas of learning rates $\alpha$ and $\delta$, we show that, under some assumptions, the proposed formulas (\ref{eq:alpha_eq}) (\ref{eq:delta_eq}) satisfy (\ref{eq:lr_cond}). Suppose that the variance of the estimator $\sigma_e^2(t)$ is the variance of the sample mean. It is well known, by the central limit theorem, that the variance of the sample mean is $\sigma_{\mu}(t)=\frac{\sigma^2}{t}$, where $\sigma$ is the variance of the process that generates the samples.
-This assumption does not hold in general, as we can see from the formula of the learning rate; however, in some cases this could be a good approximation as the sample mean is a particular estimator.
+This assumption does not hold in general, as we can see from the formula of the learning rate; however, this is true for the sample mean, that is a special case of the generic estimator.
 
-Now ,just consider the learning rate proposed in (\ref{eq:alpha_eq}), replacing the variance of the sample mean into the variance of the estimator:
+Now, just consider the learning rate proposed in (\ref{eq:alpha_eq}), replacing the variance of the sample mean into the variance of the estimator:
 \begin{align}\label{eq:alpha_smv}
  \alpha_t=\frac{\sigma^2}{\sigma^2+\eta t}
 \end{align}
 it can be easily shown that:
 \begin{align}
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{\sigma^2}{\sigma^2+\eta t} & = \infty, \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{\sigma^2}{\sigma^2+\eta t}\right)^2 & < \infty.
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\frac{\sigma^2}{\sigma^2+\eta t} & = \infty, \\
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\left(\frac{\sigma^2}{\sigma^2+\eta t}\right)^2 & < \infty.
 \end{align}
 Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario, we propose an exponential learning rate. Let be $\alpha_t=\frac{1}{t}$ for simplicity, and consider the learning rate (\ref{eq:delta_eq}) to replace the sample mean into the variance of the estimator:
 \begin{align}\label{eq:beta_delta_smv}
@@ -196,8 +196,8 @@ Now, consider $\beta_t=\alpha_t\delta_t$. In this scenario, we propose an expone
 \end{align}
 Then:
 \begin{align}
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty, \\
- \lim_{N\rightarrow\infty} \sum_{t=0}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}\right)^2 & < \infty.
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}} & = \infty, \\
+ \lim_{N\rightarrow\infty} \sum_{t=1}^{N}\left(\frac{1}{t}e^{\frac{\sigma^2}{\eta t}\log\frac{1}{2}}\right)^2 & < \infty.
 \end{align}
 This analysis considers only the estimation of the variance of the sample mean. The analysis of the generic variance estimator is more complex, but we conjecture that convergence could be guaranteed under some mild conditions on $\eta$ and $\sigma$.
 
@@ -338,9 +338,9 @@ We analyze the performance of \alg with different choices of learning rates. All
 \label{F:double-chain}
 \end{figure}
 \subsection{Noisy Grid World}
-This environment is proposed in \cite{van2010double} and consists in a $3 \times 3$ grid with the initial position in the lower-left cell and the goal state in the upper-right cell. Each action performed in a non-goal state obtains a reward $-12$ and $10$ with equal probability. In the goal state, every action obtains a reward of $5$ and terminates the episode. The discount factor is $\gamma = 0.95$. The policy is $\varepsilon$-greedy with $\varepsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$. The optimal average reward per step is $0.2$ and the maximum action-value function of the initial state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
+This environment, proposed in \cite{van2010double}  and \cite{d2016estimating}, consists in a $3 \times 3$ grid with the initial position in the lower-left cell and the goal state in the upper-right cell. Each action performed in a non-goal state obtains a reward $-12$ and $10$ with equal probability. In the goal state, every action obtains a reward of $5$ and terminates the episode. The discount factor is $\gamma = 0.95$. The policy is $\varepsilon$-greedy with $\varepsilon = \frac{1}{\sqrt{n(s)}}$, where $n(s)$ is the number of  visits of the state $s$. The optimal average reward per step is $0.2$ and the maximum action-value function of the initial state is $5\gamma^4 - \sum_{k=0}^3 \gamma^k \approx 0.36$.
 
-Figure \ref{F:hasselt_all} shows the mean reward per step and the approximation of the maximum action-value in the initial state computed by the other algorithms and \alg with $\alpha$ as used by the other algorithms, but with the separated variance-dependent learning rate $\beta$ for the action-value estimate using $\eta = 1$. Note how the performance of \alg for the reward is the best one (except for $k=0.8$ where all algorithms perform similarly) and, moreover, how the estimate of the action-value is also the best one. Notice that, with $k=1$, Speedy Q-Learning outperforms both Double Q-Learning and Weighted Q-Learning considering the mean reward per step, even with a diverging estimate of the action-value function. This is an empirical evidence of our conjecture on the non-correlation of the bias of the estimation, obtained in the experiment proposed in \cite{van2010double} and \cite{d2016estimating}. Moreover, as expected, the performance of \alg is not affected by the exponent used in the learning rate. The other algorithms achieve the optimal performance only in the setting with the higher learning rate, confirming the advantage of giving more importance to newer samples.
+Figure \ref{F:hasselt_all} shows the mean reward per step and the approximation of the maximum action-value in the initial state computed by the other algorithms and \alg with $\alpha$ as used by the other algorithms, but with the separated variance-dependent learning rate $\beta$ for the action-value estimate using $\eta = 1$. Note how the performance of \alg for the reward is the best one (except for $k=0.8$ where all algorithms perform similarly) and, moreover, how the estimate of the action-value is also the best one. Notice that, with $k=1$, Speedy Q-Learning outperforms both Double Q-Learning and Weighted Q-Learning considering the mean reward per step, even with a diverging estimate of the action-value function. This is an empirical evidence of our conjecture: the bias of the estimation is not necessarily correlated to the performance. Moreover, as expected, the performance of \alg is not affected by the exponent used in the learning rate. The other algorithms achieve the optimal performance only in the setting with the higher learning rate, confirming the advantage of giving more importance to newer samples.
 
 In Figure \ref{F:hasselt_QDecs}, we compare different variants of \alg: ``RQBeta'' is the same configuration used in Figure \ref{F:hasselt_all}; ``RQDelta'' uses $\beta = \alpha \delta$ with $\eta = 1$; ``RQWin'' uses a windowed estimation of variance with a window of length $50$ and $\eta = 0.5$. ``RQAlphaBeta'' uses a variance-dependent learning rate also for $\alpha$ with $\eta = 100$ and $\beta$ with $\eta = 1$; ``RQWinAlpha'' is the same configuration of the previous one, but uses a windowed $\beta$ with $\eta = 0.5$. Note that $\eta$ has a larger value in configurations without windowed variance estimation because such configurations are likely to overestimate the current variance of the process. ``RQDelta'' configurations result in a cautious learning that leads to very slow improvements, but avoids the overestimation of the action-value slowly converging to the optimal value. While ``RQDelta'' performance is not comparable with other configurations of \alg, it still outperforms Q-Learning. The other configurations perform similarly to the best one.
 
@@ -369,7 +369,7 @@ Note that in this problem, where the only source of stochasticity is in the tran
   \caption{Mean reward per step (top) and maximum action-value estimate in the Grid World with Holes problem in the initial state (bottom) of all the other algorithms and of the best setting of \alg for this experiment. Results are averaged over $10000$ experiments.}
   \label{F:hole}
 \end{figure}
-This environment consists in a $5 \times 5$ grid with the initial position in the lower-left cell, there are $4$ actions and the transition model is deterministic, the goal position in the upper-right cell and four holes in the middle row in such a way that only the cell in the middle is walkable (Figure \ref{F:grid_hole_map}). The agent receives a reward of $0$ in all non-hole cells, a reward of $10$ when it reaches the goal state and a reward of $-10$ when it reaches a cell with a hole. The episode ends when the agent reaches a cell with a hole. The discount factor is $\gamma = 0.9$. \alg uses $\eta = 1$.
+This environment consists in a $5 \times 5$ grid with the initial position in the lower-left cell, there are $4$ actions and the transition model is deterministic, the goal position in the upper-right cell and four holes in the middle row in such a way that only the cell in the middle is walkable (Figure \ref{F:grid_hole_map}). The agent receives a reward of $0$ in all non-hole cells, a reward of $10$ when it reaches the goal state and a reward of $-10$ when it reaches a cell with a hole or the goal state. The episode ends when the agent reaches a cell with a hole. The discount factor is $\gamma = 0.9$. \alg uses $\eta = 1$.
 The learning rate settings are the same of the previous problem.
 
 We consider this simple problem to highlight the limitations of pessimistic action-value estimates. In this MDP the optimal policy consists in avoiding the hole cells stepping through the state in the middle. Notice that in this state the episode terminates with negative reward with probability $\frac{\varepsilon}{2}$ due to the $\varepsilon$-greedy policy used for exploration, resulting in a very low value of the state especially at the beginning of learning. Figure \ref{F:hole} shows that while Q-Learning, Speedy Q-Learning, and \alg behave similarly well, Double Q-Learning and Weighted Q-Learning obtain very poor results due to the pessimistic estimate of the value function of the state in the middle.
