@@ -43,6 +43,16 @@ H.~v. Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
   cross-validation and the maximum sample average,'' \emph{arXiv preprint
   arXiv:1302.7175}, 2013.
 
+\bibitem{van2016deep}
+H.~Van~Hasselt, A.~Guez, and D.~Silver, ``Deep reinforcement learning with
+  double q-learning.'' in \emph{AAAI}, 2016, pp. 2094--2100.
+
+\bibitem{mnih2015human}
+V.~Mnih, K.~Kavukcuoglu, D.~Silver, A.~A. Rusu, J.~Veness, M.~G. Bellemare,
+  A.~Graves, M.~Riedmiller, A.~K. Fidjeland, G.~Ostrovski \emph{et~al.},
+  ``Human-level control through deep reinforcement learning,'' \emph{Nature},
+  vol. 518, no. 7540, pp. 529--533, 2015.
+
 \bibitem{d2016estimating}
 C.~D'Eramo, M.~Restelli, and A.~Nuara, ``Estimating maximum expected value
   through gaussian approximation,'' in \emph{International Conference on
