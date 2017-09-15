@@ -157,7 +157,7 @@ with $\omega=\sum_i^n \alpha_i^2 \prod_{j=i+1}^{n} \left(1-\alpha_j\right)^2$. N
 \begin{align}
  \omega_{n+1}=(1-\alpha_n)^2\omega_n+\alpha_n^2.
 \end{align}
-A weak assumption of this model is that the variables are identically distributed. While this could be true for the reward function, if the MDP is stationary, this is not true for the Q-function values whose distribution is affected by the policy and by current estimates of the other states. However, a good approximation could be to consider data collected in a temporal window in which the distribution is approximately stationary. Using this approach, we can compute the variance of the process in a given time window forgetting old values that can lead to a biased estimation of the current window variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation leads to very good results in practice as we show in the empirical Section \ref{S:empirical}.
+A weak assumption of this model is that the variables are identically distributed. While this could be true for the reward function, if the MDP is stationary, this is not true for the Q-function values whose distribution is affected by the policy and by the current estimates of the other states. However, a good approximation could be to consider data collected in a temporal window in which the distribution is approximately stationary. Using this approach, we can compute the variance of the process in a given time window forgetting old values that can lead to a biased estimation of the current window variance. While this approach is not formally correct, as the derivation of the variance estimates makes the assumption of i.i.d. variables, this approximation leads to very good results in practice as we show in the empirical Section \ref{S:empirical}.
 
 Finally, we can choose a learning rate that depends on the covariance. Let $\sigma_e^2(t)$ be an estimate of $\mathrm{Var}\left[\widetilde{X}_{t}\right]$. We propose the following learning rate for each component of the action-value function:
 \begin{align}\label{eq:alpha_eq}
@@ -169,7 +169,7 @@ If we consider the case $\beta_t=\alpha_t\delta_t$, then we have to use a differ
 \begin{align}\label{eq:delta_eq}
  \delta_t = e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}
 \end{align}
-where $\eta$ has the same interpretation as in~\ref{eq:alpha_eq} thanks to the $\log\frac{1}{2}$ factor.
+where $\eta$ has the same interpretation as in~(\ref{eq:alpha_eq}) thanks to the $\log\frac{1}{2}$ factor.
 
 \subsection{Discussion on convergence}
 Convergence of the Q-Learning algorithm is guaranteed under some conditions, including some properties on the learning rates ~\cite{EvenDar2001, watkins1992q}:
