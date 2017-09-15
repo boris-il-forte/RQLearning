@@ -35,8 +35,8 @@ E.~Van~den Steen, ``Rational overoptimism (and other biases),'' \emph{American
   Economic Review}, pp. 1141--1151, 2004.
 
 \bibitem{van2010double}
-H.~v. Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
-  Processing Systems}, 2010, pp. 2613--2621.
+H.~v. Hasselt, ``Double q-learning,'' in \emph{Proc. NIPS}, 2010, pp.
+  2613--2621.
 
 \bibitem{van2013estimating}
 ------, ``Estimating the maximum expected value: an analysis of (nested)
@@ -45,7 +45,7 @@ H.~v. Hasselt, ``Double q-learning,'' in \emph{Advances in Neural Information
 
 \bibitem{van2016deep}
 H.~v. Hasselt, A.~Guez, and D.~Silver, ``Deep reinforcement learning with
-  double q-learning.'' in \emph{AAAI}, 2016, pp. 2094--2100.
+  double q-learning.'' in \emph{Proc. AAAI}, 2016, pp. 2094--2100.
 
 \bibitem{mnih2015human}
 V.~Mnih, K.~Kavukcuoglu, D.~Silver, A.~A. Rusu, J.~Veness, M.~G. Bellemare,
@@ -55,24 +55,18 @@ V.~Mnih, K.~Kavukcuoglu, D.~Silver, A.~A. Rusu, J.~Veness, M.~G. Bellemare,
 
 \bibitem{d2016estimating}
 C.~D'Eramo, M.~Restelli, and A.~Nuara, ``Estimating maximum expected value
-  through gaussian approximation,'' in \emph{International Conference on
-  Machine Learning}, 2016, pp. 1032--1040.
+  through gaussian approximation,'' in \emph{Proc. ICML}, 2016, pp. 1032--1040.
 
 \bibitem{lee2013bias}
 D.~Lee, B.~Defourny, and W.~B. Powell, ``Bias-corrected q-learning to control
-  max-operator bias in q-learning,'' in \emph{Adaptive Dynamic Programming And
-  Reinforcement Learning (ADPRL), 2013 IEEE Symposium on}.\hskip 1em plus 0.5em
-  minus 0.4em\relax IEEE, 2013, pp. 93--99.
+  max-operator bias in q-learning,'' in \emph{Proc. ADPRL}.\hskip 1em plus
+  0.5em minus 0.4em\relax IEEE, 2013, pp. 93--99.
 
 \bibitem{NIPS2011_4251}
-\BIBentryALTinterwordspacing
 M.~Ghavamzadeh, H.~J. Kappen, M.~G. Azar, and R.~Munos, ``Speedy q-learning,''
-  in \emph{Advances in Neural Information Processing Systems 24},
-  J.~Shawe-Taylor, R.~S. Zemel, P.~L. Bartlett, F.~Pereira, and K.~Q.
-  Weinberger, Eds.\hskip 1em plus 0.5em minus 0.4em\relax Curran Associates,
-  Inc., 2011, pp. 2411--2419. [Online]. Available:
-  \url{http://papers.nips.cc/paper/4251-speedy-q-learning.pdf}
-\BIBentrySTDinterwordspacing
+  in \emph{Proc. NIPS}, J.~Shawe-Taylor, R.~S. Zemel, P.~L. Bartlett,
+  F.~Pereira, and K.~Q. Weinberger, Eds.\hskip 1em plus 0.5em minus 0.4em\relax
+  Curran Associates, Inc., 2011, pp. 2411--2419.
 
 \bibitem{mohagheghi2007proportional}
 S.~Mohagheghi, Y.~del Valle, G.~K. Venayagamoorthy, and R.~G. Harley, ``A
@@ -95,21 +89,18 @@ K.~Kobayashi, H.~Mizoue, T.~Kuremoto, and M.~Obayashi, \emph{A Meta-learning
 
 \bibitem{yoshida2013reinforcement}
 N.~Yoshida, E.~Uchibe, and K.~Doya, ``Reinforcement learning with
-  state-dependent discount factor,'' in \emph{Development and Learning and
-  Epigenetic Robotics (ICDL), 2013 IEEE Third Joint International Conference
-  on}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2013, pp. 1--6.
+  state-dependent discount factor,'' in \emph{Proc. ICDL}.\hskip 1em plus 0.5em
+  minus 0.4em\relax IEEE, 2013, pp. 1--6.
 
 \bibitem{crites1996improving}
 R.~H. Crites and A.~G. Barto, ``Improving elevator performance using
-  reinforcement learning,'' in \emph{Advances in neural information processing
-  systems}, 1996, pp. 1017--1023.
+  reinforcement learning,'' in \emph{Proc. NIPS}, 1996, pp. 1017--1023.
 
 \bibitem{bao2008infinite}
 B.-K. Bao, B.-Q. Yin, and H.-S. Xi, ``Infinite-horizon policy-gradient
   estimation with variable discount factor for markov decision process,'' in
-  \emph{Innovative Computing Information and Control, 2008. ICICIC'08. 3rd
-  International Conference on}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE,
-  2008, pp. 584--584.
+  \emph{Proc. ICICIC}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2008, pp.
+  584--584.
 
 \bibitem{franccois2015discount}
 V.~Fran{\c{c}}ois-Lavet, R.~Fonteneau, and D.~Ernst, ``How to discount deep
@@ -117,14 +108,11 @@ V.~Fran{\c{c}}ois-Lavet, R.~Fonteneau, and D.~Ernst, ``How to discount deep
   preprint arXiv:1512.02011}, 2015.
 
 \bibitem{EvenDar2001}
-\BIBentryALTinterwordspacing
 E.~Even-Dar and Y.~Mansour, \emph{Learning Rates for Q-Learning}.\hskip 1em
   plus 0.5em minus 0.4em\relax Springer Berlin Heidelberg, 2001, pp. 589--604.
-  [Online]. Available: \url{http://dx.doi.org/10.1007/3-540-44581-1_39}
-\BIBentrySTDinterwordspacing
 
 \bibitem{Peters2010RelativeEP}
 J.~Peters, K.~Mulling, and Y.~Altun, ``Relative entropy policy search,'' in
-  \emph{AAAI}, 2010.
+  \emph{Proc. AAAI}, 2010.
 
 \end{thebibliography}

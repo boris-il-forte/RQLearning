@@ -16,15 +16,15 @@ Warning--missing publisher in Tewari2007
 Done.
 You've used 20 entries,
             4087 wiz_defined-function locations,
-            950 strings with 11130 characters,
-and the built_in function-call counts, 17023 in all, are:
-= -- 1344
+            946 strings with 10612 characters,
+and the built_in function-call counts, 16945 in all, are:
+= -- 1332
 > -- 409
 < -- 163
 + -- 229
 - -- 64
-* -- 809
-:= -- 2419
+* -- 799
+:= -- 2391
 add.period$ -- 43
 call.type$ -- 20
 change.case$ -- 19
@@ -33,20 +33,20 @@ cite$ -- 21
 duplicate$ -- 1158
 empty$ -- 1399
 format.name$ -- 82
-if$ -- 4015
+if$ -- 4003
 int.to.chr$ -- 0
 int.to.str$ -- 20
 missing$ -- 188
-newline$ -- 87
+newline$ -- 83
 num.names$ -- 22
-pop$ -- 459
+pop$ -- 461
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1319
+skip$ -- 1313
 stack$ -- 0
 substring$ -- 969
-swap$ -- 977
+swap$ -- 975
 text.length$ -- 27
 text.prefix$ -- 0
 top$ -- 5
@@ -54,5 +54,5 @@ type$ -- 20
 warning$ -- 1
 while$ -- 89
 width$ -- 22
-write$ -- 213
+write$ -- 207
 (There was 1 warning)
