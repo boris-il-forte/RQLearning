@@ -5,8 +5,8 @@ class CollectParameters():
         self._alpha = alpha
         self._a = list()
 
-    def __call__(self):
-        self._a.append(deepcopy(self._alpha._parameter_value))
+    def __call__(self, **kwargs):
+        self._a.append(deepcopy(self._alpha._parameter_value.table))
 
     def get_values(self):
         return self._a

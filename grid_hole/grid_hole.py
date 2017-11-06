@@ -1,27 +1,27 @@
 import numpy as np
-from joblib import Parallel, delayed
-
-from QDecompositionLearning import QDecompositionLearning
-from VarianceParameter import VarianceDecreasingParameter,\
-    VarianceIncreasingParameter
-from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
-from collectParameters import CollectParameters
-
-from PyPi.approximators import Ensemble, Regressor, Tabular
+from PyPi.approximators import Regressor, Tabular
 from PyPi.core.core import Core
 from PyPi.environments import *
 from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
 from PyPi.utils.callbacks import CollectMaxQ
-from PyPi.utils.dataset import compute_J, parse_dataset
+from PyPi.utils.dataset import parse_dataset
 from PyPi.utils.parameters import DecayParameter
+from QDecompositionLearning import QDecompositionLearning
+from VarianceParameter import VarianceIncreasingParameter
+from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
+from joblib import Parallel, delayed
+
+from grid_world_hasselt.collectParameters import CollectParameters
 
 
-def experiment(decay_exp, alphaType):
+def experiment(decay_exp, alphaType,betaType):
     np.random.seed()
 
     # MDP
-    mdp = GridWorldVanHasselt()
+
+    grid_map = "simple_gridmap.txt"
+    mdp = GridWorldGenerator(grid_map=grid_map)
 
     # Policy
     epsilon = DecayParameter(value=1, decay_exp=.5,
@@ -39,8 +39,11 @@ def experiment(decay_exp, alphaType):
         alpha = DecayParameter(value=1, decay_exp=decay_exp, shape=shape)
     else:
         alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
-    #beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
-    beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=1., window=50)
+    if betaType == 'WindowedVarianceIncreasing':
+        beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=0.5, window=50)
+    else:
+        beta = VarianceIncreasingParameter(value=1, shape=shape, tol=0.5)
+
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, offpolicy=True)
     fit_params = dict()
@@ -74,17 +77,20 @@ if __name__ == '__main__':
 
     names = {1: '1', 0.8: '08'}
     exp = [1, 0.8]
-    for e in exp:
-        out = Parallel(n_jobs=-1)(delayed(
-            experiment)(e, 'Decay') for _ in xrange(n_experiment))
-        r = np.array([o[0] for o in out])
-        max_Qs = np.array([o[1] for o in out])
-        lr = np.array([o[2] for o in out])
+    beta_types = ['','Win']
+    for b in beta_types:
+        for e in exp:
+            out = Parallel(n_jobs=-1)(delayed(
+                experiment)(e, 'Decay',b) for _ in xrange(n_experiment))
+            r = np.array([o[0] for o in out])
+            max_Qs = np.array([o[1] for o in out])
+            lr = np.array([o[2] for o in out])
 
-        np.save('rQDecWin'+ names[e] +'.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
-        np.save('maxQDecWin'+ names[e] +'.npy', np.mean(max_Qs, 0))
-        np.save('lrQDecWin'+ names[e] +'.npy', np.mean(lr, 0))
+            np.save('results_gridhole/rQDec'+ b + names[e] +'.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
+            np.save('results_gridhole/maxQDec'+ b + names[e] +'.npy', np.mean(max_Qs, 0))
+            np.save('results_gridhole/lrQDec'+ b + names[e] +'.npy', np.mean(lr, 0))
 
+    """
     out = Parallel(n_jobs=-1)(delayed(
         experiment)(0, '') for _ in xrange(n_experiment))
     r = np.array([o[0] for o in out])
@@ -94,3 +100,4 @@ if __name__ == '__main__':
     np.save('rQDecWinAlpha.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
     np.save('maxQDecWinAlpha.npy', np.mean(max_Qs, 0))
     np.save('lrQDecWinAlpha.npy', np.mean(lr, 0))
+    """

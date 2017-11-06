@@ -2,10 +2,7 @@ import numpy as np
 from joblib import Parallel, delayed
 
 from QDecompositionLearning import QDecompositionLearning
-from VarianceParameter import VarianceDecreasingParameter,\
-    VarianceIncreasingParameter
 from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
-from collectParameters import CollectParameters
 
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core
@@ -13,7 +10,7 @@ from PyPi.environments import *
 from PyPi.policy import EpsGreedy
 from PyPi.utils import logger
 from PyPi.utils.callbacks import CollectMaxQ
-from PyPi.utils.dataset import compute_J, parse_dataset
+from PyPi.utils.dataset import parse_dataset
 from PyPi.utils.parameters import DecayParameter
 from PyPi.algorithms.td import SARSA
 

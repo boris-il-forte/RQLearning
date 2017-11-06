@@ -5,7 +5,7 @@ from QDecompositionLearning import QDecompositionLearning
 from VarianceParameter import VarianceDecreasingParameter,\
     VarianceIncreasingParameter, VarianceIncreasingParameterAutoTol2
 from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
-from collectParameters import CollectParameters
+from grid_world_hasselt.collectParameters import CollectParameters
 from PyPi.algorithms.td import QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning
 from PyPi.approximators import Ensemble, Regressor, Tabular
 from PyPi.core.core import Core

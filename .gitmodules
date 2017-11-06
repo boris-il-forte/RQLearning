@@ -1,3 +1,0 @@
-[submodule "PyPi"]
-	path = PyPi
-	url = https://github.com/carloderamo/PyPi.git
