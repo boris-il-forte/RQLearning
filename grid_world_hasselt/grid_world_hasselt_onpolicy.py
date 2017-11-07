@@ -1,21 +1,19 @@
 import numpy as np
 from joblib import Parallel, delayed
 
-from QDecompositionLearning import QDecompositionLearning
 from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
 
-from PyPi.approximators import Ensemble, Regressor, Tabular
-from PyPi.core.core import Core
-from PyPi.environments import *
-from PyPi.policy import EpsGreedy
-from PyPi.utils import logger
-from PyPi.utils.callbacks import CollectMaxQ
-from PyPi.utils.dataset import parse_dataset
-from PyPi.utils.parameters import DecayParameter
-from PyPi.algorithms.td import SARSA
+from mushroom.core.core import Core
+from mushroom.environments import *
+from mushroom.policy import EpsGreedy
+from mushroom.utils.callbacks import CollectMaxQ
+from mushroom.utils.dataset import parse_dataset
+from mushroom.utils.variance_parameters import WindowedVarianceIncreasingParameter
+from mushroom.utils.parameters import DecayParameter
+from mushroom.algorithms.value.td import SARSA, RQLearning
 
 
-def experiment1(decay_exp, alphaType):
+def experiment1(decay_exp):
     np.random.seed()
 
     # MDP

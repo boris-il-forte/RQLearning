@@ -1,14 +1,13 @@
 import numpy as np
-from PyPi.approximators import Regressor, Tabular
-from PyPi.core.core import Core
-from PyPi.environments import *
-from PyPi.policy import EpsGreedy
-from PyPi.utils import logger
-from PyPi.utils.callbacks import CollectMaxQ
-from PyPi.utils.dataset import parse_dataset
-from PyPi.utils.parameters import DecayParameter
-from QDecompositionLearning import QDecompositionLearning
-from VarianceParameter import VarianceIncreasingParameter
+from mushroom.core.core import Core
+from mushroom.environments import *
+from mushroom.policy import EpsGreedy
+from mushroom.utils import logger
+from mushroom.utils.callbacks import CollectMaxQ
+from mushroom.utils.dataset import parse_dataset
+from mushroom.utils.parameters import DecayParameter
+from mushroom.utils.variance_parameters import VarianceIncreasingParameter
+from mushroom.algorithms.value.td import RQLearning
 from joblib import Parallel, delayed
 
 
