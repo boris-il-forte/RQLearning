@@ -22,27 +22,25 @@ def experiment(decay_exp, alphaType):
 
     # Policy
     epsilon = ExponentialDecayParameter(value=1, decay_exp=.5,
-                                        shape=mdp.observation_space.size)
-    pi = EpsGreedy(epsilon=epsilon, observation_space=mdp.observation_space,
-                   action_space=mdp.action_space)
+                                        size=mdp.info.observation_space.size)
+    pi = EpsGreedy(epsilon=epsilon)
 
 
     # Agent
-    shape = mdp.observation_space.size + mdp.action_space.size
     if alphaType == 'Decay':
         alpha = ExponentialDecayParameter(value=1, decay_exp=decay_exp,
-                                          shape=shape)
+                                          size=mdp.info.size)
     else:
-        alpha = VarianceIncreasingParameter(value=1, shape=shape, tol=100.)
+        alpha = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=100.)
     #beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
-    beta = WindowedVarianceIncreasingParameter(value=1, shape=shape, tol=1.,
+    beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1.,
                                                window=50)
     #delta = VarianceDecreasingParameter(value=0, shape=shape)
     algorithm_params = dict(learning_rate=alpha, beta=beta, off_policy=True)
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
                     'fit_params': fit_params}
-    agent = RQLearning(shape, pi, mdp.gamma, agent_params)
+    agent = RQLearning(pi, mdp.info, agent_params)
 
     # Algorithm
     collect_max_Q = CollectMaxQ(agent.Q, np.array([mdp._start]))
