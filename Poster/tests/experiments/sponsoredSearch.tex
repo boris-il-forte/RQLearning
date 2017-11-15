@@ -1,0 +1,97 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=0.8,
+xmax=1.2,
+xlabel={Bid Price},
+ymin=-0.2,
+ymax=0.1,
+ylabel={Player Utility Gain},
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+legend style={legend cell align=left,at={(0.97,0.03)},anchor=south east,font=\tiny,align=left,draw=white!15!black}
+]
+\addplot [color=blue,solid,line width=2.0pt]
+  table[row sep=crcr]{%
+0.8	-0.137894715666603\\
+0.825	-0.0598468461810808\\
+0.85	-0.0216533329876517\\
+0.875	-0.0143988706450842\\
+0.9	7.93661071794016e-05\\
+0.925	0.0109612613274912\\
+0.95	-0.00253243675744719\\
+0.975	-0.0129431164855713\\
+1	0\\
+1.025	-0.0201081430557002\\
+1.05	-0.0222750641676381\\
+1.075	-0.027825265848884\\
+1.1	-0.0304365443952155\\
+1.125	-0.0404001901852189\\
+1.15	-0.0497379730112635\\
+1.175	-0.0554607211575615\\
+1.2	-0.0572394763850563\\
+};
+\addlegendentry{ME};
+
+\addplot [color=red,solid,line width=2.0pt]
+  table[row sep=crcr]{%
+0.8	-0.334025140780816\\
+0.825	-0.235772413494577\\
+0.85	-0.179215364063559\\
+0.875	-0.0942457121040257\\
+0.9	-0.0605449008581977\\
+0.925	-0.0198144078462104\\
+0.95	-0.0017729792282466\\
+0.975	-0.00390379690928488\\
+1	0\\
+1.025	0.000709358185508435\\
+1.05	0.0194202890798507\\
+1.075	0.0212079653200121\\
+1.1	0.0190545282083883\\
+1.125	0.0219456523943351\\
+1.15	0.0336650869436226\\
+1.175	0.0400227732745231\\
+1.2	0.0519578234196525\\
+};
+\addlegendentry{DE};
+
+\addplot [color=green,dashed,line width=2.0pt]
+  table[row sep=crcr]{%
+0.8	-0.239575493584934\\
+0.825	-0.153077168367924\\
+0.85	-0.111419616118559\\
+0.875	-0.0586675334263014\\
+0.9	-0.0296467921201244\\
+0.925	-0.0103244635296502\\
+0.95	-0.00841879231058218\\
+0.975	-0.00930787445688375\\
+1	0\\
+1.025	-0.00602090950513301\\
+1.05	-0.00170167090145357\\
+1.075	-0.00493446273694942\\
+1.1	-0.00228142550333965\\
+1.125	-0.00644371658246312\\
+1.15	-0.00516778260566453\\
+1.175	-0.00808813887417403\\
+1.2	-0.00422633762707469\\
+};
+\addlegendentry{WE};
+
+\addplot [color=black,solid,forget plot]
+  table[row sep=crcr]{%
+1	-5\\
+1	5\\
+};
+\end{axis}
+\end{tikzpicture}%

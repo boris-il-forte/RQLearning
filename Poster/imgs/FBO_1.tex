@@ -1,0 +1,74 @@
+\begin{tikzpicture}[scale=.7, transform shape]%[xscale=1, yscale=0.7]
+% \footnotesize
+\pgfplotsset{
+  enlargelimits=false,
+% %   height=7cm,
+% %   width=9cm,
+%    width=10cm,
+%    height=10cm,
+  xmin=0, xmax=2,
+  xtick={0.234500, 0.399500, 1.027500, 1.247500, 1.490500, 1.817500},
+  x tick label style = {yshift=-.5em},
+  extra x ticks={0.234500, 0.399500, 1.027500, 1.247500, 1.490500, 1.817500, 0.761811},
+        extra x tick labels={$\maxboundpar_1$,$\maxboundpar_2$,$\maxboundpar_3$,$\maxboundpar_4$,$\maxboundpar_5$,$\maxboundpar_6$,$\optimal{\maxboundpar}$}, 
+        extra x tick style={tick pos=right, grid=major, ticklabel pos=right, tick label style = {yshift=1em}
+                            %tick label style={font=\tiny}} ,
+                            },
+  every axis plot/.append style={line width=1.3pt},
+  every forget plot/.append style={line width=0.8pt},
+  y axis style/.style={
+        yticklabel style=#1,
+        ylabel style=#1,
+        y axis line style=#1,
+        ytick style=#1
+   }
+}
+\begin{axis}[
+  axis y line*=left,
+  enlargelimits=false,
+  ymin=-0.2, ymax=0.15,
+  xlabel={$\maxboundpar$},
+  ylabel=Magnitude of the bound,
+  y axis style=blue!75!black,
+  y tick label style = {xshift=-.5em},
+%   title={Control Basic (Single Actuator)},
+]
+\draw[dotted] (axis cs:0.234500, -0.2) -- (axis cs:0.234500,0.15);
+\draw[dotted] (axis cs:0.399500, -0.2) -- (axis cs:0.399500,0.15);
+\draw[dotted] (axis cs:1.027500, -0.2) -- (axis cs:1.027500,0.15);
+\draw[dotted] (axis cs:1.247500, -0.2) -- (axis cs:1.247500,0.15);
+\draw[dotted] (axis cs:1.490500, -0.2) -- (axis cs:1.490500,0.15);
+\draw[dotted] (axis cs:1.817500, -0.2) -- (axis cs:1.817500,0.15);
+\addplot[color=blue] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/bound_AlgDirect.txt};\label{Hplot}
+\addplot[only marks,color=blue] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/disc_points_AlgDirect.txt};
+\addplot[only marks,mark=triangle,draw=red] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/max_AlgDirect.txt};
+\addplot[dotted,color=gray,domain=0:2,forget plot] {0};
+\end{axis}
+
+\begin{axis}[
+  axis y line*=right,
+  xmin=0, xmax=2,
+  extra x ticks={0.5,0.9},
+  axis x line=none,
+  ylabel near ticks,
+  ymin = -0.5, ymax=0.375,
+  y axis style=orange!75!black,
+  y tick label style = {xshift=.4em},
+  y label style = {yshift=-.3em},
+  every axis/.append style={line width=1},
+  ylabel=Magnitude of the gradient,
+]
+\addlegendimage{/pgfplots/refstyle=Hplot}\addlegendentry{$\MSPIbound$}
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s0.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s1.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s2.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s3.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s4.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s5.txt};
+\addplot[dashed,color=orange] table[x index=0,y index=1,col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_s6.txt};
+\addlegendentry{$d\left(\sfrac{B}{\alpha}\right)$};
+\addplot[only marks,mark=square,color=orange] table[x index=0, y index=1, col sep=tab] {./pics/bound_graphs/ex2/grad_bound_AlgDirect_g.txt}
+[xshift=9pt, yshift=4pt]
+node[pos=0] {$g_0$};
+\end{axis}
+\end{tikzpicture}

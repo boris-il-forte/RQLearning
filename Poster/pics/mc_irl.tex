@@ -1,0 +1,100 @@
+% This file was created by matlab2tikz.
+% Minimal pgfplots version: 1.3
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+\definecolor{mycolor5}{rgb}{0.46600,0.67400,0.18800}%
+\definecolor{mycolor6}{rgb}{0.30100,0.74500,0.93300}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5.5cm,
+height=3.4cm,
+at={(0.758in,0.480615in)},
+scale only axis,
+xmin=8,
+xmax=310,
+ymin=40,
+ymax=240,
+grid=major,
+major grid style={densely dotted},
+tick label style={font=\tiny},
+label style={font=\tiny},
+legend style={font=\tiny},
+axis x line*=bottom,
+axis y line*=left,
+legend style={legend cell align=left,align=left,draw=white!15!black},
+legend columns=2,
+xlabel = {Number of samples},
+ylabel = {Mean episode length},
+ylabel style = {yshift=0.1cm},
+xlabel style = {yshift=-0.1cm},
+xmode=log,
+xtick={10,30,100,300},
+xticklabels={10,30,100,300},
+scaled y ticks=false,
+yticklabel style={/pgf/number format/fixed}
+]
+\addplot [color=mycolor1,densely dotted,mark=star,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 1pt]
+  table[row sep=crcr]{%
+10	92.3242\\
+30	76.1574\\
+100	73.7957\\
+300	72.1271\\
+};
+\addlegendentry{PGIRL};
+
+\addplot [color=mycolor2,solid,mark=o,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 1pt]
+  table[row sep=crcr]{%
+10	157.791\\
+30	84.947\\
+100	64.53\\
+300	62.216\\
+};
+\addlegendentry{CSI};
+
+\addplot [color=Magenta,dashdotted,mark=diamond,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 0.9pt]
+  table[row sep=crcr]{%
+10	231.65\\
+30	92.305\\
+100	60.6\\
+300	61.441\\
+};
+\addlegendentry{SCIRL};
+
+\addplot [color=mycolor4,solid,mark=square,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 1pt]
+  table[row sep=crcr]{%
+10	207.977\\
+30	120.307\\
+100	119.868\\
+300	118.224\\
+};
+\addlegendentry{Classifier};
+
+\addplot [color=mycolor5,dashdotdotted,mark=triangle,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 1pt]
+  table[row sep=crcr]{%
+10	178.234\\
+30	130.266\\
+100	108.129\\
+300	111.506\\
+};
+\addlegendentry{REPS};
+
+\addplot [color=mycolor3,solid,mark=pentagon,mark options={solid}, mark options={solid, mark size=3, line width=1pt}, line width = 1pt]
+  table[row sep=crcr]{%
+10	53.832\\
+30	52.885\\
+100	52.3\\
+300	52.25\\
+};
+\addlegendentry{Expert};
+
+\end{axis}
+\end{tikzpicture}%

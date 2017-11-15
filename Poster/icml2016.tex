@@ -1,0 +1,465 @@
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+\documentclass[portrait,a0paper,fontscale=0.312]{baposter}
+
+% For graphs
+\usepackage{graphicx}
+
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{eso-pic}
+\usepackage{layout}
+\usepackage{fancybox}
+
+
+\usepackage{calc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{bm}
+\usepackage{url}
+\usepackage{xfrac}
+\usepackage{natbib}
+\usepackage{mathtools}
+\usepackage{cancel}
+\usepackage{paralist}
+
+% \usepackage[centering,includeheadfoot,margin=2cm]{geometry}
+
+\usepackage{multicol}
+
+% \usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
+% % \usepackage{algorithmicx}
+% % \usepackage{algpseudocode}
+% \newlength\figureheight
+% \newlength\figurewidth
+% \setlength{\algomargin}{2em}
+% \SetKwComment{Comment}{$\blacktriangleright$\ }{}
+% 
+% \providecommand{\SetAlgoLined}{\SetLine}
+% \providecommand{\DontPrintSemicolon}{\dontprintsemicolon}
+
+\newcommand{\figurewidth}{7cm}
+\newcommand{\figureheight}{3cm}
+
+%\usepackage{times}
+%\usepackage{helvet}
+%\usepackage{bookman}
+\usepackage{palatino}
+
+\newcommand{\captionfont}{\footnotesize}
+
+\usetikzlibrary{calc}
+
+% \newcommand{\SET}[1]  {\ensuremath{\mathcal{#1}}}
+% \newcommand{\MAT}[1]  {\ensuremath{\boldsymbol{#1}}}
+% \newcommand{\VEC}[1]  {\ensuremath{\boldsymbol{#1}}}
+% \newcommand{\Video}{\SET{V}}
+% \newcommand{\video}{\VEC{f}}
+% \newcommand{\track}{x}
+% \newcommand{\Track}{\SET T}
+% \newcommand{\LMs}{\SET L}
+% \newcommand{\lm}{l}
+% \newcommand{\PosE}{\SET P}
+% \newcommand{\posE}{\VEC p}
+% \newcommand{\negE}{\VEC n}
+% \newcommand{\NegE}{\SET N}
+% \newcommand{\Occluded}{\SET O}
+% \newcommand{\occluded}{o}
+
+\renewcommand{\sfdefault}{lmss}
+\sffamily
+
+
+\newcommand{\listhead}[1] {\textsc{\underline{#1}}}
+
+\definecolor{rouge1}{RGB}{226,0,38}  % red P
+\definecolor{orange1}{RGB}{243,154,38}  % orange P
+\definecolor{jaune}{RGB}{254,205,27}  % jaune P
+\definecolor{blanc}{RGB}{255,255,255} % blanc P
+
+\definecolor{rouge2}{RGB}{230,68,57}  % red S
+\definecolor{orange2}{RGB}{236,117,40}  % orange S
+\definecolor{taupe}{RGB}{134,113,127} % taupe S
+\definecolor{gris}{RGB}{91,94,111} % gris S
+\definecolor{bleu1}{RGB}{38,109,131} % bleu S
+\definecolor{bleu2}{RGB}{28,50,114} % bleu S
+\definecolor{vert1}{RGB}{133,146,66} % vert S
+\definecolor{vert3}{RGB}{20,200,66} % vert S
+\definecolor{vert2}{RGB}{157,193,7} % vert S
+\definecolor{darkyellow}{RGB}{233,165,0}  % orange S
+\definecolor{lightgray}{rgb}{0.9,0.9,0.9}
+\definecolor{darkgray}{rgb}{0.6,0.6,0.6}
+
+\definecolor{blue900}{HTML}{0D47A1}
+\definecolor{blue800}{HTML}{1565C0}
+
+\newcommand{\rcol}[1]{\textcolor{red}{\textit{#1}}}
+\newcommand{\gcol}[1]{\textcolor{vert3}{\textit{#1}}}
+\newcommand{\bcol}[1]{\textcolor{blue}{\textit{#1}}}
+\newcommand{\ycol}[1]{\textcolor{darkyellow}{\textit{#1}}}
+
+\newcommand{\rcolb}[1]{\textcolor{red}{\textit{\textbf{#1}}}}
+\newcommand{\gcolb}[1]{\textcolor{vert3}{\textit{\textbf{#1}}}}
+\newcommand{\bcolb}[1]{\textcolor{blue}{\textit{\textbf{#1}}}}
+\newcommand{\ycolb}[1]{\textcolor{darkyellow}{\textit{\textbf{#1}}}}
+
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+\newcommand{\dbacks}[1]{\textbf{\textcolor{red!80!black}{{#1}}}}
+
+
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=newest}
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{na} = [baseline=-.5ex]
+\everymath{\displaystyle}
+\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{positioning}
+
+\usepackage{wasysym}
+
+\input{commands}
+\input{irlcommands}
+\usepackage{tcolorbox}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Some math symbols used in the text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Multicol Settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\columnsep}{1.5em}
+\setlength{\columnseprule}{0mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save space in lists. Use this after the opening of the list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{1pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Here starts the poster
+%%%---------------------------------------------------------------------------
+%%% Format it to your taste with the options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define some colors
+
+%\definecolor{lightblue}{cmyk}{0.83,0.24,0,0.12}
+\definecolor{lightblue}{rgb}{0.145,0.6666,1}
+
+% % Draw a video
+% \newlength{\FSZ}
+% \newcommand{\drawvideo}[3]{% [0 0.25 0.5 0.75 1 1.25 1.5]
+%    \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
+%    \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
+%    \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt,inner sep=0pt,text width=\linewidth,minimum height=0] (video) {\noindent#3};
+%    \path [fill=lightblue!50!black,line width=0pt] 
+%      (video.north west) rectangle ([yshift=\FSZ] video.north east) 
+%     \foreach \x in {1,2,...,#2} {
+%       {[rounded corners=0.6] ($(video.north west)+(-0.7,0.8)+(\x,0)$) rectangle +(0.4,-0.6)}
+%     }
+% ;
+%    \path [fill=lightblue!50!black,line width=0pt] 
+%      ([yshift=-1\FSZ] video.south west) rectangle (video.south east) 
+%     \foreach \x in {1,2,...,#2} {
+%       {[rounded corners=0.6] ($(video.south west)+(-0.7,-0.2)+(\x,0)$) rectangle +(0.4,-0.6)}
+%     }
+% ;
+%    \foreach \x in {1,...,#1} {
+%      \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1] video.north west) -- ([xshift=\x\linewidth/#1] video.south west);
+%    }
+%    \foreach \x in {0,#1} {
+%      \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1,yshift=1\FSZ] video.north west) -- ([xshift=\x\linewidth/#1,yshift=-1\FSZ] video.south west);
+%    }
+%    \end{tikzpicture}
+% }
+% 
+% \hyphenation{resolution occlusions}
+% %%
+\begin{poster}%
+  % Poster Options
+  {
+  % Show grid to help with alignment
+  columns=6,
+  grid=false,
+  % Column spacing
+  colspacing=1em,
+  % Color style
+  bgColorOne=white,
+  bgColorTwo=white,
+  borderColor=blue900,
+  headerColorOne=blue800,
+  headerColorTwo=blue800,
+  headerFontColor=white,
+  boxColorOne=white,
+  boxColorTwo=lightblue,
+  % Format of textbox
+  textborder=roundedleft,
+  % Format of text header
+  eyecatcher=true,
+  headerborder=closed,
+  headerheight=0.1\textheight,
+%  textfont=\sc, An example of changing the text font
+  headershape=roundedright,
+  headershade=shadelr,
+  headerfont=\Large\bf\textsc, %Sans Serif
+  textfont={\setlength{\parindent}{1.5em}},
+  boxshade=plain,
+%  background=shade-tb,
+  background=plain,
+  linewidth=2pt
+  }
+  % Eye Catcher
+  {\includegraphics[height=9em]{./pics/airlab_logo_reflect.png}} 
+%   {\hspace{3.5cm}}
+  % Title
+  {\bf\textsc{Estimating the Maximum Expected Value through Gaussian Approximation}\vspace{0.1em}}
+  % Authors
+  {\textsc{C. D'Eramo, M. Restelli and A. Nuara}\\ {\normalsize \texttt{\{carlo.deramo, marcello.restelli\}@polimi.it}}\\ {\normalsize \texttt{\{alessandro.nuara\}@mail.polimi.it}}}
+  % University logo
+  {% The makebox allows the title to flow into the logo, this is a hack because of the L shaped logo.
+    %\includegraphics[height=9.0em]{./pics/PoliMI.pdf}%\hspace{.5cm}
+    \includegraphics[height=9.0em]{./pics/polilogo/logoPoliBlue_poster.png}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Now define the boxes that make up the poster
+%%%---------------------------------------------------------------------------
+%%% Each box has a name and can be placed absolutely or relatively.
+%%% The only inconvenience is that you can only specify a relative position 
+%%% towards an already declared box. So if you have a box attached to the 
+%%% bottom, one to the top and a third one which should be in between, you 
+%%% have to specify the top and bottom boxes before you specify the middle 
+%%% box.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % A coloured circle useful as a bullet with an adjustably strong filling
+    \newcommand{\colouredcircle}{%
+      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);}}
+
+\newcommand{\HL}[1]{\textcolor{blue}{\textbf{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Problem}{name=problem,column=0,row=0,span=3}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}\compresslist
+ \item Compute the \HL{Maximum Expected Value (MEV)} of a set of two or more independent random variables $X = \lbrace X_{1}, ..., X_{M} \rbrace$ given samples $S = \lbrace S_{1}, ..., S_{N} \rbrace$
+ \item Most RL algorithms need to \HL{approximate MEV}
+ \item A good estimation of MEV is \dbacks{critical} in many real-world applications
+\end{itemize}
+  }
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Contributions}{name=contributions,column=3,row=0, span=3,bottomaligned=problem}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{-0.2cm}
+\begin{enumerate}\compresslist
+\item We propose the \HL{Weighted Estimator (WE)} to approximate MEV
+\item The approximation is done by a \HL{weighted average} of sample means
+\item We provide theoretical and empirical \HL{comparisons} of the \dbacks{performance} of WE and other MEV estimators
+\end{enumerate}
+  }
+  
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   \headerbox{Settings}{name=settings,column=4,row=0,span=2,bottomaligned=contributions}{
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \renewcommand{\CancelColor}{\color{red}}
+% \noindent \textbf{MDP without reward:} $\mdp = \langle\statespace,\actionspace, \pmodel, \xcancel{\rmodel}, \gamma \rangle$
+% 
+% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Maximum Expected Value Estimation}{name=mev,column=0,span=4,row=1,below=contributions}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\listhead{Idea}\\
+\begin{minipage}[t]{.45\textwidth}
+  \begin{itemize}\compresslist
+    \renewcommand{\CancelColor}{\color{red}}
+    \item Compute the \emph{Maximum Expected Value} 
+    \vspace{-.3cm}
+    $$\mu_{*}(X) = \max_{i} \mu_{i} = \max_{i} \int_{-\infty}^{+\infty}xf_i(x)~\mathrm{d}x$$
+    \item of independent random variables ($X = \{X_1, X_2, \ldots, X_M\}$) whose PDFs $f_i$ are unknown
+  \end{itemize}
+\end{minipage}\hspace{.5cm}
+\begin{minipage}[t]{.45\textwidth}
+  \begin{itemize}
+    \item \dbacks{Issue:} $\mu_{*}$ cannot be computed analytically
+    \item Given a set of noisy samples $S = \{S_1, \ldots, S_N \}$ 
+    retrieved by the unknown distributions of each $X_i$
+    
+    \vspace{-.3cm}
+    \begin{center}
+    \tikz[baseline]{
+	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G1) {
+	    $\mu_{*}(X) \approx \hat{\mu}_{*}(S)$
+	    };
+	  \node[fill=white,inner sep=2pt] at (G1.north west) {\color{blue800} \textbf{\small GOAL}};
+	}
+    \end{center}
+  \end{itemize}
+\end{minipage}
+
+\vspace{.4cm}
+\begin{minipage}[t]{.36\textwidth}
+  \listhead{Na{\"i}ve approach}
+  \begin{itemize}
+    \item \emph{Maximum Estimator (ME)}
+    \item i.e., take the maximum of the sample means
+$$\hat{\mu}^{ME}(S) = \max_{i}\hat{\mu}_{i}(S) \approx \mu_{*}(X)$$
+  \item \dbacks{Positive} bias can cause problems in some applications (e.g., Q-Learning)
+  \end{itemize}
+\end{minipage}\hspace{.5cm}
+\begin{minipage}[t]{.59\textwidth}
+\listhead{Double Estimator (DE)} [Van Hasselt, 2010] \vspace{-.5cm}\\
+\begin{enumerate}\compresslist
+\item Split dataset S in two disjoint sets
+    \vspace{-.2cm}
+$$S^A = \lbrace S^A_{1}, ..., S^A_{N} \rbrace \text{\hspace{.3cm}and\hspace{.3cm}} S^B = \lbrace S^B_{1}, ..., S^B_{N} \rbrace$$
+\item \vspace{-.2cm}Estimate the maximum index in each set
+    \vspace{-.2cm}
+$$a^* = \argmax_{i}\hat\mu^{ME}_{i}(S^A) \text{\hspace{.3cm}and\hspace{.3cm}} b^* = \argmax_{i}\hat\mu^{ME}_{i}(S^B)$$
+\item \vspace{-.2cm}Take the average maximum value
+    \vspace{-.2cm}
+$$\hat{\mu}^{DE}(S) = \frac{\hat{\mu}_{b^*}^{ME}(S^A) + \hat{\mu}_{a^*}^{ME}(S^B)}{2} \approx \mu_{*}(X)$$
+\end{enumerate}
+\vspace{-.2cm}
+% \begin{itemize}
+\hspace{.2cm} \dbacks{Negative} bias may solve ME issues in many applications
+% \end{itemize}
+\end{minipage}
+% \hfill
+% \begin{minipage}[t]{.55\textwidth}
+\vspace{-.2cm}
+\begin{center}
+% \begin{minipage}{0.95\textwidth}
+\begin{tcolorbox}[width=0.95\textwidth,colback=white,colframe=blue800]    
+\begin{center}
+\color{blue800}
+ \listhead{Weighted Estimator (WE)}
+\end{center}
+    \vspace{-.2cm}
+    \begin{center}
+    \tikz[baseline]{
+	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G2) {
+	    $\hat{\mu}^{WE}(S) = \sum_{i=1}^M \hat\mu_i(S) w_i^S$
+	    };
+	  \node[text width=6cm, xshift=5cm] at (G2.east) {\color{blue800}Weights the sample means by the probability of being the maximum};
+	  \node[fill=white,inner sep=2pt] at (G2.south west) {\color{blue800} \textbf{\small WE}};
+	  \node[below right=0cm and -0.7cm of G2] (G3) {
+	  $w_i^S = P\left(\hat\mu_i(S) = \max_j \hat\mu_j(S)\right) = \int_{-\infty}^{+\infty} {\color{red}\overbrace{\hat{f}_i^S(x)}^{\mathclap{\textit{PDF unknown}}}} \prod_{j\neq i} {\color{red}\underbrace{\hat{F}_j^S(x)}_{\textit{CDF unknown}}}~\mathrm{d}x$
+	  };
+	}
+    \end{center}
+    
+\vspace{-.3cm}
+\begin{itemize}
+\item As the number of samples increases, by the \HL{central limit theorem}:
+\vspace{-.2cm}
+$$\hat\mu_i(S)\sim\mathcal{N}\bigg(\underbrace{\mu_i}_{\textit{sample mean}},\frac{\overbrace{\sigma_i^2}^{\textit{sample variance}}}{|S_i|}\bigg)\text{ \hspace{.4cm} i.e., \hspace{.4cm}}\hat{f}_i^S = \textit{normal distribution}$$
+\end{itemize}
+% \end{minipage}
+\end{tcolorbox}  
+\end{center}
+% \end{minipage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Theoretical Results}{name=thres,column=4,span=2,row=1,below=contributions,bottomaligned=mev}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\listhead{Bias and variance of the estimators}
+
+% \begin{minipage}{0.4\textwidth}
+%  $$\mathrm{Bias}\left(\hat{\mu}^{ME}\right) \leq \sqrt{\frac{M-1}{M}\sum_{i=1}^M \frac{\sigma_i^2}{|S_i|}}$$
+ $$\mathrm{Bias}\left(\hat{\mu}^{DE}\right) \geq -\frac{1}{2}\left(\sqrt{\sum_{i=1}^M \frac{\sigma_i^2}{|S^A_i|}} + \sqrt{\sum_{i=1}^M \frac{\sigma_i^2}{|S^B_i|}}\right)$$
+ $$\mathrm{Bias}(\hat{\mu}^{WE}) \leq \mathrm{Bias}(\hat{\mu}^{ME}) \leq \sqrt{\frac{M-1}{M}\sum_{i=1}^M \frac{\sigma_i^2}{|S_i|}}$$
+$$\mathrm{Var}\left(\hat{\mu}^{ME, DE, WE}\right) \leq \sum_{i=1}^M \frac{\sigma^2_i}{|S_i|}.$$
+% \end{minipage}
+% \begin{minipage}{.59\textwidth}
+\begin{center}
+{
+  \renewcommand{\figurewidth}{5cm}
+  \renewcommand{\figureheight}{4cm}
+  \input{./tests/experiments/absolute_bias.tex}\\[.4cm]
+  \input{./tests/experiments/variance.tex}
+}
+\end{center}
+% \end{minipage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Empirical Results}{name=emp,column=0,row=3,span=6,below=thres}{
+% \headerbox{Finite Sample Analysis}{name=settings,column=2,row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.49\textwidth}
+ \listhead{Multi-Armed Bandits}
+ 
+ \centering \textbf{Internet Ads}\\
+   \input{./tests/experiments/internetAds-impressions.tex}\hspace{.1cm}
+   \input{./tests/experiments/internetAds-actions.tex}\hspace{.1cm} 
+   \input{./tests/experiments/internetAds-probs.tex}
+   
+ \centering \textbf{Sponsored Search Auctions}\\
+   \input{./tests/experiments/sponsoredSearch.tex}
+\end{minipage}\hfill
+\begin{minipage}[t]{.525\textwidth}
+ \listhead{Markov Decision Processes}
+
+ \centering \textbf{Grid World}\\
+   \input{./tests/experiments/gridexp08-ng.tex}
+   \input{./tests/experiments/gridexp08-g.tex}
+   \input{./tests/experiments/gridexp08-g-sigma1.tex}
+
+ \centering \textbf{Forex}\\
+   \vspace{.1cm}
+   \input{./tests/experiments/forexTrain.tex}\hspace{.2cm}
+   \input{./tests/experiments/forexTest.tex}
+\end{minipage}
+}
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \headerbox{Results}{name=results,column=2,row=3,below=fsa,bottomaligned=btt}{
+% % \headerbox{Results}{name=results,column=2,row=3,below=fsa,above=bottom}{
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% }
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   \headerbox{Future Directions}{name=questions,column=0,span=2,below=btt,above=bottom}{
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \vspace{0.5em}
+% 
+% \begin{itemize}\compresslist
+% \item Extend the application of the bound to \textbf{continuous state spaces}.
+% \item API in \textbf{off--policy scenario}.
+% \item Investigate the properties of the algorithms in the approximate scenario
+% \end{itemize}
+% 
+%   }
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   \headerbox{References}{name=references,column=2,below=results,bottomaligned=btt}{
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     \smaller
+%     \bibliographystyle{plainnat}
+%     \bibliography{../../bibtex/rlbibdb}
+% %    \vspace{0.3em}
+%   }
+  
+ 
+\end{poster}
+
+\end{document}
+

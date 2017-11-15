@@ -1,0 +1,99 @@
+
+
+%% math commands
+\newcommand{\transpose}[1]{{#1}^\texttt{T}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\EV}{\mathbb{E}}
+\DeclareMathOperator*{\var}{\textbf{\texttt{Var}}}
+\DeclareMathOperator*{\gradp}{\nabla_{\ppvect}}
+
+\newcommand{\norm}[2][\infty]{\left\|#2\right\|_{#1}}
+
+\newcommand{\realspace}{\mathbb R}		% realspace
+
+\newcommand{\statespace}{\mathcal S}		% state space
+\newcommand{\actionspace}{\mathcal A}		% action space
+\newcommand{\pmodel}{\mathcal P}		% transition function
+\newcommand{\rmodel}{\mathcal R}		% reward function
+\newcommand{\initD}{D}				% initial distribution
+
+%% Vector and Matrix
+\newcommand{\rvect}{\mathbf{R}}			% reward vector
+\newcommand{\vvect}{\mathbf{V}}			% value function vector
+\newcommand{\jvect}{\mathbf{J}}			% score vector
+\newcommand{\gammavect}{\boldsymbol{\gamma}}	% gamma vector
+\newcommand{\pmtx}{\mathbf{P}}			% transition matrix
+
+
+\newcommand{\ppspace}{\Theta}
+\newcommand{\pp}{\theta} 			% policy params
+\newcommand{\ppvect}{\boldsymbol{\pp}}		% policy params vector (bold)
+\newcommand{\vecop}{\text{vec }}
+\newcommand{\sap}{\boldsymbol{z}}
+
+
+\newcommand{\Jvalapx}[1][\ppvect]{\widehat{J}\left({#1}\right)}
+\newcommand{\Jval}[1][\ppvect]{J\left({#1}\right)}
+\newcommand{\Jvalp}[2][\ppvect]{J_{#2}\left({#1}\right)}
+\newcommand{\Mval}[1][\ppvect]{M\left({#1}\right)}
+\newcommand{\Jvalvect}[1][\ppvect]{\jvect\left({#1}\right)}
+\newcommand{\offJval}[1][\ppvect]{\mathcal{J}\left({#1}\right)}
+
+\newcommand{\dstate}{n}
+\newcommand{\daction}{m}
+\newcommand{\dobj}{q}
+\newcommand{\dpolicy}{d}
+
+
+\newcommand{\horiz}{T}
+\newcommand{\traj}{\tau}
+\newcommand{\trajspace}{\mathbb{T}}
+\newcommand{\trajlength}{T}
+\newcommand{\pdfunc}[1]{p\left(#1\right)}
+
+\newcommand{\currstep}{t}	% index for current time step in GPOMDP derivations
+\newcommand{\indxlogpi}{i}	% index for \sum \nabla log policy
+\newcommand{\indxr}{j}		% index for \sum reward
+\newcommand{\indxis}{w}		% index  for \prod importance sampling
+\newcommand{\indxint}{k}	% index for \prod \int
+\newcommand{\indxcomp}{k}	% index for \theta or gradient components
+\newcommand{\indxcompr}{h}	% index for reward or gradient components
+
+\newcommand{\Hessian}{H}
+\newcommand{\HJ}[1][\ppvect]{\Hessian_{\ppvect}\jvect({#1})}
+\newcommand{\HJhat}[1][\ppvect]{\widehat{\Hessian}_{\ppvect}\jvect({#1})}
+\newcommand{\HJREF}[1][\ppvect]{\widehat{\Hessian}_{\ppvect}^{RF}\jvect({#1})}
+\newcommand{\HJGP}[1][\ppvect]{\widehat{\Hessian}_{\ppvect}^{GP}\jvect({#1})}
+\newcommand{\glp}[1][]{\nabla_{\ppvect} \log \pi_{\ppvect}(a_{#1}|s_{#1})}
+\newcommand{\hlp}[1][]{H_{\ppvect} \log \pi_{\ppvect}(a_{#1}|s_{#1})}
+
+\newcommand{\EVV}[2][\ppvect \in \ppspace]{\EV_{#1}\left[{#2}\right]}
+\newcommand{\EVVC}[3]{\EV_{\substack{#1}}\left[{#2}\middle|{#3}\right]}
+
+\newcommand{\cMtx}[1][]{\mathcal{C}\left(#1\right)}
+\newcommand{\basegrad}{b_{\nabla}}
+\newcommand{\baseline}{b_\indxcomp}
+\newcommand{\stepbaseline}{b^{(\currstep)}_\indxcomp}
+\newcommand{\baseF}{F^{(\traj)}}
+\newcommand{\baseG}{G_\indxcomp^{(\traj)}}
+\newcommand{\stepbaseF}{F^{(\currstep)}}
+\newcommand{\stepbaseG}{G_\indxcomp^{(\currstep)}}
+\newcommand{\varr}[1][]{\textbf{\texttt{Var}}\left( {#1}\right)}
+
+\newcommand{\polb}{\pi^{\mathcal{B}}}
+\newcommand{\polt}{\pi^{\mathcal{T}}}
+
+\newcommand{\qf}[1][^\pol]{Q#1}
+\newcommand{\qffun}[2]{Q#1\left(#2\right)}		% value function with parenthesis
+
+\newcommand{\mow}{\boldsymbol{\alpha}}
+% \newcommand{\mow}{\Rparams}
+
+\newcommand{\normv}{x}
+\newcommand{\normpow}{y}
+\newcommand{\ncost}[1][_{\normv}^{\normpow}]{\mathcal{C}{#1}}
+
+\newcommand{\mdp}{\mathcal{M}}
+
+\newcommand{\texsub}[1]{\textsc{\tiny #1}}

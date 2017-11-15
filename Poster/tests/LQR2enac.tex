@@ -1,0 +1,141 @@
+% This file was created by matlab2tikz.
+% Minimal pgfplots version: 1.3
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{1.00000,0.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=9cm,
+height=4.5cm,
+at={(1.587786in,0.670076in)},
+scale only axis,
+xmin=-210.5,
+xmax=-206.5,
+ymin=-167,
+ymax=-165,
+tick label style={font=\tiny},
+label style={font=\tiny},
+legend style={font=\tiny},
+legend style={legend cell align=left,align=left,draw=white!15!black},
+% xlabel = $\boldsymbol{J}^M_1$,
+% ylabel = $\boldsymbol{J}^M_2$,
+]
+\addplot [color=mycolor1,solid, line width=1pt]
+  table[row sep=crcr]{%
+-212.5559	-164.553\\
+-212.3816	-164.621\\
+-212.2077	-164.6891\\
+-212.0344	-164.7573\\
+-211.8617	-164.8257\\
+-211.6894	-164.8942\\
+-211.5176	-164.9628\\
+-211.3463	-165.0316\\
+-211.1754	-165.1005\\
+-211.0051	-165.1696\\
+-210.8353	-165.2388\\
+-210.6659	-165.3081\\
+-210.4971	-165.3776\\
+-210.3287	-165.4472\\
+-210.1608	-165.517\\
+-209.9933	-165.5869\\
+-209.8264	-165.6569\\
+-209.6599	-165.7271\\
+-209.4939	-165.7974\\
+-209.3283	-165.8678\\
+-209.1632	-165.9384\\
+-208.9985	-166.0091\\
+-208.8344	-166.08\\
+-208.6706	-166.151\\
+-208.5074	-166.2222\\
+-208.3445	-166.2935\\
+-208.1822	-166.3649\\
+-208.0202	-166.4364\\
+-207.8588	-166.5082\\
+-207.6977	-166.58\\
+-207.5371	-166.652\\
+-207.377	-166.7241\\
+-207.2172	-166.7964\\
+-207.0579	-166.8688\\
+-206.8991	-166.9413\\
+-206.7406	-167.014\\
+-206.5826	-167.0868\\
+-206.425	-167.1598\\
+-206.2679	-167.2329\\
+-206.1111	-167.3062\\
+-205.9548	-167.3796\\
+-205.7989	-167.4531\\
+-205.6434	-167.5268\\
+-205.4883	-167.6006\\
+-205.3337	-167.6746\\
+-205.1794	-167.7487\\
+-205.0256	-167.8229\\
+-204.8721	-167.8973\\
+-204.7191	-167.9718\\
+-204.5664	-168.0465\\
+-204.4142	-168.1213\\
+-204.2624	-168.1963\\
+-204.1109	-168.2714\\
+-203.9599	-168.3466\\
+-203.8092	-168.422\\
+-203.6589	-168.4975\\
+-203.509	-168.5732\\
+-203.3595	-168.649\\
+-203.2104	-168.725\\
+-203.0617	-168.8011\\
+-202.9133	-168.8774\\
+-202.7654	-168.9538\\
+-202.6178	-169.0303\\
+-202.4705	-169.107\\
+-202.3237	-169.1838\\
+-202.1772	-169.2608\\
+-202.0311	-169.3379\\
+-201.8854	-169.4152\\
+-201.74	-169.4926\\
+-201.595	-169.5702\\
+};
+\addlegendentry{Pareto Front};
+
+\addplot [color=red,only marks,mark=10-pointed star,mark options={solid}, mark size=4]
+  table[row sep=crcr]{%
+-209.163189698078	-165.938418855342\\
+};
+\addlegendentry{$\Jval[\pi^{E},{\Rparams[E]}]$};
+
+\addplot [color=ForestGreen,line width=0.8pt, domain=-211:-206,forget plot] (x,-0.596812227560049*x-2.906243906894769e+02);
+
+\addplot [color=ForestGreen,line width=0.8pt,solid,mark=+,mark options={solid}]
+  table[row sep=crcr]{%
+-207.330630138078	-166.886935475342\\
+-210.111706318078	-165.227155205342\\
+};
+\addlegendentry{Plane with 10 ep.};
+
+
+\addplot [color=Orange,line width=0.8pt, densely dotted,domain=-211:-206,forget plot] (x,-0.387565973605082*x-2.470029397067992e+02);
+
+\addplot [color=Orange,line width=0.8pt,densely dotted,mark=diamond*,mark options={solid}]
+  table[row sep=crcr]{%
+-206.924743768078	-166.805949925342\\
+-210.030720768078	-165.602178925342\\
+};
+\addlegendentry{Plane with 100 ep.};
+
+
+\addplot [color=mycolor2,line width=1pt, dashed,domain=-211:-206,forget plot] (x,-0.420961890744854*x-2.539873975558649e+02);
+
+\addplot [color=mycolor2,line width=1pt, dashed,mark=triangle*,mark options={solid}]
+  table[row sep=crcr]{%
+-207.060307208078	-166.822899135342\\
+-210.047669978078	-165.565333255342\\
+};
+\addlegendentry{Plane with 1000 ep.};
+
+\node[coordinate] at (axis cs: -206.5,-166) (n1) {};
+\end{axis}
+\end{tikzpicture}%
