@@ -1,20 +1,16 @@
 import numpy as np
 from joblib import Parallel, delayed
 
-from QDecompositionLearning import QDecompositionLearning
-from VarianceParameter import VarianceDecreasingParameter,\
-    VarianceIncreasingParameter, VarianceIncreasingParameterAutoTol2
-from WindowedVarianceParameter import WindowedVarianceIncreasingParameter
+from mushroom.utils.variance_parameters import VarianceDecreasingParameter, VarianceIncreasingParameter, \
+    WindowedVarianceIncreasingParameter
 from grid_world_hasselt.collectParameters import CollectParameters
-from PyPi.algorithms.td import QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning
-from PyPi.approximators import Ensemble, Regressor, Tabular
-from PyPi.core.core import Core
-from PyPi.environments import *
-from PyPi.policy import EpsGreedy
-from PyPi.utils.callbacks import CollectMaxQ, CollectQ
-from PyPi.utils import logger
-from PyPi.utils.dataset import parse_dataset
-from PyPi.utils.parameters import Parameter, DecayParameter
+from mushroom.algorithms.value.td import QLearning, DoubleQLearning, WeightedQLearning, SpeedyQLearning, RQLearning
+from mushroom.core.core import Core
+from mushroom.environments import *
+from mushroom.policy import EpsGreedy
+from mushroom.utils.callbacks import CollectMaxQ, CollectQ
+from mushroom.utils.dataset import parse_dataset
+from mushroom.utils.parameters import Parameter, DecayParameter
 
 
 def experiment1(decay_exp, beta_type):
