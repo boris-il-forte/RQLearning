@@ -64,7 +64,7 @@ def experiment(decay_exp, alphaType, useDelta, windowed):
 
 
 if __name__ == '__main__':
-    n_experiment = 100
+    n_experiment = 10000
 
     base_folder = '/tmp/mushroom/grid_world_hasselt/'
     mk_dir_recursive(base_folder)
