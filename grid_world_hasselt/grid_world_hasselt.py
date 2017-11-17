@@ -9,12 +9,11 @@ from mushroom.utils.callbacks import CollectDataset, CollectMaxQ
 from mushroom.utils.dataset import parse_dataset
 from mushroom.utils.parameters import ExponentialDecayParameter
 from mushroom.utils.variance_parameters import VarianceIncreasingParameter, \
-    WindowedVarianceIncreasingParameter
+    WindowedVarianceIncreasingParameter, VarianceDecreasingParameter
+from mushroom.utils.folder import mk_dir_recursive
 
-from collectParameters import CollectParameters
 
-
-def experiment(decay_exp, alphaType):
+def experiment(decay_exp, alphaType, useDelta, windowed):
     np.random.seed()
 
     # MDP
@@ -32,63 +31,82 @@ def experiment(decay_exp, alphaType):
                                           size=mdp.info.size)
     else:
         alpha = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=100.)
-    #beta = VarianceIncreasingParameter(value=1, shape=shape, tol=1.)
-    beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1.,
-                                               window=50)
-    #delta = VarianceDecreasingParameter(value=0, shape=shape)
-    algorithm_params = dict(learning_rate=alpha, beta=beta, off_policy=True)
+
+    if useDelta:
+        delta = VarianceDecreasingParameter(value=0, size=mdp.info.size)
+        algorithm_params = dict(learning_rate=alpha, delta=delta, off_policy=True)
+    else:
+        if windowed:
+            beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1., window=50)
+        else:
+            beta = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1.)
+
+        algorithm_params = dict(learning_rate=alpha, beta=beta, off_policy=True)
+
     fit_params = dict()
     agent_params = {'algorithm_params': algorithm_params,
                     'fit_params': fit_params}
     agent = RQLearning(pi, mdp.info, agent_params)
 
     # Algorithm
-    collect_max_Q = CollectMaxQ(agent.Q, np.array([mdp._start]))
+    collect_max_Q = CollectMaxQ(agent.Q, mdp.convert_to_int(mdp._start, mdp._width))
     collect_dataset = CollectDataset()
-    collect_lr = CollectParameters(beta)
-    callbacks = [collect_max_Q, collect_dataset, collect_lr]
+    callbacks = [collect_max_Q, collect_dataset]
     core = Core(agent, mdp, callbacks)
 
     # Train
-    core.learn(n_iterations=10000, how_many=1, n_fit_steps=1,
-               iterate_over='samples')
+    core.learn(n_steps=10000, n_steps_per_fit=1, quiet=True)
 
     _, _, reward, _, _, _ = parse_dataset(collect_dataset.get())
     max_Qs = collect_max_Q.get_values()
-    lr = collect_lr.get_values()
 
-    return reward, max_Qs, lr
+    return reward, max_Qs
 
 
 if __name__ == '__main__':
-    n_experiment = 1
+    n_experiment = 100
 
-    os.mkdir('/tmp/mushroom')
+    base_folder = '/tmp/mushroom/grid_world_hasselt/'
+    mk_dir_recursive(base_folder)
 
     names = {1: '1', 0.8: '08'}
     exp = [1, 0.8]
-    for e in exp:
+
+    for windowed in [True, False]:
+        windowed_name = 'Win_' if windowed else ''
+
+        # RQ with alpha decay
+        for e in exp:
+            print 'RQ_' + windowed_name + names[e]
+            out = Parallel(n_jobs=-1)(delayed(
+                experiment)(e, 'Decay', False, windowed) for _ in xrange(n_experiment))
+            r = np.array([o[0] for o in out])
+            max_Qs = np.array([o[1] for o in out])
+
+            np.save(base_folder+'RQ_' + windowed_name + names[e] + '_r.npy', np.convolve(np.mean(r, 0),
+                                                                np.ones(100) / 100.,'valid'))
+            np.save(base_folder + 'RQ_' + windowed_name + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+
+        #RQ with alpha variance dependent
+        print 'RQ_' + windowed_name + 'Alpha'
         out = Parallel(n_jobs=-1)(delayed(
-            experiment)(e, 'Decay') for _ in xrange(n_experiment))
+            experiment)(0, '', False, windowed) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
-        lr = np.array([o[2] for o in out])
 
-        np.save('results/rQDecWin' + names[e] + '.npy', np.convolve(np.mean(r,
-                                                                            0),
-                                                            np.ones(100) / 100.,
-                                                            'valid'))
-        np.save('results/maxQDecWin' + names[e] + '.npy', np.mean(max_Qs, 0))
-        np.save('results/lrQDecWin' + names[e] + '.npy', np.mean(lr, 0))
+        np.save(base_folder + 'RQ_' + windowed_name + 'Alpha_r.npy', np.convolve(np.mean(r, 0),
+                                                         np.ones(100) / 100.,
+                                                         'valid'))
+        np.save(base_folder + 'RQ_' + windowed_name + 'Alpha_maxQ.npy', np.mean(max_Qs, 0))
 
-    out = Parallel(n_jobs=-1)(delayed(
-        experiment)(0, '') for _ in xrange(n_experiment))
-    r = np.array([o[0] for o in out])
-    max_Qs = np.array([o[1] for o in out])
-    lr = np.array([o[2] for o in out])
+    # RQ with delta
+    for e in exp:
+        print 'RQ_Delta_' + names[e]
+        out = Parallel(n_jobs=-1)(delayed(
+            experiment)(e, 'Decay', True, False) for _ in xrange(n_experiment))
+        r = np.array([o[0] for o in out])
+        max_Qs = np.array([o[1] for o in out])
 
-    np.save('results/rQDecWinAlpha.npy', np.convolve(np.mean(r, 0),
-                                                     np.ones(100) / 100.,
-                                                     'valid'))
-    np.save('results/maxQDecWinAlpha.npy', np.mean(max_Qs, 0))
-    np.save('results/lrQDecWinAlpha.npy', np.mean(lr, 0))
+        np.save(base_folder + 'RQ_Delta_' + names[e] + '_r.npy', np.convolve(np.mean(r, 0),
+                                                                np.ones(100) / 100., 'valid'))
+        np.save(base_folder + 'RQ_Delta_' + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
