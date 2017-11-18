@@ -12,12 +12,8 @@ from mushroom.utils.variance_parameters import VarianceIncreasingParameter, \
     WindowedVarianceIncreasingParameter, VarianceDecreasingParameter
 from mushroom.utils.folder import mk_dir_recursive
 
-from multiprocessing import Lock
-from tqdm import tqdm
 
-
-def experiment(lock, decay_exp, alphaType, useDelta, windowed):
-    tqdm.set_lock(lock)
+def experiment(decay_exp, alphaType, useDelta, windowed):
     np.random.seed()
 
     # MDP
@@ -70,8 +66,6 @@ def experiment(lock, decay_exp, alphaType, useDelta, windowed):
 if __name__ == '__main__':
     n_experiment = 10000
 
-    write_lock = Lock()
-
     base_folder = '/tmp/mushroom/grid_world_hasselt/'
     mk_dir_recursive(base_folder)
 
@@ -85,7 +79,7 @@ if __name__ == '__main__':
         for e in exp:
             print 'RQ_' + windowed_name + names[e]
             out = Parallel(n_jobs=-1)(delayed(
-                experiment)(write_lock, e, 'Decay', False, windowed) for _ in xrange(n_experiment))
+                experiment)(e, 'Decay', False, windowed) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
 
@@ -96,7 +90,7 @@ if __name__ == '__main__':
         #RQ with alpha variance dependent
         print 'RQ_' + windowed_name + 'Alpha'
         out = Parallel(n_jobs=-1)(delayed(
-            experiment)(write_lock, 0, '', False, windowed) for _ in xrange(n_experiment))
+            experiment)(0, '', False, windowed) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
 
@@ -109,7 +103,7 @@ if __name__ == '__main__':
     for e in exp:
         print 'RQ_Delta_' + names[e]
         out = Parallel(n_jobs=-1)(delayed(
-            experiment)(write_lock, e, 'Decay', True, False) for _ in xrange(n_experiment))
+            experiment)(e, 'Decay', True, False) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
 
