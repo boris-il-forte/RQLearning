@@ -37,7 +37,7 @@ def experiment(decay_exp, alphaType, useDelta, windowed):
         algorithm_params = dict(learning_rate=alpha, delta=delta, off_policy=True)
     else:
         if windowed:
-            beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1., window=50)
+            beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=.5, window=50)
         else:
             beta = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1.)
 
