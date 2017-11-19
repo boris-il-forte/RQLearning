@@ -111,10 +111,13 @@ if __name__ == '__main__':
                 experiment)(e,t) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
+            del out
 
             np.save(base_folder + alg_name + '_' + names[e] + '_r.npy',
                     np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
             np.save(base_folder + alg_name + '_' + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+            del r
+            del max_Qs
 
         # Others algs
         for a in alg_list:
@@ -123,7 +126,10 @@ if __name__ == '__main__':
                 delayed(experiment_others)(a, e) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
+            del out
 
             np.save(base_folder + names[a] + '_' + names[e] + '_r.npy',
                     np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
             np.save(base_folder + names[a] + '_' + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+            del r
+            del max_Qs

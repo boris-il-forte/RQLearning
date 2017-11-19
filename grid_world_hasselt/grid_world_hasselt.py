@@ -82,10 +82,13 @@ if __name__ == '__main__':
                 experiment)(e, 'Decay', False, windowed) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
+            del out
 
             np.save(base_folder+'RQ_' + windowed_name + names[e] + '_r.npy', np.convolve(np.mean(r, 0),
                                                                 np.ones(100) / 100.,'valid'))
             np.save(base_folder + 'RQ_' + windowed_name + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+            del r
+            del max_Qs
 
         #RQ with alpha variance dependent
         print 'RQ_' + windowed_name + 'Alpha'
@@ -93,11 +96,14 @@ if __name__ == '__main__':
             experiment)(0, '', False, windowed) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
+        del out
 
         np.save(base_folder + 'RQ_' + windowed_name + 'Alpha_r.npy', np.convolve(np.mean(r, 0),
                                                          np.ones(100) / 100.,
                                                          'valid'))
         np.save(base_folder + 'RQ_' + windowed_name + 'Alpha_maxQ.npy', np.mean(max_Qs, 0))
+        del r
+        del max_Qs
 
     # RQ with delta
     for e in exp:
@@ -106,7 +112,10 @@ if __name__ == '__main__':
             experiment)(e, 'Decay', True, False) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
+        del out
 
         np.save(base_folder + 'RQ_Delta_' + names[e] + '_r.npy', np.convolve(np.mean(r, 0),
                                                                 np.ones(100) / 100., 'valid'))
         np.save(base_folder + 'RQ_Delta_' + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+        del r
+        del max_Qs

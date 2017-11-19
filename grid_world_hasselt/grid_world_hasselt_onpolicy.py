@@ -94,15 +94,21 @@ if __name__ == '__main__':
             experiment1)(e) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
+        del out
 
         np.save(base_folder + 'RQ_Win_onpolicy_'+ names[e] +'_r.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
         np.save(base_folder + 'RQ_Win_onpolicy_'+ names[e] +'_maxQ.npy', np.mean(max_Qs, 0))
+        del r
+        del max_Qs
 
         print 'SARSA'
         out = Parallel(n_jobs=-1)(delayed(
             experiment2)(e) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])
         max_Qs = np.array([o[1] for o in out])
+        del out
 
         np.save(base_folder + 'SARSA_' + names[e] + '_r.npy', np.convolve(np.mean(r, 0), np.ones(100) / 100., 'valid'))
         np.save(base_folder + 'SARSA_' + names[e] + '_maxQ.npy', np.mean(max_Qs, 0))
+        del r
+        del max_Qs

@@ -105,6 +105,7 @@ if __name__ == '__main__':
             out = Parallel(n_jobs=-1)(
                 delayed(experiment2)(a, e) for _ in xrange(n_experiment))
             Qs = np.array(out)
+            del out
 
             Qs = np.mean(Qs, 0)
 
@@ -122,6 +123,7 @@ if __name__ == '__main__':
             Qs = np.array([o[0] for o in out])
             lr_1 = np.array([o[1] for o in out])
             lr_5 = np.array([o[2] for o in out])
+            del out
 
             Qs = np.mean(Qs, 0)
             lr_1 = np.mean(lr_1, 0)

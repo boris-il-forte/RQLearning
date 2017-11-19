@@ -66,10 +66,13 @@ if __name__ == '__main__':
                 experiment)(e, False, t) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
+            del out
 
             np.save(base_folder + 'RQ_' + names[e] + '_tol_' + names[t] + '_r.npy', np.convolve(np.mean(r, 0),
                                                                                   np.ones(100) / 100., 'valid'))
             np.save(base_folder + 'RQ_' + names[e] + '_tol_' + names[t] + '_maxQ.npy', np.mean(max_Qs, 0))
+            del r
+            del max_Qs
 
         # RQ_Win
         tol = [.1, 1, 5, 10]
@@ -79,8 +82,10 @@ if __name__ == '__main__':
                 experiment)(e, True, t) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
+            del out
 
             np.save(base_folder + 'RQ_Win_' + names[e] + '_tol_' + names[t] + '_r.npy', np.convolve(np.mean(r, 0),
                                                                                   np.ones(100) / 100., 'valid'))
             np.save(base_folder + 'RQ_Win_' + names[e] + '_tol_' + names[t] + '_maxQ.npy', np.mean(max_Qs, 0))
-
+            del r
+            del max_Qs
