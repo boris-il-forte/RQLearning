@@ -7,8 +7,8 @@ c = ['blue', 'red', 'cyan', 'orange', 'lawngreen', 'green']
 exp = ['1', '08']
 step = 20
 
-#base_folder = 'results/'
-base_folder = '/tmp/mushroom/grid_world_hasselt/'
+base_folder = 'results/'
+#base_folder = '/tmp/mushroom/grid_world_hasselt/'
 
 for e in exp:
     plt.figure()
