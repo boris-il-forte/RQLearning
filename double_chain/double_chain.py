@@ -109,6 +109,7 @@ if __name__ == '__main__':
             Qs = np.mean(Qs, 0)
 
             np.save(base_folder + names[a] + '_' + names[e] + '_Q.npy', Qs)
+            del Qs
 
         for t in beta_types:
             alg_name = 'RQ'
@@ -129,3 +130,7 @@ if __name__ == '__main__':
             np.save(base_folder + alg_name + '_' + names[e] + '_Q.npy', Qs)
             np.save(base_folder + alg_name + '_' + names[e] + '_lr_1.npy', lr_1)
             np.save(base_folder + alg_name + '_' + names[e] + '_lr_5.npy', lr_5)
+
+            del Qs
+            del lr_1
+            del lr_5
