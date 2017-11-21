@@ -255,9 +255,9 @@
   \headerbox{Problem}{name=problem,column=0,row=0,span=3}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}\compresslist
- \item Learning is difficult in highly stochastic environments.
- \item Uncertainty in action-value function estimates propagates.
- \item Some algorithms face this problem focusing on the bias of the estimate of MEV
+ \item Learning is difficult in highly stochastic environments
+ \item Uncertainty in action-value function estimates propagates
+ \item Some algorithms face this problem focusing on the bias of the estimate
 \end{itemize}
   }
   

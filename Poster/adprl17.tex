@@ -252,24 +252,30 @@
 \newcommand{\HL}[1]{\textcolor{blue}{\textbf{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Problem}{name=problem,column=0,row=0,span=3}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{itemize}\compresslist
- \item Learning is difficult in highly stochastic environments.
- \item Uncertainty in action-value function estimates propagates.
- \item Some algorithms face this problem focusing on the bias of the estimate of MEV
-\end{itemize}
-  }
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Contributions}{name=contributions,column=3,row=0, span=3,bottomaligned=problem}{
+  \headerbox{Contributions}{name=contributions,column=3,row=0, span=3}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \vspace{-0.2cm}
 \begin{enumerate}\compresslist
-\item We propose the \HL{Weighted Estimator (WE)} to approximate MEV
-\item The approximation is done by a \HL{weighted average} of sample means
-\item We provide theoretical and empirical \HL{comparisons} of the \dbacks{performance} of WE and other MEV estimators
+\item Split the estimate in two components:
+  \begin{itemize}
+   \item The expected reward $\Rtilde(x,u)$
+   \item The expected next state value function $\Qtilde(x,u)$
+  \end{itemize}
+\item Use different learning rates for the two components
+\item We provide empirical results showing the effectiveness of our approach
+
 \end{enumerate}
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Problem}{name=problem,column=0,row=0,span=3, bottomaligned=contributions}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}\compresslist
+ \item Learning is difficult in highly stochastic environments
+ \item Uncertainty in action-value function estimates propagates
+ \item Some algorithms face this problem focusing on the bias of the estimate
+\end{itemize}
   }
   
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -282,150 +288,129 @@
 % }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Maximum Expected Value Estimation}{name=mev,column=0,span=4,row=1,below=contributions}{
+  \headerbox{RQ-Learning Algorithm}{name=rq,column=0,span=6,row=3,below=contributions}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \listhead{Idea}\\
 \begin{minipage}[t]{.45\textwidth}
+  Split the action-value function in two components:
   \begin{itemize}\compresslist
     \renewcommand{\CancelColor}{\color{red}}
-    \item Compute the \emph{Maximum Expected Value} 
-    \vspace{-.3cm}
-    $$\mu_{*}(X) = \max_{i} \mu_{i} = \max_{i} \int_{-\infty}^{+\infty}xf_i(x)~\mathrm{d}x$$
-    \item of independent random variables ($X = \{X_1, X_2, \ldots, X_M\}$) whose PDFs $f_i$ are unknown
-  \end{itemize}
-\end{minipage}\hspace{.5cm}
-\begin{minipage}[t]{.45\textwidth}
-  \begin{itemize}
-    \item \dbacks{Issue:} $\mu_{*}$ cannot be computed analytically
-    \item Given a set of noisy samples $S = \{S_1, \ldots, S_N \}$ 
-    retrieved by the unknown distributions of each $X_i$
-    
-    \vspace{-.3cm}
-    \begin{center}
-    \tikz[baseline]{
-	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G1) {
-	    $\mu_{*}(X) \approx \hat{\mu}_{*}(S)$
-	    };
-	  \node[fill=white,inner sep=2pt] at (G1.north west) {\color{blue800} \textbf{\small GOAL}};
-	}
-    \end{center}
+    \item $\Rtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]$
+    \item $\Qtilde(x,u)&=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]$
+    \item $Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u)$
   \end{itemize}
 \end{minipage}
-
-\vspace{.4cm}
-\begin{minipage}[t]{.36\textwidth}
-  \listhead{Na{\"i}ve approach}
-  \begin{itemize}
-    \item \emph{Maximum Estimator (ME)}
-    \item i.e., take the maximum of the sample means
-$$\hat{\mu}^{ME}(S) = \max_{i}\hat{\mu}_{i}(S) \approx \mu_{*}(X)$$
-  \item \dbacks{Positive} bias can cause problems in some applications (e.g., Q-Learning)
-  \end{itemize}
-\end{minipage}\hspace{.5cm}
-\begin{minipage}[t]{.59\textwidth}
-\listhead{Double Estimator (DE)} [Van Hasselt, 2010] \vspace{-.5cm}\\
-\begin{enumerate}\compresslist
-\item Split dataset S in two disjoint sets
-    \vspace{-.2cm}
-$$S^A = \lbrace S^A_{1}, ..., S^A_{N} \rbrace \text{\hspace{.3cm}and\hspace{.3cm}} S^B = \lbrace S^B_{1}, ..., S^B_{N} \rbrace$$
-\item \vspace{-.2cm}Estimate the maximum index in each set
-    \vspace{-.2cm}
-$$a^* = \argmax_{i}\hat\mu^{ME}_{i}(S^A) \text{\hspace{.3cm}and\hspace{.3cm}} b^* = \argmax_{i}\hat\mu^{ME}_{i}(S^B)$$
-\item \vspace{-.2cm}Take the average maximum value
-    \vspace{-.2cm}
-$$\hat{\mu}^{DE}(S) = \frac{\hat{\mu}_{b^*}^{ME}(S^A) + \hat{\mu}_{a^*}^{ME}(S^B)}{2} \approx \mu_{*}(X)$$
-\end{enumerate}
-\vspace{-.2cm}
+%\hspace{.5cm}
+}
+% \begin{minipage}[t]{.45\textwidth}
+%   \begin{itemize}
+%     \item \dbacks{Issue:} $\mu_{*}$ cannot be computed analytically
+%     \item Given a set of noisy samples $S = \{S_1, \ldots, S_N \}$ 
+%     retrieved by the unknown distributions of each $X_i$
+%     
+%     \vspace{-.3cm}
+%     \begin{center}
+%     \tikz[baseline]{
+% 	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G1) {
+% 	    $\mu_{*}(X) \approx \hat{\mu}_{*}(S)$
+% 	    };
+% 	  \node[fill=white,inner sep=2pt] at (G1.north west) {\color{blue800} \textbf{\small GOAL}};
+% 	}
+%     \end{center}
+%   \end{itemize}
+% \end{minipage}
+% 
+% \vspace{.4cm}
+% \begin{minipage}[t]{.36\textwidth}
+%   \listhead{Na{\"i}ve approach}
+%   \begin{itemize}
+%     \item \emph{Maximum Estimator (ME)}
+%     \item i.e., take the maximum of the sample means
+% $$\hat{\mu}^{ME}(S) = \max_{i}\hat{\mu}_{i}(S) \approx \mu_{*}(X)$$
+%   \item \dbacks{Positive} bias can cause problems in some applications (e.g., Q-Learning)
+%   \end{itemize}
+% \end{minipage}\hspace{.5cm}
+% \begin{minipage}[t]{.59\textwidth}
+% \listhead{Double Estimator (DE)} [Van Hasselt, 2010] \vspace{-.5cm}\\
+% \begin{enumerate}\compresslist
+% \item Split dataset S in two disjoint sets
+%     \vspace{-.2cm}
+% $$S^A = \lbrace S^A_{1}, ..., S^A_{N} \rbrace \text{\hspace{.3cm}and\hspace{.3cm}} S^B = \lbrace S^B_{1}, ..., S^B_{N} \rbrace$$
+% \item \vspace{-.2cm}Estimate the maximum index in each set
+%     \vspace{-.2cm}
+% $$a^* = \argmax_{i}\hat\mu^{ME}_{i}(S^A) \text{\hspace{.3cm}and\hspace{.3cm}} b^* = \argmax_{i}\hat\mu^{ME}_{i}(S^B)$$
+% \item \vspace{-.2cm}Take the average maximum value
+%     \vspace{-.2cm}
+% $$\hat{\mu}^{DE}(S) = \frac{\hat{\mu}_{b^*}^{ME}(S^A) + \hat{\mu}_{a^*}^{ME}(S^B)}{2} \approx \mu_{*}(X)$$
+% \end{enumerate}
+% \vspace{-.2cm}
+% % \begin{itemize}
+% \hspace{.2cm} \dbacks{Negative} bias may solve ME issues in many applications
+% % \end{itemize}
+% \end{minipage}
+% % \hfill
+% % \begin{minipage}[t]{.55\textwidth}
+% \vspace{-.2cm}
+% \begin{center}
+% % \begin{minipage}{0.95\textwidth}
+% \begin{tcolorbox}[width=0.95\textwidth,colback=white,colframe=blue800]    
+% \begin{center}
+% \color{blue800}
+%  \listhead{Weighted Estimator (WE)}
+% \end{center}
+%     \vspace{-.2cm}
+%     \begin{center}
+%     \tikz[baseline]{
+% 	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G2) {
+% 	    $\hat{\mu}^{WE}(S) = \sum_{i=1}^M \hat\mu_i(S) w_i^S$
+% 	    };
+% 	  \node[text width=6cm, xshift=5cm] at (G2.east) {\color{blue800}Weights the sample means by the probability of being the maximum};
+% 	  \node[fill=white,inner sep=2pt] at (G2.south west) {\color{blue800} \textbf{\small WE}};
+% 	  \node[below right=0cm and -0.7cm of G2] (G3) {
+% 	  $w_i^S = P\left(\hat\mu_i(S) = \max_j \hat\mu_j(S)\right) = \int_{-\infty}^{+\infty} {\color{red}\overbrace{\hat{f}_i^S(x)}^{\mathclap{\textit{PDF unknown}}}} \prod_{j\neq i} {\color{red}\underbrace{\hat{F}_j^S(x)}_{\textit{CDF unknown}}}~\mathrm{d}x$
+% 	  };
+% 	}
+%     \end{center}
+%     
+% \vspace{-.3cm}
 % \begin{itemize}
-\hspace{.2cm} \dbacks{Negative} bias may solve ME issues in many applications
+% \item As the number of samples increases, by the \HL{central limit theorem}:
+% \vspace{-.2cm}
+% $$\hat\mu_i(S)\sim\mathcal{N}\bigg(\underbrace{\mu_i}_{\textit{sample mean}},\frac{\overbrace{\sigma_i^2}^{\textit{sample variance}}}{|S_i|}\bigg)\text{ \hspace{.4cm} i.e., \hspace{.4cm}}\hat{f}_i^S = \textit{normal distribution}$$
 % \end{itemize}
-\end{minipage}
-% \hfill
-% \begin{minipage}[t]{.55\textwidth}
-\vspace{-.2cm}
-\begin{center}
-% \begin{minipage}{0.95\textwidth}
-\begin{tcolorbox}[width=0.95\textwidth,colback=white,colframe=blue800]    
-\begin{center}
-\color{blue800}
- \listhead{Weighted Estimator (WE)}
-\end{center}
-    \vspace{-.2cm}
-    \begin{center}
-    \tikz[baseline]{
-	  \node[draw=blue800, line width=0.6mm, inner sep=8pt] (G2) {
-	    $\hat{\mu}^{WE}(S) = \sum_{i=1}^M \hat\mu_i(S) w_i^S$
-	    };
-	  \node[text width=6cm, xshift=5cm] at (G2.east) {\color{blue800}Weights the sample means by the probability of being the maximum};
-	  \node[fill=white,inner sep=2pt] at (G2.south west) {\color{blue800} \textbf{\small WE}};
-	  \node[below right=0cm and -0.7cm of G2] (G3) {
-	  $w_i^S = P\left(\hat\mu_i(S) = \max_j \hat\mu_j(S)\right) = \int_{-\infty}^{+\infty} {\color{red}\overbrace{\hat{f}_i^S(x)}^{\mathclap{\textit{PDF unknown}}}} \prod_{j\neq i} {\color{red}\underbrace{\hat{F}_j^S(x)}_{\textit{CDF unknown}}}~\mathrm{d}x$
-	  };
-	}
-    \end{center}
-    
-\vspace{-.3cm}
-\begin{itemize}
-\item As the number of samples increases, by the \HL{central limit theorem}:
-\vspace{-.2cm}
-$$\hat\mu_i(S)\sim\mathcal{N}\bigg(\underbrace{\mu_i}_{\textit{sample mean}},\frac{\overbrace{\sigma_i^2}^{\textit{sample variance}}}{|S_i|}\bigg)\text{ \hspace{.4cm} i.e., \hspace{.4cm}}\hat{f}_i^S = \textit{normal distribution}$$
-\end{itemize}
+% % \end{minipage}
+% \end{tcolorbox}  
+% \end{center}
 % \end{minipage}
-\end{tcolorbox}  
-\end{center}
-% \end{minipage}
-}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Theoretical Results}{name=thres,column=4,span=2,row=1,below=contributions,bottomaligned=mev}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\listhead{Bias and variance of the estimators}
-
-% \begin{minipage}{0.4\textwidth}
-%  $$\mathrm{Bias}\left(\hat{\mu}^{ME}\right) \leq \sqrt{\frac{M-1}{M}\sum_{i=1}^M \frac{\sigma_i^2}{|S_i|}}$$
- $$\mathrm{Bias}\left(\hat{\mu}^{DE}\right) \geq -\frac{1}{2}\left(\sqrt{\sum_{i=1}^M \frac{\sigma_i^2}{|S^A_i|}} + \sqrt{\sum_{i=1}^M \frac{\sigma_i^2}{|S^B_i|}}\right)$$
- $$\mathrm{Bias}(\hat{\mu}^{WE}) \leq \mathrm{Bias}(\hat{\mu}^{ME}) \leq \sqrt{\frac{M-1}{M}\sum_{i=1}^M \frac{\sigma_i^2}{|S_i|}}$$
-$$\mathrm{Var}\left(\hat{\mu}^{ME, DE, WE}\right) \leq \sum_{i=1}^M \frac{\sigma^2_i}{|S_i|}.$$
-% \end{minipage}
-% \begin{minipage}{.59\textwidth}
-\begin{center}
-{
-  \renewcommand{\figurewidth}{5cm}
-  \renewcommand{\figureheight}{4cm}
-  \input{./tests/experiments/absolute_bias.tex}\\[.4cm]
-  \input{./tests/experiments/variance.tex}
-}
-\end{center}
-% \end{minipage}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Empirical Results}{name=emp,column=0,row=3,span=6,below=thres}{
+\headerbox{Empirical Results}{name=emp,column=0,row=3,span=6,below=rq}{
 % \headerbox{Finite Sample Analysis}{name=settings,column=2,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{minipage}[t]{.49\textwidth}
- \listhead{Multi-Armed Bandits}
- 
- \centering \textbf{Internet Ads}\\
-   \input{./tests/experiments/internetAds-impressions.tex}\hspace{.1cm}
-   \input{./tests/experiments/internetAds-actions.tex}\hspace{.1cm} 
-   \input{./tests/experiments/internetAds-probs.tex}
-   
- \centering \textbf{Sponsored Search Auctions}\\
-   \input{./tests/experiments/sponsoredSearch.tex}
-\end{minipage}\hfill
-\begin{minipage}[t]{.525\textwidth}
- \listhead{Markov Decision Processes}
-
- \centering \textbf{Grid World}\\
-   \input{./tests/experiments/gridexp08-ng.tex}
-   \input{./tests/experiments/gridexp08-g.tex}
-   \input{./tests/experiments/gridexp08-g-sigma1.tex}
-
- \centering \textbf{Forex}\\
-   \vspace{.1cm}
-   \input{./tests/experiments/forexTrain.tex}\hspace{.2cm}
-   \input{./tests/experiments/forexTest.tex}
+%  \listhead{Multi-Armed Bandits}
+%  
+%  \centering \textbf{Internet Ads}\\
+%    \input{./tests/experiments/internetAds-impressions.tex}\hspace{.1cm}
+%    \input{./tests/experiments/internetAds-actions.tex}\hspace{.1cm} 
+%    \input{./tests/experiments/internetAds-probs.tex}
+%    
+%  \centering \textbf{Sponsored Search Auctions}\\
+%    \input{./tests/experiments/sponsoredSearch.tex}
+% \end{minipage}\hfill
+% \begin{minipage}[t]{.525\textwidth}
+%  \listhead{Markov Decision Processes}
+% 
+%  \centering \textbf{Grid World}\\
+%    \input{./tests/experiments/gridexp08-ng.tex}
+%    \input{./tests/experiments/gridexp08-g.tex}
+%    \input{./tests/experiments/gridexp08-g-sigma1.tex}
+% 
+%  \centering \textbf{Forex}\\
+%    \vspace{.1cm}
+%    \input{./tests/experiments/forexTrain.tex}\hspace{.2cm}
+%    \input{./tests/experiments/forexTest.tex}
 \end{minipage}
 }
 % 
