@@ -16,8 +16,8 @@ exp_legend = [exp_legend1, exp_legend2]
 step = 20
 #step = 1
 
-base_folder = '/tmp/mushroom/grid_world_hasselt/'
-#base_folder = 'results/'
+#base_folder = '/tmp/mushroom/grid_world_hasselt/'
+base_folder = 'results/'
 
 for k, a in enumerate(algs):
     plt.figure()

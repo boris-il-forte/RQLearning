@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 #from matplotlib2tikz import save as tikz_save
 
-alg = ['RQ', 'RQ_Win', 'RQ_Delta']
+alg = ['RQ_Delta', 'RQ', 'RQ_Win']
 c = ['brown', 'lawngreen', 'green']
 s = ['-', '-', '--']
 exp = ['1', '08']

@@ -81,7 +81,7 @@ def experiment2(decay_exp):
     return reward, max_Qs
 
 if __name__ == '__main__':
-    n_experiment = 10000
+    n_experiment = 1000
 
     base_folder = '/tmp/mushroom/grid_world_hasselt/'
     mk_dir_recursive(base_folder)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     names = {1: '1', 0.8: '08'}
     exp = [1, 0.8]
     for e in exp:
-        print 'Off-policy RQ_Win'
+        print 'On-policy RQ_Win'
         out = Parallel(n_jobs=-1)(delayed(
             experiment1)(e) for _ in xrange(n_experiment))
         r = np.array([o[0] for o in out])

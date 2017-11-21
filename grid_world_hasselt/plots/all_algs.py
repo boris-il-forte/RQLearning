@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 #from matplotlib2tikz import save as tikz_save
 
-alg = ['Q', 'DQ', 'WQ', 'SPQ', 'RQ', 'RQ_Win']
+alg = ['Q', 'DQ', 'WQ', 'SPQ', 'RQ']
 c = ['blue', 'red', 'cyan', 'orange', 'lawngreen', 'green']
 exp = ['1', '08']
 step = 20

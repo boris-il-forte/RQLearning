@@ -8,8 +8,8 @@ c = ['lawngreen', 'green']
 exp = ['1', '51']
 step = 40
 
-base_folder = '/tmp/mushroom/double_chain/'
-#base_folder = 'results/'
+#base_folder = '/tmp/mushroom/double_chain/'
+base_folder = 'results/'
 
 for e in exp:
     plt.figure()

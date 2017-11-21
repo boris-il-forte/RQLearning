@@ -2,8 +2,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 #from matplotlib2tikz import save as tikz_save
 
-base_folder = '/tmp/mushroom/double_chain/'
-#base_folder = 'results/'
+#base_folder = '/tmp/mushroom/double_chain/'
+base_folder = 'results/'
 
 alg = ['Q', 'RQ_Win']
 alg_label = ['Q', 'RQWin']

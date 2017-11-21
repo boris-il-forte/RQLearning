@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 
 from mushroom.solvers.dynamic_programming import value_iteration
 
-base_folder = '/tmp/mushroom/double_chain/'
-#base_folder = 'results/'
+#base_folder = '/tmp/mushroom/double_chain/'
+base_folder = 'results/'
 
 alg = ['Q', 'DQ', 'WQ', 'SPQ', 'RQ', 'RQ_Win']
 c = ['blue', 'red', 'cyan', 'orange', 'lawngreen', 'green']

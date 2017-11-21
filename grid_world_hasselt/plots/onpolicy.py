@@ -8,7 +8,8 @@ exp = ['1', '08']
 style = [None, '--']
 step = 20
 
-base_folder = '/tmp/mushroom/grid_world_hasselt/'
+#base_folder = '/tmp/mushroom/grid_world_hasselt/'
+base_folder = 'results/'
 
 for e in exp:
     plt.figure()
