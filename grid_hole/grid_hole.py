@@ -28,9 +28,9 @@ def experiment(decay_exp, betaType):
     alpha = ExponentialDecayParameter(value=1, decay_exp=decay_exp, size=mdp.info.size)
 
     if betaType == 'Win':
-        beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=0.5, window=50)
+        beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=.1, window=50)
     else:
-        beta = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=0.5)
+        beta = VarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1.)
 
     algorithm_params = dict(learning_rate=alpha, beta=beta, off_policy=True)
     fit_params = dict()
