@@ -333,7 +333,22 @@
 \end{center}
 \end{minipage}% <-- Don't forget this one
 \\
+\vspace{.15cm}
 \begin{center}
+  \tikz[baseline]
+  {
+    \node[] (Q1) {\color{blue} \Large \textbf{Q-Learning:}};
+    \node[right=0.5cm of Q1] (Q2) {\Large $\beta_t=\alpha_t$};
+    
+    \node[right=1.5cm of Q2] (RQ1) {\color{lightgreen} \Large \textbf{RQ-Learning:}};
+    \node[right=0.5cm of RQ1] (RQ2) {\Large $\beta_t\neq\alpha_t$};
+    
+    \node[right=1.5cm of RQ2] (RQD1) {\color{newbrown} \Large \textbf{$\text{RQ}_\delta$-Learning:}};
+    \node[right=0.5cm of RQD1] (RQD2) {\Large $\beta_t=\alpha_t\delta_t$};
+  } 
+\end{center}
+\begin{center}
+\vspace{.1cm}
  \textbf{Exploit the \HL{variance of estimation} to set the learning rate}\\
 \end{center}
 \begin{minipage}[t]{\textwidth}
@@ -368,23 +383,6 @@
    \end{minipage}		
   \end{enumerate}
 \end{minipage} 
-\vspace{0.5cm}
-\\
-\begin{minipage}[t]{\textwidth}
-  \begin{center}
-    \tikz[baseline]
-    {
-      \node[] (Q1) {\color{blue} \Large \textbf{Q-Learning:}};
-      \node[right=0.5cm of Q1] (Q2) {\Large $\beta_t=\alpha_t$};
-      
-      \node[right=1.5cm of Q2] (RQ1) {\color{lightgreen} \Large \textbf{RQ-Learning:}};
-      \node[right=0.5cm of RQ1] (RQ2) {\Large $\beta_t\neq\alpha_t$};
-      
-      \node[right=1.5cm of RQ2] (RQD1) {\color{newbrown} \Large \textbf{$\text{RQ}_\delta$-Learning:}};
-      \node[right=0.5cm of RQD1] (RQD2) {\Large $\beta_t=\alpha_t\delta_t$};
-    } 
-  \end{center}
-\end{minipage}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
