@@ -258,7 +258,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \vspace{-0.2cm}
 \begin{enumerate}\compresslist
-\item Split the estimate in \textbf{two components}:
+\item Split the action-value function estimate \textbf{two components}:
   \begin{itemize}
    \item The expected reward $\Rtilde(x,u)$
    \item The expected next state value function $\Qtilde(x,u)$
@@ -375,7 +375,7 @@
     \tikz[baseline]
     {
       \node[] (Q1) {\color{blue} \Large \textbf{Q-Learning:}};
-      \node[right=0.5cm of Q1] (Q2) {\Large $\alpha_t=\beta_t$};
+      \node[right=0.5cm of Q1] (Q2) {\Large $\beta_t=\alpha_t$};
       
       \node[right=1.5cm of Q2] (RQ1) {\color{lightgreen} \Large \textbf{RQ-Learning:}};
       \node[right=0.5cm of RQ1] (RQ2) {\Large $\beta_t\neq\alpha_t$};
