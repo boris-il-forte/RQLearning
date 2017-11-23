@@ -94,6 +94,9 @@
 \definecolor{blue900}{HTML}{0D47A1}
 \definecolor{blue800}{HTML}{1565C0}
 
+\definecolor{lightgreen}{rgb}{0.486,0.988,0}
+\definecolor{newbrown}{rgb}{0.647,0.164,0.164}
+
 \newcommand{\rcol}[1]{\textcolor{red}{\textit{#1}}}
 \newcommand{\gcol}[1]{\textcolor{vert3}{\textit{#1}}}
 \newcommand{\bcol}[1]{\textcolor{blue}{\textit{#1}}}
@@ -290,16 +293,22 @@
   \headerbox{RQ-Learning Algorithm}{name=rq,column=0,span=6,row=3,below=contributions}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\hspace{.5cm}
-\hfill
-\begin{minipage}[t]{.47\textwidth}
-  \listhead{Idea}\\
-  Exploiting:
-  \begin{itemize}
-   \item The structure of the Bellman update
-   \item The uncertainty of the estimation
-  \end{itemize}
-  
-  \listhead{Approach}\\
+\begin{center}
+ \listhead{\Large Idea}\\
+\end{center}
+  To improve estimates, exploit:
+\begin{center}
+  \tikz[baseline]
+  {
+    \node[] (G1) {\color{blue800} \Large Structure of the Bellman update};
+    \node[right=4cm of G1] (G2) {\color{red} \Large Uncertainty of the estimation};
+  } 
+\end{center}
+   
+\begin{center}
+ \listhead{\Large Approach}\\
+\end{center}
+\begin{minipage}[t]{.4\textwidth}
   Split the action-value function in two components:
   \begin{itemize}\compresslist
     \renewcommand{\CancelColor}{\color{red}}
@@ -307,40 +316,65 @@
     \item $\Qtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]$
     \item $Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u)$
   \end{itemize}
+  \vspace{0.5cm}
+  \\
   Compute the update as follows:
   \begin{itemize}
     \item $\Rtilde_{t+1}(x,u) \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u))$
     \item $\Qtilde_{t+1}(x,u) \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))$
   \end{itemize}
 \end{minipage}% <-- Don't forget this one
-%
-\hfill
-%
-\begin{minipage}[t]{.47\textwidth}
-  \listhead{Learning rate on the variance of the estimation}\\
+\begin{minipage}[t]{.6\textwidth}
   Exploit the variance of estimation to set the learning rate:
-    \begin{enumerate}
+   \begin{enumerate}
    \item Estimate the variance of the estimator $\Qtilde$, using the sample variance of the target:\\
+    \tikz[baseline]
+    {
+      \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
+    }
+    \tikz[baseline]
+    {
+      \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
+    }
+	  
    $\mathrm{Var}\left[\Qtilde\right]=S_t^2\omega_t$ \\
    $\omega_{t+1}=(1-\beta_t)^2\omega_t+\beta_t^2$ \\
    
    \item Compute the learning rate
       \begin{itemize}
 	\item Select a $\beta$ that decreases when the estimate precision increases:\\
-	$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$
+	\begin{center}
+	 \tikz[baseline]
+	  {
+	    \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
+	  }
+	\end{center}
+	
 	\item Or, select a $\delta$ that increases when the estimate precision increases: \\
-	$\delta_t=e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}$
+	\begin{center}
+	 \tikz[baseline]
+	 {
+	    \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\delta_t=e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}$};
+	 }
+	\end{center}
       \end{itemize}
   \end{enumerate}
-\end{minipage} 
-
+\end{minipage} \vspace{0.5cm}
+\\
 \begin{minipage}[t]{\textwidth}
-  Different effects on the choiche of $\alpha$ and $\beta$:\\
-  \begin{description}
-    \item Q-Learning $\alpha_t=\beta_t$
-    \item $\text{RQ}_\delta$-Learning $\beta_t=\alpha_t\delta_t$
-    \item RQ-Learning $\beta_t\neq\alpha_t$
-  \end{description}
+  \begin{center}
+    \tikz[baseline]
+    {
+      \node[] (Q1) {\color{blue} \Large Q-Learning:};
+      \node[right=0.5cm of Q1] (Q2) {\Large $\alpha_t=\beta_t$};
+      
+      \node[right=1.5cm of Q2] (RQ1) {\color{lightgreen} \Large RQ-Learning:};
+      \node[right=0.5cm of RQ1] (RQ2) {\Large $\beta_t\neq\alpha_t$};
+      
+      \node[right=1.5cm of RQ2] (RQD1) {\color{newbrown} \Large $\text{RQ}_\delta$-Learning:};
+      \node[right=0.5cm of RQD1] (RQD2) {\Large $\beta_t=\alpha_t\delta_t$};
+    } 
+  \end{center}
 \end{minipage}
 }
 
@@ -349,40 +383,127 @@
 % \headerbox{Finite Sample Analysis}{name=settings,column=2,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\listhead{Noisy Gridworld}\\
-\begin{minipage}{0.5\textwidth}
-\includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs1.pdf}
-\includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs08.pdf}
-\end{minipage}%
-%
-\hfill
-%
-\begin{minipage}{0.5\textwidth}
-\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs1.pdf}
-\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs08.pdf}
+\begin{minipage}{0.6\textwidth}
+  \begin{center}
+    \listhead{Noisy Gridworld}\\
+    \vspace{1cm}
+    \begin{minipage}{0.5\textwidth}
+      \includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs1.pdf}
+      \includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs08.pdf}
+    \end{minipage}%
+    %
+    \hfill
+    %
+    \begin{minipage}{0.5\textwidth}
+	\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs1.pdf}
+	\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs08.pdf}
+    \end{minipage}
+  \end{center}
 \end{minipage}
+\begin{minipage}{0.45\textwidth}
+  \begin{center}
+    \listhead{Gridworld with Holes}\\
+    \vspace{1cm}
+    \begin{minipage}{0.5\textwidth}
+      \includegraphics[scale=0.50]{./imgs/gridHole/grid_hole.pdf}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}{0.4\textwidth}
+      \includegraphics[scale=0.35]{./imgs/gridHole/gridhole.pdf}
+    \end{minipage}
+  \end{center}
+\end{minipage}  
+\begin{center}
+  \listhead{Double chain}\\
+  \vspace{0.75cm}
+  \begin{minipage}{0.33\textwidth}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/v1-1.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/v1-51.pdf}\\
+    \includegraphics[scale=0.55]{./imgs/doubleChain/v5-1.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/v5-51.pdf}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.33\textwidth}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-1.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-51.pdf}\\
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-1.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-51.pdf}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.33\textwidth}
+    \begin{tikzpicture}[scale=0.11]
+      \tikzstyle{every node}+=[inner sep=0pt, style={scale=0.65}]
+      \draw [black] (10.4,-17.1) circle (3);
+      \draw (10.4,-17.1) node {$1$};
+      \draw [black] (20.1,-6.5) circle (3);
+      \draw (20.1,-6.5) node {$2$};
+      \draw [black] (34.4,-6.3) circle (3);
+      \draw (34.4,-6.3) node {$3$};
+      \draw [black] (48.2,-6.3) circle (3);
+      \draw (48.2,-6.3) node {$4$};
+      \draw [black] (61.6,-6.3) circle (3);
+      \draw (61.6,-6.3) node {$5$};
+      \draw [black] (19.4,-26) circle (3);
+      \draw (19.4,-26) node {$6$};
+      \draw [black] (34.4,-26) circle (3);
+      \draw (34.4,-26) node {$7$};
+      \draw [black] (48.2,-26) circle (3);
+      \draw (48.2,-26) node {$8$};
+      \draw [black] (61.6,-26) circle (3);
+      \draw (61.6,-26) node {$9$};
+      \draw [black] (10.195,-14.122) arc (-186.01298:-258.90993:8.628);
+      \fill [black] (17.12,-6.56) -- (16.23,-6.22) -- (16.43,-7.2);
+      \draw (11.87,-7.74) node [left] {$r(1)=0$};
+      \draw [black] (16.449,-26.391) arc (-94.70547:-174.65436:7.013);
+      \fill [black] (16.45,-26.39) -- (15.69,-25.83) -- (15.61,-26.82);
+      \draw (8.26,-24.87) node [below] {$r(2)=2$};
+      \draw [black] (13.375,-17.324) arc (75.15536:15.48481:8.153);
+      \fill [black] (13.37,-17.32) -- (14.02,-18.01) -- (14.28,-17.05);
+      \draw [black] (19.363,-9.401) arc (-21.12574:-63.79717:12.497);
+      \fill [black] (13.22,-16.11) -- (14.16,-16.2) -- (13.72,-15.31);
+      \draw [black] (32.152,-8.285) arc (-50.72552:-80.81899:39.653);
+      \fill [black] (13.38,-16.73) -- (14.25,-17.1) -- (14.09,-16.11);
+      \draw [black] (45.468,-7.539) arc (-66.30261:-81.8066:123.727);
+      \fill [black] (13.37,-16.71) -- (14.24,-17.09) -- (14.09,-16.1);
+      \draw [black] (58.752,-7.242) arc (-72.09117:-84.0864:221.864);
+      \fill [black] (13.39,-16.81) -- (14.23,-17.23) -- (14.13,-16.23);
+      \draw [black] (13.385,-17.393) arc (82.46666:56.84042:44.631);
+      \fill [black] (13.39,-17.39) -- (14.11,-17.99) -- (14.24,-17);
+      \draw [black] (13.394,-17.292) arc (85.54014:67.96192:107.716);
+      \fill [black] (13.39,-17.29) -- (14.15,-17.85) -- (14.23,-16.86);
+      \draw [black] (13.398,-17.219) arc (87.26949:73.00835:185.371);
+      \fill [black] (13.4,-17.22) -- (14.17,-17.76) -- (14.22,-16.76);
+      \draw (38.03,-18.9) node [above] {$r(2)=2$};
+      \draw [black] (22.4,-26) -- (31.4,-26);
+      \fill [black] (31.4,-26) -- (30.6,-25.5) -- (30.6,-26.5);
+      \draw (26.9,-26.5) node [below] {$r(1)=0$};
+      \draw [black] (37.4,-26) -- (45.2,-26);
+      \fill [black] (45.2,-26) -- (44.4,-25.5) -- (44.4,-26.5);
+      \draw (41.3,-26.5) node [below] {$r(1)=0$};
+      \draw [black] (51.2,-26) -- (58.6,-26);
+      \fill [black] (58.6,-26) -- (57.8,-25.5) -- (57.8,-26.5);
+      \draw (54.9,-26.5) node [below] {$r(1)=0$};
+      \draw [black] (51.2,-6.3) -- (58.6,-6.3);
+      \fill [black] (58.6,-6.3) -- (57.8,-5.8) -- (57.8,-6.8);
+      \draw (54.9,-5.8) node [above] {$r(1)=0$};
+      \draw [black] (37.4,-6.3) -- (45.2,-6.3);
+      \fill [black] (45.2,-6.3) -- (44.4,-5.8) -- (44.4,-6.8);
+      \draw (41.3,-5.8) node [above] {$r(1)=0$};
+      \draw [black] (23.1,-6.46) -- (31.4,-6.34);
+      \fill [black] (31.4,-6.34) -- (30.59,-5.85) -- (30.61,-6.85);
+      \draw (27.23,-5.85) node [above] {$r(1)=0$};
+      \draw [black] (64.28,-4.977) arc (144:-144:2.25);
+      \draw (68.85,-6.3) node [right] {$r(1)=10$};
+      \fill [black] (64.28,-7.62) -- (64.63,-8.5) -- (65.22,-7.69);
+      \draw [black] (64.117,-24.39) arc (150.34019:-137.65981:2.25);
+      \draw (68.96,-25.15) node [right] {$r(1)=5$};
+      \fill [black] (64.41,-27.02) -- (64.86,-27.85) -- (65.35,-26.98);
+    \end{tikzpicture}
+  \end{minipage}
 
-\listhead{Double chain}\\
-\begin{minipage}{0.5\textwidth}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/v1-1.pdf}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/v1-51.pdf}\\
-  \includegraphics[scale=0.55]{./imgs/doubleChain/v5-1.pdf}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/v5-51.pdf}
-\end{minipage} %
-%
-\hfill
-%
-\begin{minipage}{0.5\textwidth}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-1.pdf}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-51.pdf}\\
-  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-1.pdf}
-  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-51.pdf}
-\end{minipage}
+\end{center}
 
-\listhead{Gridworld with Holes}\\
-{\centering
-\includegraphics[scale=0.55]{./imgs/gridHole/grid_hole.pdf}
-}
+
 }
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
