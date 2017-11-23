@@ -9,8 +9,8 @@ exp = ['1', '08']
 step = 20
 
 
-base_folder = '/tmp/mushroom/grid_hole/'
-#base_folder = 'results/'
+#base_folder = '/tmp/mushroom/grid_hole/'
+base_folder = 'results/'
 
 l = list()
 
@@ -32,7 +32,7 @@ for idx, e in enumerate(exp):
             labelbottom='off')
         q = np.load(base_folder + a + '_' + e + '_maxQ.npy')
         plt.subplot(2, 2, 3 + idx)
-        if a == 'QDecWin':
+        if a == 'RQ_Win':
             plt.plot(q[::step], c[i], linewidth=3, linestyle='--')
         else:
             plt.plot(q[::step], c[i], linewidth=3)
