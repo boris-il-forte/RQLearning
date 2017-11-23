@@ -25,10 +25,8 @@
 \usepackage{cancel}
 \usepackage{paralist}
 \usepackage{subfigure}
-
-% \usepackage[centering,includeheadfoot,margin=2cm]{geometry}
-
 \usepackage{multicol}
+\usepackage[inline]{enumitem}
 
 % \usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
 % % \usepackage{algorithmicx}
@@ -292,9 +290,18 @@
   \headerbox{RQ-Learning Algorithm}{name=rq,column=0,span=6,row=3,below=contributions}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\hspace{.5cm}
-\hfill
-\begin{minipage}[t]{.47\textwidth}
-  \listhead{Idea}\\
+\begin{center}
+ \listhead{Idea}\\
+\end{center}
+  To improve estimates, exploit:
+  \begin{itemize}
+   \item The structure of the Bellman update
+   \item The uncertainty of the estimation
+  \end{itemize}
+\begin{center}
+ \listhead{Approach}\\
+\end{center}
+\begin{minipage}[t]{.4\textwidth}
   Split the action-value function in two components:
   \begin{itemize}\compresslist
     \renewcommand{\CancelColor}{\color{red}}
@@ -307,21 +314,10 @@
     \item $\Rtilde_{t+1}(x,u) \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u))$
     \item $\Qtilde_{t+1}(x,u) \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))$
   \end{itemize}
-  
-  Different effects on the choiche of $\alpha$ and $\beta$:
-  \begin{description}
-    \item[Q-Learning] $\alpha_t=\beta_t$
-    \item[$\text{RQ}_\delta$-Learning] $\beta_t=\alpha_t\delta_t$
-    \item[RQ-Learning] $\beta_t\neq\alpha_t$
-  \end{description}
 \end{minipage}% <-- Don't forget this one
-%
-\hfill
-%
-\begin{minipage}[t]{.47\textwidth}
-  \listhead{Learning rate on the variance of the estimation}\\
+\begin{minipage}[t]{.6\textwidth}
   Exploit the variance of estimation to set the learning rate:
-    \begin{enumerate}
+   \begin{enumerate}
    \item Estimate the variance of the estimator $\Qtilde$, using the sample variance of the target:\\
    $\mathrm{Var}\left[\Qtilde\right]=S_t^2\omega_t$ \\
    $\omega_{t+1}=(1-\beta_t)^2\omega_t+\beta_t^2$ \\
@@ -334,9 +330,19 @@
 	$\delta_t=e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}$
       \end{itemize}
   \end{enumerate}
+\end{minipage} 
 
+\begin{center}
+ \listhead{Algorithms}\\
+\end{center}
+\begin{minipage}[t]{\textwidth}
+  Different effects on the choiche of $\alpha$ and $\beta$:\\
+  \begin{description}
+    \item [Q-Learning] $\alpha_t=\beta_t$
+    \item [$\text{RQ}_\delta$-Learning] $\beta_t=\alpha_t\delta_t$
+    \item [RQ-Learning] $\beta_t\neq\alpha_t$
+  \end{description}
 \end{minipage}
-\hfill
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

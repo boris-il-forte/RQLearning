@@ -25,10 +25,8 @@
 \usepackage{cancel}
 \usepackage{paralist}
 \usepackage{subfigure}
-
-% \usepackage[centering,includeheadfoot,margin=2cm]{geometry}
-
 \usepackage{multicol}
+\usepackage[inline]{enumitem}
 
 % \usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
 % % \usepackage{algorithmicx}
@@ -295,6 +293,13 @@
 \hfill
 \begin{minipage}[t]{.47\textwidth}
   \listhead{Idea}\\
+  Exploiting:
+  \begin{itemize}
+   \item The structure of the Bellman update
+   \item The uncertainty of the estimation
+  \end{itemize}
+  
+  \listhead{Approach}\\
   Split the action-value function in two components:
   \begin{itemize}\compresslist
     \renewcommand{\CancelColor}{\color{red}}
@@ -307,13 +312,6 @@
     \item $\Rtilde_{t+1}(x,u) \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u))$
     \item $\Qtilde_{t+1}(x,u) \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))$
   \end{itemize}
-  
-  Different effects on the choiche of $\alpha$ and $\beta$:
-  \begin{description}
-    \item[Q-Learning] $\alpha_t=\beta_t$
-    \item[$\text{RQ}_\delta$-Learning] $\beta_t=\alpha_t\delta_t$
-    \item[RQ-Learning] $\beta_t\neq\alpha_t$
-  \end{description}
 \end{minipage}% <-- Don't forget this one
 %
 \hfill
@@ -334,35 +332,57 @@
 	$\delta_t=e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}$
       \end{itemize}
   \end{enumerate}
+\end{minipage} 
 
+\begin{minipage}[t]{\textwidth}
+  Different effects on the choiche of $\alpha$ and $\beta$:\\
+  \begin{description}
+    \item Q-Learning $\alpha_t=\beta_t$
+    \item $\text{RQ}_\delta$-Learning $\beta_t=\alpha_t\delta_t$
+    \item RQ-Learning $\beta_t\neq\alpha_t$
+  \end{description}
 \end{minipage}
-\hfill
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Empirical Results}{name=emp,column=0,row=3,span=6,below=rq}{
 % \headerbox{Finite Sample Analysis}{name=settings,column=2,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{minipage}[t]{.49\textwidth}
-\listhead{Double chain}
 
-\begin{minipage}{\textwidth}
-\centering
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:double_chain_1_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/v1-1.pdf}}
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:double_chain_1_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/v1-51.pdf}}
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)}$\label{F:double_chain_5_1}]{\includegraphics[scale=.7]{./imgs/doubleChain/v5-1.pdf}}
-  \subfigure[$\alpha = \dfrac{1}{n(s,a)^{0.51}}$\label{F:double_chain_5_51}]{\includegraphics[scale=.7]{./imgs/doubleChain/v5-51.pdf}}
+\listhead{Noisy Gridworld}\\
+\begin{minipage}{0.5\textwidth}
+\includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs1.pdf}
+\includegraphics[scale=0.55]{./imgs/gridHasselt/allAlgs08.pdf}
+\end{minipage}%
+%
+\hfill
+%
+\begin{minipage}{0.5\textwidth}
+\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs1.pdf}
+\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs08.pdf}
 \end{minipage}
 
-\begin{minipage}{\textwidth}
-  \includegraphics[scale=.7]{./imgs/doubleChain/lrs1-1.pdf}
-  \includegraphics[scale=.7]{./imgs/doubleChain/lrs1-51.pdf}
-  \includegraphics[scale=.7]{./imgs/doubleChain/lrs5-1.pdf}
-  \includegraphics[scale=.7]{./imgs/doubleChain/lrs5-51.pdf}
+\listhead{Double chain}\\
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/v1-1.pdf}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/v1-51.pdf}\\
+  \includegraphics[scale=0.55]{./imgs/doubleChain/v5-1.pdf}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/v5-51.pdf}
+\end{minipage} %
+%
+\hfill
+%
+\begin{minipage}{0.5\textwidth}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-1.pdf}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-51.pdf}\\
+  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-1.pdf}
+  \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-51.pdf}
 \end{minipage}
 
-
-\end{minipage}
+\listhead{Gridworld with Holes}\\
+{\centering
+\includegraphics[scale=0.55]{./imgs/gridHole/grid_hole.pdf}
+}
 }
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
