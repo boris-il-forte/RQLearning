@@ -122,7 +122,7 @@ if __name__ == '__main__':
         # Others algs
         for a in alg_list:
             print names[a] + '_' + names[e]
-            out = Parallel(n_jobs=1)(
+            out = Parallel(n_jobs=-1)(
                 delayed(experiment_others)(a, e) for _ in xrange(n_experiment))
             r = np.array([o[0] for o in out])
             max_Qs = np.array([o[1] for o in out])
