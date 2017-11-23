@@ -224,7 +224,7 @@
   linewidth=2pt
   }
   % Eye Catcher
-  {\includegraphics[height=9em]{./pics/airlab_logo_reflect.png}} 
+  {\includegraphics[height=2cm, width=4.5cm]{./pics/airlab-logo-new.pdf}} 
 %   {\hspace{3.5cm}}
   % Title
   {\bf\textsc{Exploiting Structure and Uncertainty of Bellman Updates in Markov Decision Processes}\vspace{0.1em}}
@@ -258,13 +258,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \vspace{-0.2cm}
 \begin{enumerate}\compresslist
-\item Split the estimate in two components:
+\item Split the estimate in \textbf{two components}:
   \begin{itemize}
    \item The expected reward $\Rtilde(x,u)$
    \item The expected next state value function $\Qtilde(x,u)$
   \end{itemize}
-\item Use different learning rates for the two components
-\item We provide empirical results showing the effectiveness of our approach
+\item Use \HL{different learning rates} for the two components
+\item We provide \HL{empirical results} showing the effectiveness of our approach
 
 \end{enumerate}
   }
@@ -274,9 +274,10 @@
   \headerbox{Problem}{name=problem,column=0,row=0,span=3, bottomaligned=contributions}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}\compresslist
- \item Learning is difficult in highly stochastic environments
- \item Uncertainty in action-value function estimates propagates
- \item Some algorithms face this problem focusing on the bias of the estimate
+ \item Learning is \dbacks{difficult} in \HL{highly stochastic} environments
+ \item \HL{Uncertainty} in action-value function estimates propagates
+ \item Some algorithms face this problem focusing on the \HL{bias} of the estimate
+ \item Despite empirical evidence, there is \dbacks{no proof} that focusing on the bias is the solution
 \end{itemize}
   }
   
@@ -296,70 +297,70 @@
 \begin{center}
  \listhead{\Large Idea}\\
 \end{center}
-  To improve estimates, exploit:
+\centering \Large \textbf{Improve accuracy of the estimate exploiting:}
 \begin{center}
   \tikz[baseline]
   {
-    \node[] (G1) {\color{blue800} \Large Structure of the Bellman update};
-    \node[right=4cm of G1] (G2) {\color{red} \Large Uncertainty of the estimation};
+    \node[] (G1) {\color{blue800} \Large \textbf{Structure of the Bellman update}};
+    \node[right=4cm of G1] (G2) {\color{red} \Large \textbf{Uncertainty of the estimation}};
   } 
 \end{center}
    
 \begin{center}
  \listhead{\Large Approach}\\
 \end{center}
-\begin{minipage}[t]{.4\textwidth}
-  Split the action-value function in two components:
-  \begin{itemize}\compresslist
-    \renewcommand{\CancelColor}{\color{red}}
-    \item $\Rtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]$
-    \item $\Qtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]$
-    \item $Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u)$
-  \end{itemize}
-  \vspace{0.5cm}
-  \\
-  Compute the update as follows:
-  \begin{itemize}
-    \item $\Rtilde_{t+1}(x,u) \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u))$
-    \item $\Qtilde_{t+1}(x,u) \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))$
-  \end{itemize}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+  \textbf{Split the action-value function in two components}\\
+  \vspace{.25cm}
+  $\Rtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]$\\
+  \vspace{.25cm}
+  $\Qtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]$\\
+  \vspace{.25cm}
+  $Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u)$
+\end{center}
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+  \textbf{Compute the update as follows}\\
+  \vspace{.75cm}
+  $\Rtilde_{t+1}(x,u) \leftarrow\Rtilde_t(x,u)+\alpha_t(R(x,u,x')-\Rtilde_t(x,u))$\\
+  \vspace{.75cm}
+  $\Qtilde_{t+1}(x,u) \leftarrow\Qtilde_t(x,u)+\beta_t(\max_{u'}Q_t(x',u')-\Qtilde_t(x,u))$
+\end{center}
 \end{minipage}% <-- Don't forget this one
-\begin{minipage}[t]{.6\textwidth}
-  Exploit the variance of estimation to set the learning rate:
+\\
+\begin{center}
+ \textbf{Exploit the \HL{variance of estimation} to set the learning rate}\\
+\end{center}
+\begin{minipage}[t]{\textwidth}
    \begin{enumerate}
    \item Estimate the variance of the estimator $\Qtilde$, using the sample variance of the target:\\
+   \vspace{-.75cm}
+   \begin{center}
     \tikz[baseline]
     {
-      \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
+	\node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\mathrm{Var}\left[\Qtilde\right]\approx S_t^2\omega_t$};
+	\node[draw=blue800, line width=0.6mm, inner sep=5pt, right=1cm of G1] (G2) {$\omega_{t+1}=(1-\beta_t)^2\omega_t+\beta_t^2$};
     }
-    \tikz[baseline]
-    {
-      \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
-    }
-	  
-   $\mathrm{Var}\left[\Qtilde\right]=S_t^2\omega_t$ \\
-   $\omega_{t+1}=(1-\beta_t)^2\omega_t+\beta_t^2$ \\
-   
-   \item Compute the learning rate
+   \end{center}
+   \item Compute the learning rate according to the \HL{precision of the estimate}:
       \begin{itemize}
-	\item Select a $\beta$ that decreases when the estimate precision increases:\\
-	\begin{center}
+	\item Select a $\beta$ that \textbf{\color{lightgreen}decreases} when the estimate precision increases:
 	 \tikz[baseline]
 	  {
-	    \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$};
+	    \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\beta_t=\dfrac{\sigma_e^2(t)}{\sigma_e^2(t)+\eta}$}{\color{blue800} \textbf{\small GOAL}};
 	  }
-	\end{center}
 	
-	\item Or, select a $\delta$ that increases when the estimate precision increases: \\
-	\begin{center}
+	\item Or, select a $\delta$ that \textbf{\color{newbrown}increases} when the estimate precision increases:
 	 \tikz[baseline]
 	 {
 	    \node[draw=blue800, line width=0.6mm, inner sep=5pt] (G1) {$\delta_t=e^{\frac{\sigma_e^2}{\eta}\log\frac{1}{2}}$};
 	 }
-	\end{center}
       \end{itemize}
   \end{enumerate}
-\end{minipage} \vspace{0.5cm}
+\end{minipage} 
+\vspace{0.5cm}
 \\
 \begin{minipage}[t]{\textwidth}
   \begin{center}
@@ -415,7 +416,7 @@
 \end{minipage}  
 \begin{center}
   \listhead{Double chain}\\
-  \vspace{0.75cm}
+  \vspace{0.5cm}
   \begin{minipage}{0.33\textwidth}
     \includegraphics[scale=0.55]{./imgs/doubleChain/v1-1.pdf}
     \includegraphics[scale=0.55]{./imgs/doubleChain/v1-51.pdf}\\
