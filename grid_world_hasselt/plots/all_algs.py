@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-#from matplotlib2tikz import save as tikz_save
+from matplotlib2tikz import save as tikz_save
 
 alg = ['Q', 'DQ', 'WQ', 'SPQ', 'RQ']
 c = ['blue', 'red', 'cyan', 'orange', 'lawngreen', 'green']
@@ -12,7 +12,7 @@ base_folder = 'results/'
 
 for e in exp:
     plt.figure()
-    plt.title(e)
+    plt.suptitle(e)
     for i, a in enumerate(alg):
         plt.subplot(2, 1, 1)
         plt.plot(np.load(base_folder + a + '_' + e + '_r.npy')[::step], c[i], linewidth=3)
@@ -34,5 +34,6 @@ for e in exp:
     if e == '08':
         plt.subplot(2, 1, 1)
         plt.legend(alg)
+    tikz_save('allAlgs' + e + '.tex', figureheight='5cm', figurewidth='6cm')
 plt.show()
-    #tikz_save('allAlgs' + e + '.tex', figureheight='5cm', figurewidth='6cm')
+    

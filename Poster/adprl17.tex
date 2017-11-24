@@ -317,7 +317,7 @@
 \begin{center}
   \textbf{Split the action-value function in two components}\\
   \vspace{.25cm}
-  $\Rtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]$\hspace{1cm}
+  $\Rtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[ r(x,u,x')\right]$\hspace{0.7cm}
   $\Qtilde(x,u)=\underset{\strut\mathclap{x'\sim \Pmodel(x'|x,u)}}{\mathbb{E}}\left[\max_{u'} Q^*(x',u')\right]$\\
   \vspace{.25cm}
   $Q^*(x,u)=\Rtilde(x,u)+\gamma\Qtilde(x,u)$
@@ -348,7 +348,7 @@
   } 
 \end{center}
 \begin{center}
-\vspace{.1cm}
+\vspace{.2cm}
  \textbf{Exploit the \HL{variance of estimation} to set the learning rate}\\
 \end{center}
 \begin{minipage}[t]{\textwidth}
@@ -402,8 +402,8 @@
     \hfill
     %
     \begin{minipage}{0.5\textwidth}
-	\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs1.pdf}
-	\includegraphics[scale=0.55]{./imgs/gridHasselt/QDecs08.pdf}
+	\includegraphics[scale=0.55]{./imgs/gridHasselt/RQ_1.pdf}
+	\includegraphics[scale=0.55]{./imgs/gridHasselt/RQ_08.pdf}
     \end{minipage}
   \end{center}
 \end{minipage}
@@ -424,17 +424,13 @@
   \listhead{Double chain}\\
   \vspace{0.25cm}
   \begin{minipage}{0.33\textwidth}
-    \includegraphics[scale=0.55]{./imgs/doubleChain/v1-1.pdf}
-    \includegraphics[scale=0.55]{./imgs/doubleChain/v1-51.pdf}\\
     \includegraphics[scale=0.55]{./imgs/doubleChain/v5-1.pdf}
     \includegraphics[scale=0.55]{./imgs/doubleChain/v5-51.pdf}
   \end{minipage}
   \hfill
   \begin{minipage}{0.33\textwidth}
-    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-1.pdf}
-    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs1-51.pdf}\\
-    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-1.pdf}
-    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs5-51.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs-1.pdf}
+    \includegraphics[scale=0.55]{./imgs/doubleChain/lrs-51.pdf}
   \end{minipage}
   \hfill
   \begin{minipage}{0.33\textwidth}

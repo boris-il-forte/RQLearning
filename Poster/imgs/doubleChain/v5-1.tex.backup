@@ -15,7 +15,7 @@
 
 \begin{groupplot}[group style={group size=1 by 2}]
 \nextgroupplot[
-title={\Large $\alpha=\frac{1}{n(s,a)}$},
+xlabel={# steps},
 ylabel={maxQ(1,a)},
 xmin=-24.95, xmax=523.95,
 ymin=-3.10007712288786, ymax=66.1136195806451,
@@ -3548,7 +3548,7 @@ table {%
 499 59.4394189868378
 };
 \nextgroupplot[
-xlabel={\# steps},
+xlabel={# steps},
 ylabel={maxQ(5,a)},
 xmin=-24.95, xmax=523.95,
 ymin=-4.6955, ymax=104.9855,
@@ -7082,5 +7082,11 @@ table {%
 };
 \end{groupplot}
 
+\node at ({$(current bounding box.south west)!0.5!(current bounding box.south east)$}|-{$(current bounding box.south west)!0.98!(current bounding box.north west)$})[
+  scale=0.6,
+  anchor=north,
+  text=black,
+  rotate=0.0
+]{ 1};
 \end{tikzpicture}
 \end{document}

@@ -25,7 +25,7 @@ def experiment1(decay_exp):
 
     # Agent
     alpha = ExponentialDecayParameter(value=1, decay_exp=decay_exp, size=mdp.info.size)
-    beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=1., window=50)
+    beta = WindowedVarianceIncreasingParameter(value=1, size=mdp.info.size, tol=.1, window=50)
     algorithm_params = dict(learning_rate=alpha, beta=beta, off_policy=False)
     fit_params = dict()
 

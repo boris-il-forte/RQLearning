@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-#from matplotlib2tikz import save as tikz_save
+from matplotlib2tikz import save as tikz_save
 
 alg = ['Q', 'DQ', 'WQ', 'SPQ', 'RQ', 'RQ_Win']
 alg_name = ['Q', 'DQ', 'WQ', 'SQ', 'RQ', 'RQ_Win']
@@ -13,7 +13,7 @@ step = 20
 base_folder = 'results/'
 
 l = list()
-
+plt.figure()
 for idx, e in enumerate(exp):
     for i, a in enumerate(alg):
         r = np.load(base_folder + a + '_' + e + '_r.npy')
@@ -51,5 +51,6 @@ for idx, e in enumerate(exp):
     plt.plot(np.ones(10000 / step) * 4.782969, 'k', linewidth=1)
 
 plt.figlegend(handles=l, labels=alg_name, loc='lower center', ncol=len(alg), frameon=False)
+tikz_save('grid_hole.tex', figureheight='5cm', figurewidth='6cm')
 plt.show()
-#tikz_save('grid_hole.tex', figureheight='5cm', figurewidth='6cm')
+

@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-#from matplotlib2tikz import save as tikz_save
+from matplotlib2tikz import save as tikz_save
 
 from mushroom.solvers.dynamic_programming import value_iteration
 
@@ -18,30 +18,30 @@ v = value_iteration(p, r, 0.9, 1e-6)
 
 for e in exp:
     plt.figure()
+    plt.suptitle(e)
     for i, a in enumerate(alg):
-        plt.plot(np.max(np.load(base_folder + a + '_' + e + '_Q.npy')[:, 0, :], axis=1)[::step], c[i], linewidth=3)
+        style='--' if a is 'RQ_Win' else None
+        plt.subplot(2, 1, 1)
+        plt.plot(np.max(np.load(base_folder + a + '_' + e + '_Q.npy')[:, 0, :], axis=1)[::step], c[i], linewidth=3, linestyle=style)
+        plt.subplot(2, 1, 2)
+        plt.plot(np.max(np.load(base_folder + a + '_' + e + '_Q.npy')[:, 4, :], axis=1)[::step], c[i], linewidth=3, linestyle=style)
 
+    plt.subplot(2, 1, 1)
     plt.plot(v[0] * np.ones(20000 / step), 'k', linewidth=1)
     plt.xlabel('# steps')
     
-    if e == '1':
-        plt.ylabel('maxQ(1,a)')
-
-    if e == '51':
-        plt.legend(alg)
-    #tikz_save('v1-' + e + '.tex', figureheight='5cm', figurewidth='6cm')
-for e in exp:
-    plt.figure()
-    for i, a in enumerate(alg):
-        plt.plot(np.max(np.load(base_folder + a + '_' + e + '_Q.npy')[:, 4, :], axis=1)[::step], c[i], linewidth=3)
-
+    plt.subplot(2, 1, 2)
     plt.plot(v[4] * np.ones(20000 / step), 'k', linewidth=1)
     plt.xlabel('# steps')
     
+    
     if e == '1':
+        plt.subplot(2, 1, 1)
+        plt.ylabel('maxQ(1,a)')
+        plt.subplot(2, 1, 2)
         plt.ylabel('maxQ(5,a)')
 
     if e == '51':
         plt.legend(alg)
-    #tikz_save('v5-' + e + '.tex', figureheight='5cm', figurewidth='6cm')
+    tikz_save('v5-' + e + '.tex', figureheight='5cm', figurewidth='6cm')
 plt.show()

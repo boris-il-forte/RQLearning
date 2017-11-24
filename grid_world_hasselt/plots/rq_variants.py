@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-#from matplotlib2tikz import save as tikz_save
+from matplotlib2tikz import save as tikz_save
 
 alg = ['RQ_Delta', 'RQ', 'RQ_Win']
 c = ['brown', 'lawngreen', 'green']
@@ -38,5 +38,5 @@ for e in exp:
     if e == '08':
         plt.subplot(2, 1, 1)
         plt.legend(alg + ['RQ_Alpha', 'RQ_Win_Alpha'])
-    #tikz_save('QDecs' + e + '.tex', figureheight='5cm', figurewidth='6cm')
+    tikz_save('RQ_' + e + '.tex', figureheight='5cm', figurewidth='6cm')
 plt.show()
