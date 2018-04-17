@@ -1,7 +1,7 @@
 # RQLearning
 Repository implementing the experiments of the paper:
 
-_Tateo, D., D'Eramo, C., Nuara, A., Restelli, M., & Bonarini, A. (2017, November). *Exploiting structure and uncertainty of Bellman updates in Markov decision processes*. In Computational Intelligence (SSCI), 2017 IEEE Symposium Series on (pp. 1-8). IEEE._
+_Tateo, D., D'Eramo, C., Nuara, A., Restelli, M., & Bonarini, A. (2017, November). **Exploiting structure and uncertainty of Bellman updates in Markov decision processes**. In Computational Intelligence (SSCI), 2017 IEEE Symposium Series on (pp. 1-8). IEEE._
 
 To cite this paper:
 
